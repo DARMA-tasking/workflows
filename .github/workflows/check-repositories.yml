@@ -1,0 +1,22 @@
+name: DARMA repositories check
+
+on:
+  # schedule: 
+  #   - cron: '*/30 * * * *'
+  push:
+    branches:
+    - 1-validate-required-workflows-usage-across-repositories
+
+jobs:
+  check_repositories:
+    name: Check repositories
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Listing DARMA repositories
+        run: bash ./ci/check_repositories.sh
+
+          
