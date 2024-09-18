@@ -37,11 +37,12 @@ do
     
     if [[ " ${CHECKS_REPOS[*]} " =~ [[:space:]]${e}[[:space:]] ]]; then
         echo "$ORG/$e > Ignoring (checks repository)";
-        echo "----------------------------------";
+        echo "--------------------------------------------------";
     elif [[ " ${EXCLUDE_REPOS[*]} " =~ [[:space:]]${e}[[:space:]] ]]; then
         echo "$ORG/$e > Ignoring (excluded)";
-        echo "----------------------------------";
+        echo "--------------------------------------------------";
     else
+        TSSTART=$(date +%s)
         echo "$ORG/$e > Cloning repository...";
         git clone https://github.com/$ORG/$e $WORKING_DIR/$e >/dev/null 2>&1
         for w in "${EXPECTED_WORKFLOWS[@]}"
@@ -52,7 +53,10 @@ do
                 echo "[ok] workflow file '$w.yml' OK"
             fi
         done
-        echo "----------------------------------";
+        TSEND=$(date +%s)
+        TSDURATION=$(( $TSEND - $TSSTART ))
+        echo "$WORKING_DIR/$e has been processed in $TSDURATION seconds."
+        echo "--------------------------------------------------";
     fi
 done
 

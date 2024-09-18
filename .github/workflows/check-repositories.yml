@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Listing DARMA repositories
+      - name: Check repositories
         run: bash ./ci/check_repositories.sh
 
           
