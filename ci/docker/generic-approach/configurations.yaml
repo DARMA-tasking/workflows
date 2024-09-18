@@ -1,0 +1,41 @@
+# NOTE: This is an investigation about a more complex but more scalable way to difine th platforms to target in CI.
+# This file might be used as an input to scripts to
+# - generate dockerfile environment files (for nodes with type='docker-image') and being able to build and push images
+# - generate Github workflows yaml files stub (for nodes with type='github-runner')*
+# - generate Azure pipelines yaml files stub (for nodes with type='azure-runner')*
+# *In VT we have some specific stuff. We might want to add some compose logic with some generated pipeline stub and complementary
+# project-specific pipeline
+
+# THIS IS A LOT OF WORK BUT MIGHT BE VERY USEFUL
+
+globals:
+  AZURE_PIPELINES_DIR: ci/azure
+  GITHUB_PIPELINES_DIR: .github/workflows
+
+parameters:
+  python-common-packages: [nanobind, yaml]
+  conda-python[3.8-3.12]:
+    py3.8: [ python: 3.8, packages: "@python-common-packages"]
+    py3.9: [ python: 3.9, packages: "@python-common-packages" ]
+    py3.10: [ python: 3.10, packages: "@python-common-packages" ]
+    py3.11: [ python: 3.11, packages: "@python-common-packages" ]
+    py3.12: [ python: 3.12, packages: "@python-common-packages" ]
+
+configurations: 
+  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
+    type: docker-image
+    arch: amd64
+    base: ubuntu:22.04
+    compiler: { type: gnu, cc: gcc-11, cxx: gcc-11++ }
+    conda: "@conda-python[3.8-3.12]"
+    vtk: { version: '9.2.2' }
+    mpi: { dir: v5.0, version: '5.0.4' }
+
+  macos-12-clang-14-vtk-9.3.1:
+    type: github-runner
+    runs-on: macos-12,
+    compiler: { type: gnu, cc: clang-14, cxx: clang-14++ }
+    gcov: llvm-gcov,
+    python: ['3.8', '3.9', '3.10', '3.11', '3.12']
+    vtk: '9.3.1'
+    mpi: ~
