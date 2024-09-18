@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Check that a repository is compliant:
+# - required workflows exist
+
 CURRENT_DIR="$(dirname -- "$(realpath -- "$0")")" # Current directory
 PARENT_DIR="$(dirname "$CURRENT_DIR")"
 WORKING_DIR="$PARENT_DIR/output"
@@ -31,6 +34,8 @@ do
         ((N_ERRORS++))
     else
         echo "[ok] workflow file '$w.yml' OK"
+        # ENHANCEMENT: check that file is calling the appropriate workflow 
+        # (read yaml file and find the use statement)
     fi
 done
 
