@@ -2,23 +2,57 @@
 
 CURRENT_DIR="$(dirname -- "$(realpath -- "$0")")" # Current directory
 PARENT_DIR="$(dirname "$CURRENT_DIR")"
-
+WORKING_DIR="$PARENT_DIR/output"
+ORG=DARMA-tasking
 # Clean
-rm -rf $CURRENT_DIR/repositories.json
+rm -rf $WORKING_DIR
+mkdir -p $WORKING_DIR
 
-echo "> Listing repositories"
-gh repo list DARMA-tasking --json name --json defaultBranchRef >> $CURRENT_DIR/repositories.json
+DARMA_REPOSITORIES=$(gh repo list $ORG --json name --jq '.[].name')
+DARMA_REPOSITORIES=(${DARMA_REPOSITORIES//\\n/ })
+readarray -td '' DARMA_REPOSITORIES < <(printf '%s\0' "${DARMA_REPOSITORIES[@]}" | sort -z)
 
-python $CURRENT_DIR/check_workflow_usage.py
+EXCLUDE_REPOS=(\
+DARMA-tasking.github.io
+)
 
-# DARMA_REPOSITORIES=$(gh repo list DARMA-tasking --json name --jq '.[].name')
-# DARMA_REPOSITORIES=(${DARMA_REPOSITORIES//\\n/ })
-# readarray -td '' DARMA_REPOSITORIES < <(printf '%s\0' "${DARMA_REPOSITORIES[@]}" | sort -z)
+CHECKS_REPOS=( \
+find-unsigned-commits \
+check-commit-format \
+find-trailing-whitespace \
+check-pr-fixes-issue \
+)
 
-# for e in "${DARMA_REPOSITORIES[@]}"; do
-#     printf "%s\n" "${e}"
+EXPECTED_WORKFLOWS=( \
+find-unsigned-commits \
+check-commit-format \
+find-trailing-whitespace \
+check-pr-fixes-issue \
+action-git-diff-check \
+)
+
+for e in "${DARMA_REPOSITORIES[@]}"
+do
+    printf "%s\n" "${e}"
     
-#     echo "Listing active workflows for $e"
-#     gh workflow list --repo DARMA-Tasking/$e
-# done
+    if [[ " ${CHECKS_REPOS[*]} " =~ [[:space:]]${e}[[:space:]] ]]; then
+        echo "$ORG/$e > Ignoring (checks repository)";
+        echo "----------------------------------";
+    elif [[ " ${EXCLUDE_REPOS[*]} " =~ [[:space:]]${e}[[:space:]] ]]; then
+        echo "$ORG/$e > Ignoring (excluded)";
+        echo "----------------------------------";
+    else
+        echo "$ORG/$e > Cloning repository...";
+        git clone https://github.com/$ORG/$e $WORKING_DIR/$e >/dev/null 2>&1
+        for w in "${EXPECTED_WORKFLOWS[@]}"
+        do
+            if [ ! -f "$WORKING_DIR/$e/.github/workflows/$w.yml" ]; then
+                echo "[error] Missing workflow file '$w.yml' at $WORKING_DIR/$e/.github/workflows/$w.yml"
+            else
+                echo "[ok] workflow file '$w.yml' OK"
+            fi
+        done
+        echo "----------------------------------";
+    fi
+done
 
