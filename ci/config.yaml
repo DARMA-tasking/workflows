@@ -14,13 +14,13 @@
 
 # Common parameters
 parameters:
-    common_pip_packages: [nanobind, yaml, setuptools]
+    common_pip_packages: "nanobind,yaml,setuptools"
     conda-py3.8_9_10_11_12:
-      - { python: "3.8", packages: "@common_pip_packages" }
-      - { python: "3.9", packages: "@common_pip_packages" }
-      - { python: "3.10", packages: "@common_pip_packages" }
-      - { python: "3.11", packages: "@common_pip_packages" }
-      - { python: "3.12", packages: "@common_pip_packages" }
+      - ["3.8", "@common_pip_packages"]
+      - ["3.9", "@common_pip_packages"]
+      - ["3.10", "@common_pip_packages"]
+      - ["3.11", "@common_pip_packages"]
+      - ["3.12", "@common_pip_packages"]
 
 # Environments (OS, commpiler, dependencies)
 environments:
@@ -30,7 +30,7 @@ environments:
     # list of optional dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
     deps:
       conda: [ ]
-      conda-env: "@conda-py3.8_9_10_11_12"
+      conda-python-envs: "@conda-py3.8_9_10_11_12"
       vtk: [ '9.3.1' ]
       openmpi: ['v5.0', '5.0.4']
 

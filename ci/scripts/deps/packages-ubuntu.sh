@@ -7,6 +7,7 @@ DEFAULT_PACKAGES=$(
 echo "ca-certificates \
 less \
 curl \
+jq \
 git \
 wget \
 zlib1g \

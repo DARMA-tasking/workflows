@@ -1,30 +1,21 @@
-# Describes images with dependencies
+# Build an image with some configured packages and dependencies
 ARG ARCH=amd64
 ARG BASE=ubuntu:22.04
 FROM ${ARCH}/${BASE} as base
 
-RUN whoami
-
-COPY ci/scripts /opt/scripts
-RUN chmod u+x /opt/scripts/**/*.sh
-
-
-
+# Copy setup scripts
+COPY ci/scripts/deps /opt/scripts/install
+RUN ls /opt/scripts/install
+RUN chmod u+x /opt/scripts/install/*.sh
 
 # Install packages (works)
 ARG PACKAGES=""
-RUN echo $PACKAGES
 ARG INSTALL_DEFAULT_PACKAGES=1
-RUN /opt/scripts/deps/packages.sh "${PACKAGES}" ${INSTALL_DEFAULT_PACKAGES}
+RUN /opt/scripts/install/packages.sh "${PACKAGES}" ${INSTALL_DEFAULT_PACKAGES}
 
-# Run additional setup commands
-# ARG SETUP=""
-# RUN bash -c "cd /opt/scripts/deps; \
-#     readarray -td, instructions <<<"${SETUP}"; declare -p instructions; \
-#     for cmd in \${instructions[@]}; \
-#     do \
-#         /opt/scripts/deps/\$cmd \
-#     done\
-#     "
+# Run additional setup commands from setup file
+ARG SETUP_FILE=""
+RUN /opt/scripts/install/${SETUP_FILE}
 
+# Clean
 RUN rm -rf /opt/scripts
