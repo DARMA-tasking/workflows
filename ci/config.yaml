@@ -1,0 +1,64 @@
+# Configuration of the desired CI target platforms
+# Available types:
+# - docker-image: to generate a docker file (.dockerfile)
+# - github-workflow: to generate a github workflow (.yaml)
+# - azure-pipelines-workflow: to generate an azure workflow (.yaml)
+# 
+# This file defines all the configurations to test in CI
+# NOTE: This is an investigation about a more complex but more scalable way to difine th platforms to target in CI.
+# This file might be used as an input to scripts to
+# - generate dockerfile environment files (for nodes with type='docker-image') and being able to build and push images
+# - generate Github workflows yaml files stub (for nodes with type='github-runner')*
+# - generate Azure pipelines yaml files stub (for nodes with type='azure-runner')*
+# *In VT we have some specific stuff. We might want to add some compose logic with some generated pipeline stub and complementary
+# project-specific pipeline
+
+# THIS IS A LOT OF WORK BUT MIGHT BE VERY USEFUL
+
+# Common parameters
+parameters:
+  python-common-packages: [nanobind, yaml]
+  conda-python[3.8-3.12]:
+    py3.8: [ python: 3.8, packages: "@python-common-packages"]
+    py3.9: [ python: 3.9, packages: "@python-common-packages" ]
+    py3.10: [ python: 3.10, packages: "@python-common-packages" ]
+    py3.11: [ python: 3.11, packages: "@python-common-packages" ]
+    py3.12: [ python: 3.12, packages: "@python-common-packages" ]
+
+# Test environments
+environments:
+  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
+    compiler: { type: gnu, cc: gcc-11, cxx: gcc-11++ }
+    # list of deps to setup by running ci/scripts/deps/{dep}.sh
+    deps:
+      conda: [ "@conda-python[3.8-3.12]" ]
+      vtk: [ 9.2.2' ]
+      openmpi: ['v5.0', '5.0.4']
+
+  macos-12-clang-14-vtk-9.3.1:
+    compiler: { type: gnu, cc: clang-14, cxx: clang-14++, gcov: llvm-gcov }
+    deps:
+      conda: "@conda-python[3.8-3.12]"
+      vtk: '9.3.1'
+
+# Workflow definitions to run the different environments
+workflows:
+  # A Github workflow running macos-12
+  macos-12-clang-14-vtk-9.3.1:
+    type: github
+    runner: macos-12
+    environment: macos-12-clang-14-vtk-9.3.1
+    execute_in: runner
+
+  # A Github workflow running ubuntu-22.04 and using internally a docker container
+  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
+    type: github
+    runner: ubuntu-22.04
+    execute_in: docker
+    docker:
+      environment: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi
+      repository: lifflander1/vt
+      image: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi
+      dockerfile: ubuntu-cpp-base.dockerfile
+      arch: amd64
+      base: ubuntu:22.04
