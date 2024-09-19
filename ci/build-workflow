@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+
+import copy
+import os
+
+from util import resolve_conf
+import yaml
+
+AZURE_PIPELINES_OUTPUT_DIR="ci/azure"
+GITHUB_PIPELINES_OUTPUT_DIR=".github/workflows"
+
+class WorkflowGenerator:
+    """Workflow file generator class"""
+
+    def generate(self):
+        """Start generation"""
+        config: dict = {}
+        with open(os.path.dirname(__file__) + '/config.yaml', 'r', encoding="utf-8") as file:
+            config = yaml.safe_load(file)
+
+        prms: dict = copy.deepcopy(config.get("parameters", {}))
+        if prms:
+            prms = resolve_conf(prms, prms)
+
+        environments = resolve_conf(copy.deepcopy(config.get("environments", {})), prms)
+
+        # Step 1: list platforms and their configurations
+        choices = {k: v for k, v in enumerate(environments.keys())}
+        print("Choose environment: ")
+        for i in choices:
+            print(f"[{i}] {choices[i]}")
+        choice = input("> ")
+
+        platform_id = choices[int(choice)]
+        platform = environments.get(platform_id)
+        platform_type = platform.get("type")
+
+        print("Selected environment:")
+        print("---------------------------")
+        print(yaml.dump(config.get("environments").get(platform_id), default_flow_style=True))
+        print("---------------------------")
+
+        if platform_type == "docker-image":
+            print("Generating docker image...")
+        elif platform_type ==  "azure-pipelines-workflow":
+            print("Generating azure pipelines workflow...")
+        elif platform_type ==  "github-workflow":
+            print("Generating azure pipelines workflow...")
+        else:
+            print(f"Unsupported platform type {platform_type}...")
+
+WorkflowGenerator().generate()

@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+
+import copy
+import os
+
+from util import resolve_conf
+import yaml
+
+AZURE_PIPELINES_OUTPUT_DIR="ci/azure"
+GITHUB_PIPELINES_OUTPUT_DIR=".github/workflows"
+
+class DockerfileGenerator:
+    """Dockerfile generator class"""
+
+    def generate(self):
+        """Start generation"""
+        raw_config: dict = {}
+        with open(os.path.dirname(__file__) + '/config.yaml', 'r', encoding="utf-8") as file:
+            raw_config = yaml.safe_load(file)
+
+        config = resolve_conf(copy.deepcopy(raw_config))
+        images = config.get("images")
+
+        # Step 1: list platforms and their configurations
+        choices = {k: v for k, v in enumerate(images.keys())}
+        print("Choose image: ")
+        for i in choices:
+            print(f"[{i}] {choices[i]}")
+        choice = input("> ")
+
+        tag = choices[int(choice)]
+        image = images.get(tag)
+
+        print("Selected image:")
+        print("---------------------------")
+        print(yaml.dump(config.get("images").get(tag), default_flow_style=True))
+        print("---------------------------")
+
+        repo = image.get("repository")
+
+        # Add compiler packages
+        environment = image.get("environment")
+        packages = []
+        if environment.get("compiler") is not None:
+            packages.append(environment.get("compiler").get("cc"))
+            packages.append(environment.get("compiler").get("cxx"))
+
+        # Add setup instructions
+        setup = []
+        deps = environment.get("deps")
+        for dep_id in deps:
+            dep_args = deps[dep_id]
+            if len(dep_args):
+                dep_args = [ f"\"{a}\"" for a in dep_args]
+            setup.append(f"{dep_id}.sh {' '.join(dep_args)}")
+
+        cmd = ("docker build"
+                f" --tag {repo}:{tag}"
+                f" --build-arg ARCH={image.get('arch')}"
+                f" --build-arg BASE={image.get('base')}"
+                 " --build-arg INSTALL_DEFAULT_PACKAGES=1"
+                f" --build-arg PACKAGES=\"{' '.join(packages)}\""
+                #f" --build-arg SETUP=\"{','.join(setup)}\"" PB
+                # could be defined using json (we need script name and arguments)
+                f" --file {os.path.dirname(__file__)}/docker/base.dockerfile ."
+                " --progress=plain"
+                " --no-cache")
+        print(cmd)
+        os.system(cmd)
+
+DockerfileGenerator().generate()
