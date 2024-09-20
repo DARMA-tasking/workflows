@@ -1,4 +1,5 @@
 # This if a template to build and test a project in all available test environments on Github actions
+# WIP: This is currently a work in progress (#2: Docker image usage)
 
 on:
   push:
@@ -7,12 +8,12 @@ on:
 
 jobs:
   get-matrix:
-    name: Retrieve Pipeline Matrix
+    name: Retrieve CI matrix
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:  
-      - name: Retrieve environment matrix
+      - name: Retrieve CI matrix
         id: get-matrix
         run: |
           wget https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/github-matrix.json
@@ -22,7 +23,7 @@ jobs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
 
   run:
-    name: Run (${{ matrix.runner.id }})
+    name: Run (${{ matrix.runner.environment.label }})
     runs-on: ${{ matrix.runner.runs-on }}
     needs: get-matrix
     strategy:
@@ -34,5 +35,25 @@ jobs:
         run: |
           echo "id=${{ matrix.runner.id }}"
           echo "runs-on=${{ matrix.runner.runs-on }}"
-          echo "environment_setup":${{ matrix.runner.runs-on }}"
-          echo "image:${{ matrix.runner.image }}"
+          echo "Image=${{ matrix.runner.image }}"
+          echo "Environment Setup=${{ matrix.runner.environment_setup }}"
+          echo "Environment Label=${{ matrix.runner.environment.label }}"
+
+      # - name: Build and test
+      # TODO: Build an test step.
+      # > Option 1: Docker image (Environment Setup="docker") WIP
+      # - pull the docker image
+      # - build & Test using `docker exec [container] build_and_test.sh` for example or by using an inner build_and_test docker image
+      # - (TODO: copy artifacts using a volume)
+
+      # > Option 2: Current runner (Environment Setup="local") (Future for some macos)
+      # - setup dependencies here directly
+      #   (Here a work needs to be done to determine how to get the dependencies script. It might be shared by the workflows repo and put in matrix)
+      # - build & Test using build_and_test.sh
+
+      # - name: Upload artifacts
+
+      # - name: Report test results
+      # note: (as in vt-tv or LBAF)
+
+      # - name: Report coverage

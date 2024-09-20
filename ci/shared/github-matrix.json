@@ -1,23 +1,32 @@
 {
-  "_comment": "This file has been generated. Do not edit",
+  "_comment": "This file has been generated. Please do not edit",
   "matrix": [
     {
       "id": "ubuntu-develop",
       "runs-on": "ubuntu-24.04",
       "environment_setup": "docker",
-      "image": "lifflander1/vt:ubuntu-develop"
+      "image": "lifflander1/vt:ubuntu-develop",
+      "environment": {
+        "label": "Ubuntu 24.04 / gcc-14 / Python[3.8-3.12] / MPI 5.0.4 / Zoltan / Mpich 4.0.2 / VTK 9.3.1"
+      }
     },
     {
       "id": "ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi",
       "runs-on": "ubuntu-22.04",
       "environment_setup": "docker",
-      "image": "lifflander1/vt:ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi"
+      "image": "lifflander1/vt:ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi",
+      "environment": {
+        "label": "Ubuntu 22.04 / gcc-11 / Python[3.8-3.12] / MPI 5.0.4 / VTK 9.3.1"
+      }
     },
     {
       "id": "macos-12-clang-14-vtk-9.3.1",
       "runs-on": "macos-12",
       "environment_setup": "local",
-      "image": null
+      "image": null,
+      "environment": {
+        "label": "MacOSX / clang / VTK 9.3.1"
+      }
     }
   ]
 }

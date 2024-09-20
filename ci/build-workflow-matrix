@@ -26,17 +26,33 @@ class MatrixGenerator:
                            for k, v in config.get("images").items())
 
         for runner_type in ["github", "azure-pipelines"]:
-            runners = [{
-                "id": k,
-                "runs-on": v.get("runs-on"),
-                "environment_setup": v.get("environment_setup"),
-                "image": image_tags.get(v.get("image"))
-                } for k, v in config.get("runners").items() if v.get("type") == runner_type]
+            runners = dict((k, v) for k, v in config.get("runners").items() if v.get("type") == runner_type)
+
+            matrix = []
+            for (runner_id, runner) in runners.items():
+                environment = {}
+                if runner.get("environment_setup") == "docker":
+                    image = config.get("images").get(runner.get("image"))
+                    environment_id = image.get("environment")
+                else: # local
+                    environment_id = runner.get("environment")
+
+                environment = config.get("environments").get(environment_id)
+                matrix.append({
+                    "id": runner_id,
+                    "runs-on": runner.get("runs-on"),
+                    "environment_setup": runner.get("environment_setup"),
+                    "image": image_tags.get(runner.get("image", None), None),
+                    "environment": {
+                        "label": environment.get("label", environment_id)
+                    }
+                })
 
             data = json.dumps({
-                "_comment": "This file has been generated. Do not edit",
-                "matrix": runners}, indent=2)
-            with open(os.path.dirname(__file__) + f"/shared/{runner_type}-matrix.json", 'w+', encoding="utf-8") as file:
+                "_comment": "This file has been generated. Please do not edit",
+                "matrix": matrix}, indent=2)
+            with open(os.path.dirname(__file__) + f"/shared/{runner_type}-matrix.json", 'w+',
+                        encoding="utf-8") as file:
                 file.write(data)
 
 MatrixGenerator().generate()
