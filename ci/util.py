@@ -15,6 +15,7 @@ def resolve_item(item, root: Union[dict,list] = None):
 
         if not ref_name in ref_group.keys() or ref_group is None:
             raise ValueError(f"Reference not found at {ref_path} !")
+
         return ref_group.get(ref_name)
     return item
 

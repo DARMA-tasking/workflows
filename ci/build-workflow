@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# TODO: generate either GH or AZURE workflow file
+# Note: We should inspire with VT having a perl script that generates all yaml files using a .ini configuration for Azure pipelines.
+
 import copy
 import os
 

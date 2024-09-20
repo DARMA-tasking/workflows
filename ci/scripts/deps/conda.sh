@@ -5,7 +5,7 @@
 # 1. Setup conda
 # 2. Create conda environments py3.8, py3.9, py3.10, py3.11, py3.12 (with python version and nanobind package)
 
-CONDA_INSTALL_DIR="/opt/conda"
+CONDA_INSTALL_DIR=${CONDA_INSTALL_DIR:-"/opt/conda"}
 
 echo "Installing conda..."
 mkdir -p ~/miniconda3

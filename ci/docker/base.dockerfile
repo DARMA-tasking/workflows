@@ -1,6 +1,9 @@
 # Build an image with some configured packages and dependencies
 ARG ARCH=amd64
 ARG BASE=ubuntu:22.04
+ARG CC=${CC:-""}
+ARG CXX=${CXX:-""}
+
 FROM ${ARCH}/${BASE} as base
 
 SHELL ["/bin/bash", "-c"]
@@ -15,12 +18,20 @@ ARG PACKAGES=""
 ARG INSTALL_DEFAULT_PACKAGES=1
 RUN /opt/scripts/install/packages.sh "${PACKAGES}" ${INSTALL_DEFAULT_PACKAGES}
 
-# Run additional setup commands from setup file
-ARG SETUP_FILE=""
-
+# Environment variables (conda path, python environments, compiler, cmake path, vtk)
 ENV PATH=/opt/cmake/bin:$PATH
+
+ENV CC=$CC
+ENV CXX=$CXX
+ENV GCOV=$GCOV
+
+ENV CONDA_INSTALL_DIR=/opt/conda
+ENV CONDA_AUTO_ACTIVATE_BASE=false
+
 ENV VTK_DIR=/opt/vtk/build
 
+# Run additional setup commands from setup file
+ARG SETUP_FILE=""
 RUN /opt/scripts/install/${SETUP_FILE}
 
 # Clean

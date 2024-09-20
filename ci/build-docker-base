@@ -3,49 +3,63 @@
 import copy
 import os
 import uuid
+import sys
 
 from util import resolve_conf
 import yaml
 
-AZURE_PIPELINES_OUTPUT_DIR="ci/azure"
-GITHUB_PIPELINES_OUTPUT_DIR=".github/workflows"
-
-class DockerfileGenerator:
+class DockerBuilder:
     """Dockerfile generator class"""
 
-    def generate(self):
-        """Start generation"""
+    def build(self, args: list):
+        """Build an image using a given docker configuration fro the config file"""
+
         raw_config: dict = {}
         with open(os.path.dirname(__file__) + '/config.yaml', 'r', encoding="utf-8") as file:
             raw_config = yaml.safe_load(file)
 
         config = resolve_conf(copy.deepcopy(raw_config))
         images = config.get("images")
+        environments = config.get("environments")
 
-        # Step 1: list platforms and their configurations
-        choices = {k: v for k, v in enumerate(images.keys())}
-        print("Choose image: ")
-        for i in choices:
-            lbl = images.get(choices[i]).get('environment').get('label')
-            print(f"\033[1m[{i}] {choices[i]}\033[0m\n    \033[3m{lbl}\033[0m")
-        choice = input("> ")
+        if len(args) > 0:
+            image_key = args[0]
+            if not image_key in images.keys():
+                print(f"[error] Invalid image name {image_key}.\nAllowed: "
+                                f"{', '. join(images.keys())}")
+                raise SystemExit(1)
+        else:
+            # Step 1: list platforms and their configurations
+            choices = {k: v for k, v in enumerate(images.keys())}
+            print("Choose image: ")
+            for i in choices:
+                image = images.get(choices[i])
+                environment = environments.get(image.get('environment'))
+                lbl = environment.get('label')
+                print(
+                    f"\033[1m[{i}] {choices[i]}\033[0m\n"
+                    f"    \033[3;34m{lbl}\033[0m"
+                )
+            choice = input("> ")
 
-        tag = choices[int(choice)]
-        image = images.get(tag)
+            image_key = choices[int(choice)]
 
+        image = images.get(image_key)
         print("Selected image:")
         print("---------------------------")
-        print(yaml.dump(config.get("images").get(tag), default_flow_style=True))
+        print(yaml.dump(image, default_flow_style=True))
         print("---------------------------")
 
         repo = image.get("repository")
+        tag = image_key
+        environment = environments.get(image.get('environment'))
 
         # Add compiler packages
-        environment = image.get("environment")
+        compiler = environment.get('compiler')
         packages = []
-        if environment.get("compiler") is not None:
-            packages.append(environment.get("compiler").get("cc"))
-            packages.append(environment.get("compiler").get("cxx"))
+        if compiler is not None:
+            packages.append(compiler.get("cc"))
+            packages.append(compiler.get("cxx"))
 
         # Add setup instructions
         instructions = []
@@ -86,6 +100,9 @@ class DockerfileGenerator:
                 f" --tag {repo}:{tag}"
                 f" --build-arg ARCH={image.get('arch')}"
                 f" --build-arg BASE={image.get('base')}"
+                f" --build-arg CC={compiler.get('cc', '') if compiler is not None else ''}"
+                f" --build-arg CXX={compiler.get('cxx', '') if compiler is not None else ''}"
+                f" --build-arg GCOV={compiler.get('gcov', '') if compiler is not None else ''}"
                  " --build-arg INSTALL_DEFAULT_PACKAGES=1"
                 f" --build-arg PACKAGES=\"{' '.join(packages)}\""
                 f" --build-arg SETUP_FILE=\'{setup_filename}\'"
@@ -101,4 +118,4 @@ class DockerfileGenerator:
 
         # TODO: option to push to Dockerhub
 
-DockerfileGenerator().generate()
+DockerBuilder().build(sys.argv[1:])
