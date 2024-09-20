@@ -1,2 +1,38 @@
 # This if a template to build and test a project in all available test environments on Github actions
 
+on:
+  push:
+    branches: 
+      - 2-implement-common-docker-containers
+
+jobs:
+  get-matrix:
+    name: Retrieve Pipeline Matrix
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:  
+      - name: Retrieve environment matrix
+        id: get-matrix
+        run: |
+          wget https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/github-matrix.json
+          matrix=$(cat github-matrix.json | jq '.matrix')
+          echo "runner=$(echo $matrix)" >> $GITHUB_OUTPUT
+    outputs:
+      matrix: ${{ steps.get-matrix.outputs.runner }}
+
+  run:
+    name: Run (${{ matrix.runner.id }})
+    runs-on: ${{ matrix.runner.runs-on }}
+    needs: get-matrix
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ${{ fromJson(needs.get-matrix.outputs.matrix ) }}
+    steps:
+      - name: Display configuration
+        run: |
+          echo "id=${{ matrix.runner.id }}"
+          echo "runs-on=${{ matrix.runner.runs-on }}"
+          echo "environment_setup":${{ matrix.runner.runs-on }}"
+          echo "image:${{ matrix.runner.image }}"
