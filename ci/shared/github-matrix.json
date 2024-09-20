@@ -1,0 +1,23 @@
+{
+  "_comment": "This file has been generated. Do not edit",
+  "matrix": [
+    {
+      "id": "ubuntu-develop",
+      "runs-on": "ubuntu-24.04",
+      "environment_setup": "docker",
+      "image": "lifflander1/vt:ubuntu-develop"
+    },
+    {
+      "id": "ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi",
+      "runs-on": "ubuntu-22.04",
+      "environment_setup": "docker",
+      "image": "lifflander1/vt:ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi"
+    },
+    {
+      "id": "macos-12-clang-14-vtk-9.3.1",
+      "runs-on": "macos-12",
+      "environment_setup": "local",
+      "image": null
+    }
+  ]
+}
