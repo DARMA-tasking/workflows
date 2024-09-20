@@ -26,7 +26,8 @@ class DockerfileGenerator:
         choices = {k: v for k, v in enumerate(images.keys())}
         print("Choose image: ")
         for i in choices:
-            print(f"[{i}] {choices[i]}")
+            lbl = images.get(choices[i]).get('environment').get('label')
+            print(f"\033[1m[{i}] {choices[i]}\033[0m\n    \033[3m{lbl}\033[0m")
         choice = input("> ")
 
         tag = choices[int(choice)]
@@ -51,19 +52,27 @@ class DockerfileGenerator:
         deps = environment.get("deps")
         for dep_id in deps:
             dep_args = deps.get(dep_id)
+            # Install deps with arguments
             if dep_args is not None and len(dep_args) > 0:
-                # dep script call for several arguments
+                # dep script multiple call
                 if isinstance(dep_args[0], list):
                     for (i, dep_args_sub) in enumerate(dep_args):
-                      instructions.append(f"{dep_id}.sh {' '.join(dep_args_sub)}")
+                        dep_args_sub = [ f"\"{a}\"" for a in dep_args_sub]
+                        instructions.append(f"./{dep_id}.sh {' '.join(dep_args_sub)}")
+                # dep script single call
                 else:
                     dep_args = [ f"\"{a}\"" for a in dep_args]
-                    instructions.append(f"{dep_id}.sh {' '.join(dep_args)}")
+                    instructions.append(f"./{dep_id}.sh {' '.join(dep_args)}")
+            # No arguments
             else:
-                instructions.append(f"bash {dep_id}.sh {' '.join(dep_args)}")
+                instructions.append(f"./{dep_id}.sh")
 
         setup_script = ""
-        with open(os.path.dirname(__file__) + '/scripts/setup-deps-template.sh', 'r', encoding="utf-8") as file:
+        with open(
+            os.path.dirname(__file__) + '/scripts/setup-deps-template.sh',
+            'r',
+            encoding="utf-8"
+        ) as file:
             setup_script = file.read()
         setup_script = setup_script.replace('%INSTRUCTIONS%', '\n'.join(instructions))
 
@@ -82,7 +91,7 @@ class DockerfileGenerator:
                 f" --build-arg SETUP_FILE=\'{setup_filename}\'"
                 f" --file {os.path.dirname(__file__)}/docker/base.dockerfile ."
                 " --progress=plain"
-                " --no-cache"
+                # " --no-cache"
             )
         print(cmd)
         os.system(cmd)

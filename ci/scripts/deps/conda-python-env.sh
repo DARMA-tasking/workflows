@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 
-set -exo pipefail
-
 if test $# -lt 1
 then
-    echo "usage: ./$0 <csv_python_versions> <csv_pip_packages> <...>"
+    echo "usage: ./$0 \"<python_version>\" \"<pip_packages_1 pip_packages_2 ...>\""
     exit 1
 fi
 
-python_version=$1
-pip_packages=${2:-"nanobind,yaml"}
+set -exo pipefail
 
-readarray -td, pip_packages_array <<<"$pip_packages"; declare -p pip_packages_array;
+PYTHON_VERSION=$1
+PIP_PACKAGES=${2:-""}
 
-conda create -y --no-default-package -n py$python_version
-conda activate py$python_version
+. /opt/conda/etc/profile.d/conda.sh
 
-for p in ${pip_packages_array[@]};
-do
-    pip install $p
-done
+conda create -y --no-default-package -n py$PYTHON_VERSION
+conda activate py$PYTHON_VERSION
+
+if [ $PIP_PACKAGES != "" ]
+then
+    pip install $PIP_PACKAGES
+fi
 
 conda deactivate

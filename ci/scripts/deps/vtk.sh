@@ -11,8 +11,8 @@ then
 fi
 
 VTK_VERSION=$1
-VTK_SRC_DIR=${2:-"/opt/src/vtk"}
-VTK_INSTALL_DIR=${3:-VTK_DIR:-"/opt/build/vtk"}
+VTK_SRC_DIR=${2:-"/opt/vtk/src"}
+VTK_INSTALL_DIR=${3:-VTK_DIR:-"/opt/vtk/build"}
 
 echo "Installing VTK $VTK_VERSION..."
 git clone --recursive --branch v${VTK_VERSION} https://gitlab.kitware.com/vtk/vtk.git ${VTK_SRC_DIR}

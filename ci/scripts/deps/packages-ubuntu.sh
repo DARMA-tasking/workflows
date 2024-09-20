@@ -23,10 +23,10 @@ if [[ $INSTALL_DEFAULT_PACKAGES == "0" ]]
 then
     $DEFAULT_PACKAGES=""
 else
-    echo "DEFAULT_PACKAGES=${DEFAULT_PACKAGES}"
+    echo "DEFAULT_PACKAGES=\"${DEFAULT_PACKAGES}\""
 fi
 
-echo "PACKAGES=${PACKAGES}"
+echo "PACKAGES=\"${PACKAGES}\""
 
 apt-get update -y -q && \
     apt-get install -y -q --no-install-recommends \

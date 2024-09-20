@@ -3,6 +3,8 @@ ARG ARCH=amd64
 ARG BASE=ubuntu:22.04
 FROM ${ARCH}/${BASE} as base
 
+SHELL ["/bin/bash", "-c"]
+
 # Copy setup scripts
 COPY ci/scripts/deps /opt/scripts/install
 RUN ls /opt/scripts/install
@@ -15,6 +17,10 @@ RUN /opt/scripts/install/packages.sh "${PACKAGES}" ${INSTALL_DEFAULT_PACKAGES}
 
 # Run additional setup commands from setup file
 ARG SETUP_FILE=""
+
+ENV PATH=/opt/cmake/bin:$PATH
+ENV VTK_DIR=/opt/vtk/build
+
 RUN /opt/scripts/install/${SETUP_FILE}
 
 # Clean

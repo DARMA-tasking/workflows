@@ -14,23 +14,42 @@
 
 # Common parameters
 parameters:
-    common_pip_packages: "nanobind,yaml,setuptools"
+    # Python
+    common_pip_packages: "nanobind yaml setuptools"
     conda-py3.8_9_10_11_12:
       - ["3.8", "@common_pip_packages"]
       - ["3.9", "@common_pip_packages"]
       - ["3.10", "@common_pip_packages"]
       - ["3.11", "@common_pip_packages"]
       - ["3.12", "@common_pip_packages"]
+    # C/C++
+    gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, gcov: gcov }  
+    gcc-14: { type: gnu, cc: gcc-14, cxx: g++-14, gcov: gcov }  
 
 # Environments (OS, commpiler, dependencies)
 environments:
-  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
-    label: Ubuntu 22.04 / gcc-11 / Python[3.8-3.12] / MPI / VTK 9.3.1
-    compiler: { type: gnu, cc: gcc-11, cxx: g++-11, gcov: gcov }
+
+  ubuntu-develop:
+    label: Ubuntu 24.04 / gcc-14 / Python[3.8-3.12] / MPI 5.0.4 / Zoltan / Mpich 4.0.2 / VTK 9.3.1
+    compiler: "@gcc-14"
     # list of optional dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
     deps:
+      cmake: ['3.23.4']
+      conda: ~
+      conda-python-env: "@conda-py3.8_9_10_11_12" 
+      openmpi: ['v5.0', '5.0.4', '-j4']
+      zoltan: [-j4', '/trilinos-install']
+      mpich: ['4.0.2', '-j4']
+      vtk: [ '9.3.1' ]
+
+  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
+    label: Ubuntu 22.04 / gcc-11 / Python[3.8-3.12] / MPI 5.0.4 / VTK 9.3.1
+    compiler: "@gcc-11"
+    # list of optional dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
+    deps:
+      cmake: ['3.23.4']
       conda: [ ]
-      conda-python-envs: "@conda-py3.8_9_10_11_12"
+      conda-python-env: "@conda-py3.8_9_10_11_12"
       vtk: [ '9.3.1' ]
       openmpi: ['v5.0', '5.0.4']
 
@@ -43,6 +62,14 @@ environments:
 
 # Docker containers
 images:
+
+  ubuntu-develop:
+    repository: lifflander1/vt
+    dockerfile: ubuntu-cpp-base.dockerfile
+    arch: amd64
+    base: ubuntu:24.04
+    environment: "@environments.ubuntu-develop"
+  
   ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
     repository: lifflander1/vt
     dockerfile: ubuntu-cpp-base.dockerfile
@@ -62,3 +89,8 @@ runners:
     type: github
     runs-on: ubuntu-22.04
     environment_setup: docker
+
+  develop:
+    type: github
+    runs-on: ubuntu-24.04
+    environment_setup: develop
