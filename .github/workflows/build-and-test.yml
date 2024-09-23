@@ -14,11 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CI_REPO: DARMA-tasking/workflows
+      CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
     steps:  
       - name: Retrieve CI matrix
         id: get-matrix
         run: |
-          wget https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/workflows/github-matrix.json
+          wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/workflows/github-matrix.json
           matrix=$(cat github-matrix.json | jq '.matrix')
           echo "runner=$(echo $matrix)" >> $GITHUB_OUTPUT
     outputs:
@@ -27,6 +29,9 @@ jobs:
   run:
     name: Run (${{ matrix.runner.environment.label }})
     runs-on: ${{ matrix.runner.runs-on }}
+    env:
+      CI_REPO: DARMA-tasking/workflows
+      CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
     needs: get-matrix
     strategy:
       fail-fast: false
@@ -45,9 +50,35 @@ jobs:
         run: |
           if [[ ${{ matrix.runner.environment_setup == 'local' }} ]]
           then
-            wget https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/workflows/setup-matrix.json
+            echo "Download dependencies scripts..."
+            mkdir -p ~/tmp
+            cd ~/tmp
+            git clone -b 2-implement-common-docker-containers --no-checkout --depth 1 https://github.com/${{ env.CI_REPO }} workflows
+            cd ~/tmp/workflows
+            readarray -t arr < <(git ls-tree -r --name-only refs/heads/${{ env.CI_BRANCH }} | grep -E "ci/shared/scripts/deps/.*\.sh")
+            cd ~/
+            rm -rf ~/tmp
+
+            mkdir -p ~/scripts
+            pushd ~/scripts
+
+            mkdir deps
+            pushd deps
+            for script in ${arr[@]}
+            do
+              wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/$script
+            done
+            popd
+
+            echo "Download setup script (for current environment)..."
+            wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/setup-${{ matrix.runner.environment.id }}.sh
+            
+            echo "Running setup script..."
             bash setup-${{ matrix.runner.environment.id }}.sh
-            # TODO: need also to get the scripts under ci/shared/deps/
+
+            popd
+          else
+            echo "Docker environment pull. Not implemented."
           fi
 
       # - name: Build and test
