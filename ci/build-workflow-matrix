@@ -3,7 +3,6 @@
 import copy
 import os
 import json
-import sys
 
 from util import resolve_conf
 import yaml
@@ -51,7 +50,7 @@ class MatrixGenerator:
             data = json.dumps({
                 "_comment": "This file has been generated. Please do not edit",
                 "matrix": matrix}, indent=2)
-            with open(os.path.dirname(__file__) + f"/shared/{runner_type}-matrix.json", 'w+',
+            with open(os.path.dirname(__file__) + f"/shared/workflows/{runner_type}-matrix.json", 'w+',
                         encoding="utf-8") as file:
                 file.write(data)
 

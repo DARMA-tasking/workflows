@@ -2,7 +2,6 @@
 
 import copy
 import os
-import uuid
 import sys
 
 from util import resolve_conf
@@ -56,65 +55,23 @@ class DockerBuilder:
 
         # Add compiler packages
         compiler = environment.get('compiler')
-        packages = []
-        if compiler is not None:
-            packages.append(compiler.get("cc"))
-            packages.append(compiler.get("cxx"))
-
-        # Add setup instructions
-        instructions = []
-        deps = environment.get("deps")
-        for dep_id in deps:
-            dep_args = deps.get(dep_id)
-            # Install deps with arguments
-            if dep_args is not None and len(dep_args) > 0:
-                # dep script multiple call
-                if isinstance(dep_args[0], list):
-                    for (i, dep_args_sub) in enumerate(dep_args):
-                        dep_args_sub = [ f"\"{a}\"" for a in dep_args_sub]
-                        instructions.append(f"./{dep_id}.sh {' '.join(dep_args_sub)}")
-                # dep script single call
-                else:
-                    dep_args = [ f"\"{a}\"" for a in dep_args]
-                    instructions.append(f"./{dep_id}.sh {' '.join(dep_args)}")
-            # No arguments
-            else:
-                instructions.append(f"./{dep_id}.sh")
-
-        setup_script = ""
-        with open(
-            os.path.dirname(__file__) + '/scripts/setup-deps-template.sh',
-            'r',
-            encoding="utf-8"
-        ) as file:
-            setup_script = file.read()
-        setup_script = setup_script.replace('%INSTRUCTIONS%', '\n'.join(instructions))
-
-        setup_filename = f"~setup-deps-{uuid.uuid4()}.sh"
-        setup_filepath = os.path.join(os.path.dirname(__file__), 'scripts', 'deps', setup_filename)
-
-        with open(setup_filepath, "w+", encoding="utf-8") as f:
-            f.write(setup_script)
-
         cmd = ("docker build"
+                # General
                 f" --tag {repo}:{tag}"
                 f" --build-arg ARCH={image.get('arch')}"
                 f" --build-arg BASE={image.get('base')}"
+                # Compiler
                 f" --build-arg CC={compiler.get('cc', '') if compiler is not None else ''}"
                 f" --build-arg CXX={compiler.get('cxx', '') if compiler is not None else ''}"
                 f" --build-arg GCOV={compiler.get('gcov', '') if compiler is not None else ''}"
-                 " --build-arg INSTALL_DEFAULT_PACKAGES=1"
-                f" --build-arg PACKAGES=\"{' '.join(packages)}\""
-                f" --build-arg SETUP_FILE=\'{setup_filename}\'"
+                f" --build-arg CI_ENVIRONMENT={image.get('environment')}"
+                #
                 f" --file {os.path.dirname(__file__)}/docker/base.dockerfile ."
                 " --progress=plain"
                 # " --no-cache"
             )
         print(cmd)
         os.system(cmd)
-
-        # remove temporary setup script
-        os.remove(setup_filepath)
 
         # TODO: option to push to Dockerhub
 

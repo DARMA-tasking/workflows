@@ -3,12 +3,12 @@
 # Set up packages through the package manager
 
 DEPS_DIR="$(dirname -- "$(realpath -- "$0")")"
-PACKAGES="${1:-""}"
-INSTALL_DEFAULT_PACKAGES=${2:-"1"}
 
-echo "Set up dependencies..."
+PACKAGES=$@
+
+echo "Install system packages..."
 if [[ $(uname -a) == *"Darwin"* ]]; then
-    bash $DEPS_DIR/packages-macos.sh "$PACKAGES" $INSTALL_DEFAULT_PACKAGES
+    bash $DEPS_DIR/packages-macos.sh $PACKAGES
     exit 0
 elif [[ $(uname -a) == *"Linux"* ]]; then
     if [[ -f "/etc/lsb-release" ]]
@@ -16,7 +16,7 @@ elif [[ $(uname -a) == *"Linux"* ]]; then
         . /etc/lsb-release
         if [[ $DISTRIB_ID == "Ubuntu" ]]
         then
-            bash $DEPS_DIR/packages-ubuntu.sh "$PACKAGES"
+            bash $DEPS_DIR/packages-ubuntu.sh $PACKAGES
             exit 0
         fi
     else

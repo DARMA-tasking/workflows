@@ -1,6 +1,6 @@
 name: Build and Test (Template)
 
-# This if a template to build and test a project in all available test environments on Github actions
+# Template workkflow to build and test a project in all available test environments on Github actions
 # WIP: This is currently a work in progress (#2: Docker image usage)
 
 on:
