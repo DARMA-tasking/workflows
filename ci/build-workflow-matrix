@@ -43,6 +43,7 @@ class MatrixGenerator:
                     "environment_setup": runner.get("environment_setup"),
                     "image": image_tags.get(runner.get("image", None), None),
                     "environment": {
+                        "id": environment_id,
                         "label": environment.get("label", environment_id)
                     }
                 })

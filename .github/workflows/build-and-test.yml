@@ -18,7 +18,7 @@ jobs:
       - name: Retrieve CI matrix
         id: get-matrix
         run: |
-          wget https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/github-matrix.json
+          wget https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/workflows/github-matrix.json
           matrix=$(cat github-matrix.json | jq '.matrix')
           echo "runner=$(echo $matrix)" >> $GITHUB_OUTPUT
     outputs:
@@ -40,6 +40,15 @@ jobs:
           echo "Image=${{ matrix.runner.image }}"
           echo "Environment Setup=${{ matrix.runner.environment_setup }}"
           echo "Environment Label=${{ matrix.runner.environment.label }}"
+
+      - name: Set up environment
+        run: |
+          if [[ ${{ matrix.runner.environment_setup == 'local' }} ]]
+          then
+            wget https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/workflows/setup-matrix.json
+            bash setup-${{ matrix.runner.environment.id }}.sh
+            # TODO: need also to get the scripts under ci/shared/deps/
+          fi
 
       # - name: Build and test
       # TODO: Build an test step.
