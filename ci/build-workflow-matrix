@@ -30,17 +30,22 @@ class MatrixGenerator:
             matrix = []
             for (runner_id, runner) in runners.items():
                 environment = {}
-                if runner.get("environment_setup") == "docker":
+                setup-mode = runner.get("setup-mode")
+                if setup-mode == "docker":
                     image = config.get("images").get(runner.get("image"))
                     environment_id = image.get("environment")
-                else: # local
+                elif setup-mode == "runner" or runner.get("setup-mode") is None:
                     environment_id = runner.get("environment")
-
+                else:
+                    raise ValueError(f"Invalid option {environment_id} for key `setup-mode`."
+                                       "Supported values are docker|runner (runner if unset)")
                 environment = config.get("environments").get(environment_id)
+                if environment is None:
+                    raise ValueError(f"Environment {environment_id} not found")
                 matrix.append({
                     "id": runner_id,
                     "runs-on": runner.get("runs-on"),
-                    "environment_setup": runner.get("environment_setup"),
+                    "setup-mode": runner.get("setup-mode"),
                     "image": image_tags.get(runner.get("image", None), None),
                     "environment": {
                         "id": environment_id,

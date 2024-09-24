@@ -41,14 +41,16 @@ jobs:
       - name: Display configuration
         run: |
           echo "id=${{ matrix.runner.id }}"
-          echo "runs-on=${{ matrix.runner.runs-on }}"
-          echo "Image=${{ matrix.runner.image }}"
-          echo "Environment Setup=${{ matrix.runner.environment_setup }}"
-          echo "Environment Label=${{ matrix.runner.environment.label }}"
+          echo "Environment=${{ matrix.runner.environment.label }}"
+          echo "Runner=${{ matrix.runner.runs-on }}"
+          echo "Setup Mode=${{ matrix.runner.setup-mode }}"
+          if [ "${{ matrix.runner.setup-mode }}" == "docker" ]
+            echo "> With Docker Image=${{ matrix.runner.image }}"
+          fi
 
       - name: Set up environment
         run: |
-          if [[ ${{ matrix.runner.environment_setup == 'local' }} ]]
+          if [[ ${{ matrix.runner.setup-mode == 'runner' }} ]]
           then
             echo "Download dependencies scripts..."
             mkdir -p ~/tmp
