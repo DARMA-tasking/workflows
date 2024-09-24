@@ -38,12 +38,12 @@ environments:
     label: Ubuntu 24.04 / gcc-14 / Python[3.8-3.12] / MPI 5.0.4 / Zoltan / Mpich 4.0.2 / VTK 9.3.1
     compiler: "@gcc-14"
     # list of optional dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
-    deps:
-      packages: "@apt_default_packages"
-      cmake: ['3.23.4']
+    # deps:
+      # packages: "@apt_default_packages"
+      # cmake: ['3.23.4']
       # conda: ~
       # conda-python-env: [ "@conda-py[3.8-3.12]" ]
-      openmpi: ['v5.0', '5.0.4', '-j4']
+      # openmpi: ['v5.0', '5.0.4', '-j4']
       # zoltan: [-j4', '/trilinos-install']
       # mpich: ['4.0.2', '-j4']
       # vtk: [ '9.3.1' ]

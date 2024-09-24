@@ -23,7 +23,7 @@ class SetupBuilder:
 
             call_args = [ f"\"{a}\"" for a in args]
 
-        return [ f"./deps/{dep_id}.sh {' '.join(call_args)}" ]
+        return [ f"./{dep_id}.sh {' '.join(call_args)}" ]
 
     def build(self):
         """Build environment setup scripts for each environments defined in config"""
@@ -36,21 +36,20 @@ class SetupBuilder:
         environments = config.get("environments")
 
         for (env_id, environment) in environments.items():
-
-
             # Add compiler packages
             compiler = environment.get('compiler')
             packages = copy.deepcopy(environment.get("deps", {}).get("packages", []))
             if compiler is not None:
-                if environment.get("deps") is None:
-                    environment["deps"] = {}
                 if packages is None:
-                    environment["deps"]["packages"] = []
+                    packages = []
 
                 if compiler.get("cc") is not None and not compiler.get("cc") in packages:
                     packages.append(compiler.get("cc"))
                 if compiler.get("cxx") is not None and not compiler.get("cxx") in packages:
                     packages.append(compiler.get("cxx"))
+
+                if environment.get("deps") is None:
+                    environment["deps"] = {}
                 environment["deps"]["packages"] = packages
 
             # Add setup instructions
@@ -65,6 +64,7 @@ class SetupBuilder:
                 encoding="utf-8"
             ) as file:
                 setup_script = file.read()
+            setup_script = setup_script.replace('%ENVIRONMENT_LABEL%', environment.get("label"))
             setup_script = setup_script.replace('%INSTRUCTIONS%', '\n'.join(instructions))
 
             setup_filename = f"setup-{env_id}.sh"

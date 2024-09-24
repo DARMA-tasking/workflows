@@ -29,9 +29,6 @@ jobs:
   run:
     name: Run (${{ matrix.runner.environment.label }})
     runs-on: ${{ matrix.runner.runs-on }}
-    env:
-      CI_REPO: DARMA-tasking/workflows
-      CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
     needs: get-matrix
     strategy:
       fail-fast: false
@@ -49,37 +46,13 @@ jobs:
             echo "> With Docker Image=${{ matrix.runner.image }}"
           fi
 
-      - name: Set up environment
+      - name: Set up dependencies
         run: |
           if [[ "${{ matrix.runner.setup-mode}}" == "runner" ]]
           then
-            echo "::group::List installation scripts"
-            mkdir -p ~/tmp
-            cd ~/tmp
-            git clone -b 2-implement-common-docker-containers --no-checkout --depth 1 https://github.com/${{ env.CI_REPO }} workflows
-            cd ~/tmp/workflows
-            arr=($(git ls-tree -r --name-only refs/heads/${{ env.CI_BRANCH }} | grep -E "ci/shared/scripts/deps/.*\.sh"))
-            cd ~/
-            rm -rf ~/tmp
-            echo "::endgroup::"
-
-            echo "::group::Copy installation scripts"
-            mkdir -p /opt/scripts/deps
-            pushd /opt/scripts/
-            for script in ${arr[@]}
-            do
-              wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/$script
-            done
-            popd
-            wget -O setup.sh https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/setup-${{ matrix.runner.environment.id }}.sh
-    
-            chmod u+x /opt/scripts/setup.sh /opt/scripts/deps/*.sh
-            popd
-            echo "::endgroup::"
-
-            echo "::group::Setup"
-            /opt/scripts/setup.sh
-            echo "::endgroup::"
+            wget -O setup.sh https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/setup-${{ matrix.runner.environment.id }}.sh
+            chmod +x setup.sh
+            ./setup.sh
           else
             echo "Docker environment pull. Not implemented."
             exit 1
