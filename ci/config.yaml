@@ -14,23 +14,11 @@
 
 # Common parameters
 parameters:
-    # Package common dependencies
-    apt_default_packages:
-      - ca-certificates
-      - less
-      - curl
-      - jq
-      - git
-      - wget
-      - zlib1g
-      - zlib1g-dev
-      - ninja-build
-      - valgrind
-      - make-guile
-      - libomp5
-      - libunwind-dev
-      - ccache
-    brew_default_packages: []
+    # Dependencies to install using package manager
+    apt_default_packages: [ 
+      ca-certificates, curl, git, jq, less, libomp5, libunwind-dev make-guile,
+      ninja-build, valgrind, wget, zlib1g, zlib1g-dev, ccache ]
+    brew_default_packages: [ coreutils ]
     # Python
     common_pip_packages: "nanobind yaml setuptools"
     conda-py[3.8-3.12]:
@@ -76,7 +64,7 @@ environments:
     label: MacOSX / clang / VTK 9.3.1
     compiler: { type: clang, cc: clang-14, cxx: clang-14++, gcov: llvm-gcov }
     deps:
-      packages: "@apt_default_packages"
+      packages: "@brew_default_packages"
       conda: [ ]
       vtk: [ '9.3.1' ]
 
