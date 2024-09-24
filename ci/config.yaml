@@ -34,19 +34,19 @@ parameters:
 # Environments (OS, commpiler, dependencies)
 environments:
 
-  ubuntu-develop:
+  ubuntu-full:
     label: Ubuntu 24.04 / gcc-14 / Python[3.8-3.12] / MPI 5.0.4 / Zoltan / Mpich 4.0.2 / VTK 9.3.1
     compiler: "@gcc-14"
     # list of optional dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
-    # deps:
-      # packages: "@apt_default_packages"
-      # cmake: ['3.23.4']
-      # conda: ~
-      # conda-python-env: [ "@conda-py[3.8-3.12]" ]
-      # openmpi: ['v5.0', '5.0.4', '-j4']
-      # zoltan: [-j4', '/trilinos-install']
-      # mpich: ['4.0.2', '-j4']
-      # vtk: [ '9.3.1' ]
+    deps:
+      packages: "@apt_default_packages"
+      cmake: ['3.23.4']
+      conda: ~
+      conda-python-env: [ "@conda-py[3.8-3.12]" ]
+      openmpi: ['v5.0', '5.0.4', '-j4']
+      zoltan: [-j4', '/trilinos-install']
+      mpich: ['4.0.2', '-j4']
+      vtk: [ '9.3.1' ]
 
   ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
     label: Ubuntu 22.04 / gcc-11 / Python[3.8-3.12] / MPI 5.0.4 / VTK 9.3.1
@@ -66,17 +66,18 @@ environments:
     deps:
       packages: "@brew_default_packages"
       conda: [ ]
+      conda-python-env: [ "@conda-py[3.8-3.12]" ]
       vtk: [ '9.3.1' ]
 
 # Docker containers
 images:
 
-  ubuntu-develop:
+  ubuntu-full:
     repository: lifflander1/vt
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:24.04
-    environment: ubuntu-develop
+    environment: ubuntu-full
   
   ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
     repository: lifflander1/vt
@@ -87,11 +88,11 @@ images:
 
 # Runners (CI host machines to setup the environments on)
 runners:
-  ubuntu-develop:
+  ubuntu-full:
     type: github
     runs-on: ubuntu-24.04
     setup-mode: docker
-    image: ubuntu-develop
+    image: ubuntu-full
 
   ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
     type: github

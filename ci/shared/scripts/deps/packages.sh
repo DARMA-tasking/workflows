@@ -2,8 +2,7 @@
 
 # Set up packages through the package manager
 
-DEPS_DIR="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
-
+DEPS_DIR="$(cd "$(dirname "$0")" && pwd)"
 PACKAGES=$@
 
 echo "Install system packages..."
