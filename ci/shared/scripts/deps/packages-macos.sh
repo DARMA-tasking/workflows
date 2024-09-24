@@ -4,5 +4,5 @@ PACKAGES=$@
 
 echo "PACKAGES=\"${PACKAGES}\""
 
-apt-get brew install -y -q && \
+brew install -y -q && \
     $PACKAGES

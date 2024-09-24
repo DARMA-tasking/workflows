@@ -52,7 +52,7 @@ jobs:
           then
             wget -O setup.sh https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/setup-${{ matrix.runner.environment.id }}.sh
             chmod +x setup.sh
-            ./setup.sh
+            sudo ./setup.sh
           else
             echo "Docker environment pull. Not implemented."
             exit 1
