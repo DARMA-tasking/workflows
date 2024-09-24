@@ -55,7 +55,7 @@ jobs:
             cd ~/tmp
             git clone -b 2-implement-common-docker-containers --no-checkout --depth 1 https://github.com/${{ env.CI_REPO }} workflows
             cd ~/tmp/workflows
-            readarray -t arr < <(git ls-tree -r --name-only refs/heads/${{ env.CI_BRANCH }} | grep -E "ci/shared/scripts/deps/.*\.sh")
+            arr=("${(@f)$(git ls-tree -r --name-only refs/heads/${{ env.CI_BRANCH }} | grep -E "ci/shared/scripts/deps/.*\.sh")}") 
             cd ~/
             rm -rf ~/tmp
 
