@@ -52,9 +52,11 @@ class SetupBuilder:
                     environment["deps"] = {}
                 environment["deps"]["packages"] = packages
 
-            # Add setup instructions
+            # generate install instructions and install dependencies commands
             instructions = []
+            downloads = []
             for (dep_id, args) in environment.get("deps").items():
+                downloads.append(f"wget $SCRIPTS_DEPS_URL/{dep_id}.sh")
                 instructions.extend(self.__instructions(dep_id, args))
 
             setup_script = ""
@@ -65,7 +67,8 @@ class SetupBuilder:
             ) as file:
                 setup_script = file.read()
             setup_script = setup_script.replace('%ENVIRONMENT_LABEL%', environment.get("label"))
-            setup_script = setup_script.replace('%INSTRUCTIONS%', '\n'.join(instructions))
+            setup_script = setup_script.replace('%DEPS_DOWNLOAD%', '\n'.join(downloads))
+            setup_script = setup_script.replace('%DEPS_INSTALL%', '\n'.join(instructions))
 
             setup_filename = f"setup-{env_id}.sh"
             setup_filepath = os.path.join(os.path.dirname(__file__),

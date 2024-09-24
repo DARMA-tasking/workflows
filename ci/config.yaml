@@ -34,7 +34,7 @@ parameters:
 # Environments (OS, commpiler, dependencies)
 environments:
 
-  ubuntu-full:
+  ubuntu-develop:
     label: Ubuntu 24.04 / gcc-14 / Python[3.8-3.12] / MPI 5.0.4 / Zoltan / Mpich 4.0.2 / VTK 9.3.1
     compiler: "@gcc-14"
     # list of optional dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
@@ -72,12 +72,12 @@ environments:
 # Docker containers
 images:
 
-  ubuntu-full:
+  ubuntu-develop:
     repository: lifflander1/vt
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:24.04
-    environment: ubuntu-full
+    environment: ubuntu-develop
   
   ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
     repository: lifflander1/vt
@@ -88,11 +88,11 @@ images:
 
 # Runners (CI host machines to setup the environments on)
 runners:
-  ubuntu-full:
+  ubuntu-develop:
     type: github
     runs-on: ubuntu-24.04
     setup-mode: docker
-    image: ubuntu-full
+    image: ubuntu-develop
 
   ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
     type: github
