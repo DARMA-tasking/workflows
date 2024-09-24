@@ -12,8 +12,9 @@ SCRIPTS_REPO_BRANCH=2-implement-common-docker-containers
 SCRIPTS_DEP_REGEX="ci/shared/scripts/deps/.*\.sh"
 SCRIPTS_INSTALL_DIR=/opt/scripts/ci
 
+chown -R $(whoami) /opt
+
 mkdir -p $SCRIPTS_INSTALL_DIR
-chown -R $(whoami) $SCRIPTS_INSTALL_DIR
 
 # List scripts in `ci/shared/scripts/deps` from the scripts repository
 mkdir -p ~/tmp
