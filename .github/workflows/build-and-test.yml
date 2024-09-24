@@ -45,42 +45,44 @@ jobs:
           echo "Runner=${{ matrix.runner.runs-on }}"
           echo "Setup Mode=${{ matrix.runner.setup-mode }}"
           if [ "${{ matrix.runner.setup-mode }}" == "docker" ]
+          then
             echo "> With Docker Image=${{ matrix.runner.image }}"
           fi
 
       - name: Set up environment
         run: |
-          if [[ ${{ matrix.runner.setup-mode == 'runner' }} ]]
+          if [[ "${{ matrix.runner.setup-mode}}" == "runner" ]]
           then
-            echo "Download dependencies scripts..."
+            echo "::group::List installation scripts"
             mkdir -p ~/tmp
             cd ~/tmp
             git clone -b 2-implement-common-docker-containers --no-checkout --depth 1 https://github.com/${{ env.CI_REPO }} workflows
             cd ~/tmp/workflows
-            arr=("${(@f)$(git ls-tree -r --name-only refs/heads/${{ env.CI_BRANCH }} | grep -E "ci/shared/scripts/deps/.*\.sh")}") 
+            arr=($(git ls-tree -r --name-only refs/heads/${{ env.CI_BRANCH }} | grep -E "ci/shared/scripts/deps/.*\.sh"))
             cd ~/
             rm -rf ~/tmp
+            echo "::endgroup::"
 
-            mkdir -p ~/scripts
-            pushd ~/scripts
-
-            mkdir deps
-            pushd deps
+            echo "::group::Copy installation scripts"
+            mkdir -p /opt/scripts/deps
+            pushd /opt/scripts/
             for script in ${arr[@]}
             do
               wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/$script
             done
             popd
-
-            echo "Download setup script (for current environment)..."
-            wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/setup-${{ matrix.runner.environment.id }}.sh
-            
-            echo "Running setup script..."
-            bash setup-${{ matrix.runner.environment.id }}.sh
-
+            wget -O setup.sh https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/setup-${{ matrix.runner.environment.id }}.sh
+    
+            chmod u+x /opt/scripts/setup.sh /opt/scripts/deps/*.sh
             popd
+            echo "::endgroup::"
+
+            echo "::group::Setup"
+            /opt/scripts/setup.sh
+            echo "::endgroup::"
           else
             echo "Docker environment pull. Not implemented."
+            exit 1
           fi
 
       # - name: Build and test

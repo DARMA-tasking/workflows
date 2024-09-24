@@ -61,7 +61,7 @@ environments:
       openmpi: ['v5.0', '5.0.4']
 
   macos-12-clang-14-vtk-9.3.1:
-    label: MacOSX / clang / VTK 9.3.1
+    label: MacOS 14 Sonoma / clang-14 / VTK 9.3.1
     compiler: { type: clang, cc: clang-14, cxx: clang-14++, gcov: llvm-gcov }
     deps:
       packages: "@brew_default_packages"
