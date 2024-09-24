@@ -2,7 +2,7 @@
 
 # Set up packages through the package manager
 
-DEPS_DIR="$(dirname -- "$(realpath -- "$0")")"
+DEPS_DIR="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 
 PACKAGES=$@
 
