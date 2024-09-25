@@ -22,28 +22,14 @@ mkdir -p $SCRIPTS_INSTALL_DIR/deps
 pushd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
 wget $SCRIPTS_DEPS_URL/cmake.sh
-wget $SCRIPTS_DEPS_URL/conda.sh
-wget $SCRIPTS_DEPS_URL/conda-python-env.sh
 wget $SCRIPTS_DEPS_URL/openmpi.sh
-wget $SCRIPTS_DEPS_URL/zoltan.sh
-wget $SCRIPTS_DEPS_URL/mpich.sh
-wget $SCRIPTS_DEPS_URL/vtk.sh
 
 # > Run install instructions
 chmod u+x *.sh
 ls -l
-./packages.sh "ca-certificates" "curl" "git" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "wget" "zlib1g" "zlib1g-dev" "ccache" "gcc-14" "g++-14"
+./packages.sh "ca-certificates" "curl" "git" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "wget" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-14" "g++-14"
 ./cmake.sh "3.23.4"
-./conda.sh 
-./conda-python-env.sh "3.8" "nanobind yaml setuptools"
-./conda-python-env.sh "3.9" "nanobind yaml setuptools"
-./conda-python-env.sh "3.10" "nanobind yaml setuptools"
-./conda-python-env.sh "3.11" "nanobind yaml setuptools"
-./conda-python-env.sh "3.12" "nanobind yaml setuptools"
 ./openmpi.sh "v5.0" "5.0.4" "-j4"
-./zoltan.sh "-j4'" "/trilinos-install"
-./mpich.sh "4.0.2" "-j4"
-./vtk.sh "9.3.1"
 
 popd # $SCRIPTS_INSTALL_DIR/deps
 
