@@ -18,9 +18,8 @@ elif [[ $(uname -a) == *"Linux"* ]]; then
         then
             apt-get update -y -q && \
             apt-get install -y -q --no-install-recommends \
-            $PACKAGES && \
-            apt-get clean && \
-            rm -rf /var/lib/apt/lists/*
+                $PACKAGES && \
+                apt-get clean
             exit 0
         fi
     else

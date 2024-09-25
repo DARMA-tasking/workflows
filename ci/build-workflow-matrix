@@ -21,9 +21,6 @@ class MatrixGenerator:
             raw_config = yaml.safe_load(file)
         config = resolve_conf(copy.deepcopy(raw_config))
 
-        image_tags = dict((k, v.get("repository") + ":" + k)
-                           for k, v in config.get("images").items())
-
         for runner_type in ["github", "azure-pipelines"]:
             runners = dict((k, v) for k, v in config.get("runners").items() if v.get("type") == runner_type)
 
@@ -31,6 +28,7 @@ class MatrixGenerator:
             for (runner_id, runner) in runners.items():
                 setup = {}
                 setup_in = runner.get("setup-in")
+                image = None
                 if setup_in == "docker":
                     image = config.get("images").get(runner.get("image"))
                     if image is None:
@@ -48,7 +46,7 @@ class MatrixGenerator:
                     "runs-on": runner.get("runs-on"),
                     "id": runner_id,
                     "label": setup.get("label", setup_id),
-                    "image": image_tags.get(runner.get("image", None), None),
+                    "image": image.get("repository") + ":" + image.get("tag") if image is not None else None,
                     "setup": setup_id,
                     "setup-in": setup_in
                 })

@@ -13,28 +13,105 @@
 # THIS IS A LOT OF WORK BUT MIGHT BE VERY USEFUL
 
 defaults:
-  apt_packages: [ca-certificates, curl, git, jq, less, libomp5, libunwind-dev make-guile,
+  apt-packages: [ca-certificates, curl, git, jq, less, libomp5, libunwind-dev make-guile,
       ninja-build, valgrind, wget, zlib1g, zlib1g-dev, ccache, python3]
-  brew_packages: [ coreutils ]
+  brew-packages: [ coreutils ]
   repo: lifflander1/vt
+  pip-packages: "nanobind yaml setuptools"
+  conda-py3.all:
+      - ["3.8", "@defaults.pip-packages"]
+      - ["3.9", "@defaults.pip-packages"]
+      - ["3.10", "@defaults.pip-packages"]
+      - ["3.11", "@defaults.pip-packages"]
+      - ["3.12", "@defaults.pip-packages"]
 
 compilers:
-  gcc-9: { type: gnu, cc: gcc-9, cxx: g++-9, fc: gfortran, gcov: gcov }
-  gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, fc: gfortran, gcov: gcov }
-  gcc-12: { type: gnu, cc: gcc-12, cxx: g++-12, fc: gfortran, gcov: gcov }
+  clang-11: { type: clang, cc: clang-11, cxx: clang++-11, fc: flang-11, gcov: llvm-gcov }
+  gcc-9: { type: gnu, cc: gcc-9, cxx: g++-9, fc: gfortran-9, gcov: gcov-9 }
+  gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, fc: gfortran-11, gcov: gcov-11 }
+  gcc-12: { type: gnu, cc: gcc-12, cxx: g++-12, fc: gfortran-12, gcov: gcov-12 }
+  gcc-13: { type: gnu, cc: gcc-13, cxx: g++-13, fc: gfortran-13, gcov: gcov-13 }
 
 setup:
+  #vt
   ubuntu-20.04-gcc-9-12.2.0-cpp:
-    label: gcc-9, ubuntu, mpich, zoltan
+    label: vt, gcc-9, ubuntu, mpich, zoltan
     compiler: "@compilers.gcc-9"
+    # deps and versions to find in vt
     deps:
-      packages: "@defaults.apt_packages"
+      packages: "@defaults.apt-packages"
       cmake: ['3.23.4']
-      vtk: [ '9.3.1' ]
       openmpi: ['v5.0', '5.0.4']
       zoltan: [-j4', '/trilinos-install']
+      mpich: ['4.0.2', '-j4']   
+
+  # TODO: add the following
+  # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
+  # amd64-ubuntu-20.04-icpc-icpc-cpp:
+  # amd64-ubuntu-24.04-clang-16-clang-16-cpp:
+  # develop:
+  # amd64-ubuntu-22.04-clang-13-clang-13-cpp
+  # amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
+  # amd64-ubuntu-20.04-clang-10-clang-10-cpp:
+  # amd64-ubuntu-20.04-icpx-icpx-cpp:
+  # amd64-ubuntu-22.04-clang-12-clang-12-cpp:
+  # amd64-ubuntu-22.04-gcc-11-gcc-11-cpp:
+  # amd64-ubuntu-22.04-clang-14-clang-14-cpp:
+  # amd64-ubuntu-22.04-clang-11-clang-11-cpp:
+  # amd64-ubuntu-20.04-gcc-9-gcc-9-cpp:
+  # amd64-ubuntu-22.04-gcc-12-gcc-12-cpp:
+  # amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp:
+  # amd64-ubuntu-18.04-gcc-8-gcc-8-cpp:
+  # amd64-alpine-clang-13-clang-13-cpp:
+  # amd64-ubuntu-20.04-clang-9-clang-9-cpp:
+
+  # vt-tv
+  ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all:
+    label: vt-tv, gcc-13, ubuntu, vtk 9.3.1, py3[8-12]
+    compiler: "@compilers.gcc-13"
+    deps:
+      packages: "@defaults.apt-packages"
+      mesa: ~
+      conda: ~
+      conda-python-env: "@defaults.conda-py3.all"
+      cmake: ['3.30.3']
+      vtk: [ '9.3.1' ]
+
+  ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all:
+    label: vt-tv, gcc-12, ubuntu, vtk 9.3.0, py3[8-12]
+    compiler: "@compilers.gcc-12"
+    deps:
+      packages: "@defaults.apt-packages"
+      mesa: ~
+      conda: ~
+      conda-python-env: "@defaults.conda-py3.all"
+      cmake: ['3.30.3']
+      vtk: [ '9.3.0' ]
+
+  ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all:
+    label: vt-tv, clang-11, ubuntu, vtk 9.2.2, py3[8-12]
+    compiler: "@compilers.clang-11"
+    deps:
+      packages: "@defaults.apt-packages"
+      mesa: ~
+      conda: ~
+      conda-python-env: "@defaults.conda-py3.all"
+      cmake: ['3.30.3']
+      vtk: [ '9.2.2' ]
+
+  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all:
+    label: vt-tv, gcc-11, ubuntu, vtk 9.2.2, py3[8-12]
+    compiler: "@compilers.gcc-11"
+    deps:
+      packages: "@defaults.apt-packages"
+      mesa: ~
+      conda: ~
+      conda-python-env: "@defaults.conda-py3.all"
+      cmake: ['3.30.3']
+      vtk: [ '9.2.2' ]
 
 images:
+  # vt
   amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
     repository: "@defaults.repo"
     tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
@@ -43,9 +120,105 @@ images:
     base: ubuntu:20.04
     setup: ubuntu-20.04-gcc-9-12.2.0-cpp
 
+  # TODO: add the following
+  # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
+  # amd64-ubuntu-20.04-icpc-icpc-cpp:
+  # amd64-ubuntu-24.04-clang-16-clang-16-cpp:
+  # develop:
+  # amd64-ubuntu-22.04-clang-13-clang-13-cpp
+  # amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
+  # amd64-ubuntu-20.04-clang-10-clang-10-cpp:
+  # amd64-ubuntu-20.04-icpx-icpx-cpp:
+  # amd64-ubuntu-22.04-clang-12-clang-12-cpp:
+  # amd64-ubuntu-22.04-gcc-11-gcc-11-cpp:
+  # amd64-ubuntu-22.04-clang-14-clang-14-cpp:
+  # amd64-ubuntu-22.04-clang-11-clang-11-cpp:
+  # amd64-ubuntu-20.04-gcc-9-gcc-9-cpp:
+  # amd64-ubuntu-22.04-gcc-12-gcc-12-cpp:
+  # amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp:
+  # amd64-ubuntu-18.04-gcc-8-gcc-8-cpp:
+  # amd64-alpine-clang-13-clang-13-cpp:
+  # amd64-ubuntu-20.04-clang-9-clang-9-cpp:
+
+  # vt-tv
+  ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all:
+    repository: "@defaults.repo"
+    tag: ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all
+    dockerfile: ubuntu-cpp-base.dockerfile
+    arch: amd64
+    base: ubuntu:24.04
+    setup: ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all
+  ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all:
+    repository: "@defaults.repo"
+    tag: ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all
+    dockerfile: ubuntu-cpp-base.dockerfile
+    arch: amd64
+    base: ubuntu:22.04
+    setup: ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all
+  ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all:
+    repository: "@defaults.repo"
+    tag: ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all
+    dockerfile: ubuntu-cpp-base.dockerfile
+    arch: amd64
+    base: ubuntu:22.04
+    setup: ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all
+  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all:
+    repository: "@defaults.repo"
+    tag: ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all
+    dockerfile: ubuntu-cpp-base.dockerfile
+    arch: amd64
+    base: ubuntu:22.04
+    setup: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all
+
 runners:
+  # vt
   amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
     type: github
     runs-on: ubuntu-20.04
     setup-in: docker
     image: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
+
+  # TODO: add the following
+  # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
+  # amd64-ubuntu-20.04-icpc-icpc-cpp:
+  # amd64-ubuntu-24.04-clang-16-clang-16-cpp:
+  # develop:
+  # amd64-ubuntu-22.04-clang-13-clang-13-cpp
+  # amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
+  # amd64-ubuntu-20.04-clang-10-clang-10-cpp:
+  # amd64-ubuntu-20.04-icpx-icpx-cpp:
+  # amd64-ubuntu-22.04-clang-12-clang-12-cpp:
+  # amd64-ubuntu-22.04-gcc-11-gcc-11-cpp:
+  # amd64-ubuntu-22.04-clang-14-clang-14-cpp:
+  # amd64-ubuntu-22.04-clang-11-clang-11-cpp:
+  # amd64-ubuntu-20.04-gcc-9-gcc-9-cpp:
+  # amd64-ubuntu-22.04-gcc-12-gcc-12-cpp:
+  # amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp:
+  # amd64-ubuntu-18.04-gcc-8-gcc-8-cpp:
+  # amd64-alpine-clang-13-clang-13-cpp:
+  # amd64-ubuntu-20.04-clang-9-clang-9-cpp:
+
+  # vt-tv
+  ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all:
+    type: github
+    runs-on: ubuntu-24.04
+    setup-in: docker
+    image: ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all
+
+  ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all:
+    type: github
+    runs-on: ubuntu-22.04
+    setup-in: docker
+    image: ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all
+
+  ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all:
+    type: github
+    runs-on: ubuntu-22.04
+    setup-in: docker
+    image: ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all
+
+  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all:
+    type: github
+    runs-on: ubuntu-22.04
+    setup-in: docker
+    image: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all

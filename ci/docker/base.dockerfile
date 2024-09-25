@@ -2,7 +2,7 @@
 
 ARG ARCH=amd64
 ARG BASE=ubuntu:22.04
-ARG ENVIRONMENT_ID=${ENVIRONMENT_ID:-"ubuntu-develop"}
+ARG SETUP_ID=${SETUP_ID:-"ubuntu-develop"}
 ARG CC=${CC:-""}
 ARG CXX=${CXX:-""}
 ARG FC=${FC:-""}
@@ -13,12 +13,12 @@ FROM ${ARCH}/${BASE} as base
 RUN apt-get update && \
     apt-get install -y wget git
 
-ARG ENVIRONMENT_ID
+ARG SETUP_ID
 ARG CC
 ARG CXX
 ARG GCOV
 
-COPY ci/shared/scripts/setup-${ENVIRONMENT_ID}.sh setup.sh
+COPY ci/shared/scripts/setup-${SETUP_ID}.sh setup.sh
 
 SHELL ["/bin/bash", "-c"]
 

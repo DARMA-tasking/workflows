@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# Ubuntu 24.04 / gcc-14 / Python[3.8-3.12] / MPI 5.0.4 / Zoltan / Mpich 4.0.2 / VTK 9.3.1 - Installation
+# vt, gcc-9, ubuntu, mpich, zoltan - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -22,14 +22,18 @@ mkdir -p $SCRIPTS_INSTALL_DIR/deps
 pushd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
 wget $SCRIPTS_DEPS_URL/cmake.sh
+wget $SCRIPTS_DEPS_URL/openmpi.sh
 wget $SCRIPTS_DEPS_URL/zoltan.sh
+wget $SCRIPTS_DEPS_URL/mpich.sh
 
 # > Run install instructions
 chmod u+x *.sh
 ls -l
-./packages.sh "ca-certificates" "curl" "git" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "wget" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-14" "g++-14"
+./packages.sh "ca-certificates" "curl" "git" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "wget" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
 ./cmake.sh "3.23.4"
+./openmpi.sh "v5.0" "5.0.4"
 ./zoltan.sh "-j4'" "/trilinos-install"
+./mpich.sh "4.0.2" "-j4"
 
 popd # $SCRIPTS_INSTALL_DIR/deps
 

@@ -11,13 +11,13 @@ fi
 ZOLTAN_SRC_DIR="/opt/trilinos/src"
 ZOLTAN_BUILD_DIR="/opt/trilinos/build"
 ZOLTAN_MAKE_FLAGS=${1:-""}
-ZOLTAN_INSTALL_DIR=${2:-"/opt/trilinos/bin"}
+ZOLTAN_INSTALL_DIR=${2:-"/trilinos_install"}
 
 if test -d Trilinos
 then
     echo "Found Trilinos already"
 else
-    git clone https://github.com/trilinos/Trilinos.git --depth=1
+    git clone https://github.com/trilinos/Trilinos.git --depth=1 $ZOLTAN_SRC_DIR
 fi
 
 mkdir -p ${ZOLTAN_SRC_DIR}
@@ -34,7 +34,7 @@ cmake \
   -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF \
   -DTrilinos_ENABLE_Zoltan:BOOL=ON \
   -DZoltan_ENABLE_ULLONG_IDS:Bool=ON \
-  ../Trilinos
+  $ZOLTAN_SRC_DIR
 make ${ZOLTAN_MAKE_FLAGS}
 make install
 cd -

@@ -1,0 +1,43 @@
+name: Build docker images
+
+# Template workflow to build and test a project in all available setup configurations
+# WIP: This is currently a work in progress (#2: Docker image usage)
+
+on:
+  push:
+    branches: 
+      - 2-implement-common-docker-containers
+
+jobs:
+  get-matrix:
+    name: Retrieve CI matrix
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CI_REPO: DARMA-tasking/workflows
+      CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
+    steps:  
+      - name: Retrieve CI matrix
+        id: get-matrix
+        run: |
+          wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/workflows/github-matrix.json
+          matrix=$(cat github-matrix.json | jq '.matrix' | jq -c '[ .[] | select( ."setup-in" == "docker") ]')
+          echo "runner=$(echo $matrix)" >> $GITHUB_OUTPUT
+    outputs:
+      matrix: ${{ steps.get-matrix.outputs.runner }}
+
+  run:
+    name: Build docker image (${{ matrix.runner.label }})
+    runs-on: ${{ matrix.runner.runs-on }}
+    needs: get-matrix
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ${{ fromJson(needs.get-matrix.outputs.matrix ) }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v5
+
+      - name: Docker image build
+        run: |
+          python ci/build-docker-base ${{ matrix.runner.image }}
