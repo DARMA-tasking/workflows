@@ -54,8 +54,16 @@ jobs:
             chmod +x setup.sh
             sudo ./setup.sh
           else
-            echo "Docker environment pull. Not implemented."
-            exit 1
+            docker image pull ${{ matrix.runner.image }}
+          fi
+
+      - name: Run (example)
+        run: |
+          if [[ "${{ matrix.runner.setup-in }}" == "docker" ]]
+          then
+            docker run ${{ matrix.runner.image }} uname -a
+          else
+            uname -a
           fi
 
       # - name: Build and test
