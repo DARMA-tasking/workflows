@@ -8,8 +8,6 @@ then
     exit 1
 fi
 
-which gcc-14
-
 openmpi_dir=$1
 openmpi_version=$2
 openmpi_name="openmpi-${openmpi_version}"

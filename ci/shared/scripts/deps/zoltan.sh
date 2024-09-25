@@ -8,9 +8,10 @@ then
     exit 1
 fi
 
-make_flags=$1
-build_dir=/trilinos-build/
-install_dir=$2
+ZOLTAN_SRC_DIR="/opt/trilinos/src"
+ZOLTAN_BUILD_DIR="/opt/trilinos/build"
+ZOLTAN_MAKE_FLAGS=${1:-""}
+ZOLTAN_INSTALL_DIR=${2:-"/opt/trilinos/bin"}
 
 if test -d Trilinos
 then
@@ -19,13 +20,14 @@ else
     git clone https://github.com/trilinos/Trilinos.git --depth=1
 fi
 
-mkdir -p ${build_dir}
-mkdir -p ${install_dir}
+mkdir -p ${ZOLTAN_SRC_DIR}
+mkdir -p ${ZOLTAN_BUILD_DIR}
+mkdir -p ${ZOLTAN_INSTALL_DIR}
 
-cd ${build_dir}
-export FC=/usr/bin/gfortran
+cd ${ZOLTAN_BUILD_DIR}
+
 cmake \
-  -DCMAKE_INSTALL_PREFIX:FILEPATH=${install_dir} \
+  -DCMAKE_INSTALL_PREFIX:FILEPATH=${ZOLTAN_INSTALL_DIR} \
   -DTPL_ENABLE_MPI:BOOL=ON \
   -DCMAKE_C_FLAGS:STRING="-m64 -g" \
   -DCMAKE_CXX_FLAGS:STRING="-m64 -g" \
@@ -33,8 +35,8 @@ cmake \
   -DTrilinos_ENABLE_Zoltan:BOOL=ON \
   -DZoltan_ENABLE_ULLONG_IDS:Bool=ON \
   ../Trilinos
-make ${make_flags}
+make ${ZOLTAN_MAKE_FLAGS}
 make install
 cd -
-rm -rf Trilinos
-rm -rf ${build_dir}
+rm -rf ${ZOLTAN_SRC_DIR}
+rm -rf ${ZOLTAN_BUILD_DIR}
