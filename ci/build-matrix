@@ -7,11 +7,9 @@ import json
 from util import resolve_conf
 import yaml
 
-AZURE_PIPELINES_OUTPUT_DIR="ci/azure"
-GITHUB_PIPELINES_OUTPUT_DIR=".github/workflows"
 
 class MatrixGenerator:
-    """MatrixGenerator class for CI pipelines"""
+    """MatrixGenerator to generate a matrix file for Github and Azure Pipelines"""
 
     def generate(self):
         """Generate a matrix of runners and inner environments to be used by CI pipelines"""
@@ -22,7 +20,10 @@ class MatrixGenerator:
         config = resolve_conf(copy.deepcopy(raw_config))
 
         for runner_type in ["github", "azure-pipelines"]:
-            runners = dict((k, v) for k, v in config.get("runners").items() if v.get("type") == runner_type)
+            runners = dict(
+                (k, v) for k, v in config.get("runners").items()
+                if v.get("type") == runner_type
+            )
 
             matrix = []
             for (runner_id, runner) in runners.items():
@@ -46,7 +47,8 @@ class MatrixGenerator:
                     "runs-on": runner.get("runs-on"),
                     "id": runner_id,
                     "label": setup.get("label", setup_id),
-                    "image": image.get("repository") + ":" + image.get("tag") if image is not None else None,
+                    "image": image.get("repository") + ":" + image.get("tag")
+                             if image is not None else None,
                     "setup": setup_id,
                     "setup-in": setup_in
                 })
@@ -54,8 +56,11 @@ class MatrixGenerator:
             data = json.dumps({
                 "_comment": "This file has been generated. Please do not edit",
                 "matrix": matrix}, indent=2)
-            with open(os.path.dirname(__file__) + f"/shared/workflows/{runner_type}-matrix.json", 'w+',
-                        encoding="utf-8") as file:
+            with open(
+                os.path.dirname(__file__) + f"/shared/matrix/{runner_type}.json",
+                'w+',
+                encoding="utf-8"
+            ) as file:
                 file.write(data)
 
 MatrixGenerator().generate()

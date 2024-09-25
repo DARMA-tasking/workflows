@@ -10,18 +10,18 @@ on:
 
 jobs:
   get-matrix:
-    name: Retrieve CI matrix
+    name: Retrieve Setup matrix
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CI_REPO: DARMA-tasking/workflows
       CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
     steps:  
-      - name: Retrieve CI matrix
+      - name: Retrieve Setup matrix
         id: get-matrix
         run: |
-          wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/workflows/github-matrix.json
-          matrix=$(cat github-matrix.json | jq '.matrix')
+          wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/matrix/github.json
+          matrix=$(cat github.json | jq '.matrix')
           echo "runner=$(echo $matrix)" >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
