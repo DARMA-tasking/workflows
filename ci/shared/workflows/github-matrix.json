@@ -2,14 +2,12 @@
   "_comment": "This file has been generated. Please do not edit",
   "matrix": [
     {
-      "id": "amd64-ubuntu-20.04-gcc-9-12.2.0-cpp",
       "runs-on": "ubuntu-20.04",
-      "setup-mode": "docker",
+      "id": "amd64-ubuntu-20.04-gcc-9-12.2.0-cpp",
+      "label": "gcc-9, ubuntu, mpich, zoltan",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-9-12.2.0-cpp",
-      "environment": {
-        "id": "ubuntu-20.04-gcc-9-12.2.0-cpp",
-        "label": "gcc-9, ubuntu, mpich, zoltan"
-      }
+      "setup": "ubuntu-20.04-gcc-9-12.2.0-cpp",
+      "setup-in": "docker"
     }
   ]
 }

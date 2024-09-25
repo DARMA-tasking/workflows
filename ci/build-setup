@@ -26,16 +26,16 @@ class SetupBuilder:
         return [ f"./{dep_id}.sh {' '.join(call_args)}" ]
 
     def build(self):
-        """Build environment setup scripts for each environments defined in config"""
+        """Build setup scripts for each setup configuration defined in config"""
 
         raw_config: dict = {}
         with open(os.path.dirname(__file__) + '/config.yaml', 'r', encoding="utf-8") as file:
             raw_config = yaml.safe_load(file)
         config = resolve_conf(copy.deepcopy(raw_config))
 
-        environments = config.get("environments")
+        setup = config.get("setup")
 
-        for (env_id, environment) in environments.items():
+        for (env_id, environment) in setup.items():
             # Add compiler packages
             compiler = environment.get('compiler')
             packages = copy.deepcopy(environment.get("deps", {}).get("packages", []))

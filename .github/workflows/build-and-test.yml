@@ -1,6 +1,6 @@
 name: Build and Test (Template)
 
-# Template workkflow to build and test a project in all available test environments on Github actions
+# Template workflow to build and test a project in all available setup configurations
 # WIP: This is currently a work in progress (#2: Docker image usage)
 
 on:
@@ -27,7 +27,7 @@ jobs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
 
   run:
-    name: Run (${{ matrix.runner.environment.label }})
+    name: Run (${{ matrix.runner.label }})
     runs-on: ${{ matrix.runner.runs-on }}
     needs: get-matrix
     strategy:
@@ -38,17 +38,17 @@ jobs:
       - name: Display configuration
         run: |
           echo "id=${{ matrix.runner.id }}"
-          echo "Environment=${{ matrix.runner.environment.label }}"
+          echo "Environment=${{ matrix.runner.label }}"
           echo "Runner=${{ matrix.runner.runs-on }}"
-          echo "Setup Mode=${{ matrix.runner.setup-mode }}"
-          if [ "${{ matrix.runner.setup-mode }}" == "docker" ]
+          echo "Setup in=${{ matrix.runner.setup-in }}"
+          if [ "${{ matrix.runner.setup-in }}" == "docker" ]
           then
             echo "> With Docker Image=${{ matrix.runner.image }}"
           fi
 
       - name: Set up dependencies
         run: |
-          if [[ "${{ matrix.runner.setup-mode}}" == "runner" ]]
+          if [[ "${{ matrix.runner.setup-in }}" == "runner" ]]
           then
             wget -O setup.sh https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/setup-${{ matrix.runner.environment.id }}.sh
             chmod +x setup.sh

@@ -23,8 +23,7 @@ compilers:
   gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, fc: gfortran, gcov: gcov }
   gcc-12: { type: gnu, cc: gcc-12, cxx: g++-12, fc: gfortran, gcov: gcov }
 
-# Environments
-environments:
+setup:
   ubuntu-20.04-gcc-9-12.2.0-cpp:
     label: gcc-9, ubuntu, mpich, zoltan
     compiler: "@compilers.gcc-9"
@@ -35,8 +34,6 @@ environments:
       openmpi: ['v5.0', '5.0.4']
       zoltan: [-j4', '/trilinos-install']
 
-# Docker images
-# ${ARCH}-ubuntu-${UBUNTU}-${HOST_COMPILER}-${COMPILER}-cpp
 images:
   amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
     repository: "@defaults.repo"
@@ -44,8 +41,11 @@ images:
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:20.04
-    environment: ubuntu-20.04-gcc-9-12.2.0-cpp
+    setup: ubuntu-20.04-gcc-9-12.2.0-cpp
 
-# Runners (CI host machines to setup the environments on)
 runners:
-  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: { type: github, runs-on: ubuntu-20.04, setup-mode: docker, image: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp }
+  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
+    type: github
+    runs-on: ubuntu-20.04
+    setup-in: docker
+    image: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp

@@ -31,9 +31,8 @@ parameters:
     gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, fc: gfortran, gcov: gcov }
     gcc-12: { type: gnu, cc: gcc-12, cxx: g++-12, fc: gfortran, gcov: gcov }
 
-# Environments (OS, commpiler, dependencies)
-environments:
-
+# Setup configurations (OS, commpiler, dependencies)
+setup:
   ubuntu-develop:
     label: Ubuntu 24.04 / gcc-14 / Python[3.8-3.12] / MPI 5.0.4 / Zoltan / Mpich 4.0.2 / VTK 9.3.1
     compiler: "@gcc-14"
@@ -66,7 +65,7 @@ images:
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:24.04
-    environment: ubuntu-develop
+    setup: ubuntu-develop
 
 # Runners (CI host machines to setup the environments on)
 runners:
@@ -74,12 +73,12 @@ runners:
   ubuntu-develop:
     type: github
     runs-on: ubuntu-24.04
-    setup-mode: docker
+    setup-in: docker
     image: ubuntu-develop
 
   # Example with no docker image (runner)
   macos-12-clang-14-vtk-9.3.1:
     type: github
     runs-on: macos-12
-    setup-mode: runner
-    environment: macos-12-clang-14-vtk-9.3.1
+    setup-in: runner
+    setup: macos-12-clang-14-vtk-9.3.1

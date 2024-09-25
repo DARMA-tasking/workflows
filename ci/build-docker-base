@@ -19,7 +19,7 @@ class DockerBuilder:
 
         config = resolve_conf(copy.deepcopy(raw_config))
         images = config.get("images")
-        environments = config.get("environments")
+        setup = config.get("setup")
 
         if len(args) > 0:
             image_key = args[0]
@@ -33,7 +33,7 @@ class DockerBuilder:
             print("Choose image: ")
             for i in choices:
                 image = images.get(choices[i])
-                environment = environments.get(image.get('environment'))
+                environment = setup.get(image.get('environment'))
                 lbl = environment.get('label')
                 print(
                     f"\033[1m[{i}] {choices[i]}\033[0m\n"
@@ -51,7 +51,7 @@ class DockerBuilder:
 
         repo = image.get("repository")
         tag = image_key
-        environment = environments.get(image.get('environment'))
+        environment = setup.get(image.get('environment'))
         deps = environment.get("deps", {})
 
         # Add compiler packages
