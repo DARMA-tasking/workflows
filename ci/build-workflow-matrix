@@ -33,6 +33,8 @@ class MatrixGenerator:
                 setup_mode = runner.get("setup-mode")
                 if setup_mode == "docker":
                     image = config.get("images").get(runner.get("image"))
+                    if image is None:
+                        raise RuntimeError(f"Image not found {runner.get('image')}")
                     environment_id = image.get("environment")
                 elif setup_mode == "runner" or setup_mode is None:
                     environment_id = runner.get("environment")

@@ -12,97 +12,40 @@
 
 # THIS IS A LOT OF WORK BUT MIGHT BE VERY USEFUL
 
-# Common parameters
-parameters:
-    # Dependencies to install using package manager
-    apt_default_packages: [ 
-      ca-certificates, curl, git, jq, less, libomp5, libunwind-dev make-guile,
-      ninja-build, valgrind, wget, zlib1g, zlib1g-dev, ccache, python3 ]
-    brew_default_packages: [ coreutils ]
-    # Python
-    common_pip_packages: "nanobind yaml setuptools"
-    conda-py[3.8-3.12]:
-      - ["3.8", "@common_pip_packages"]
-      - ["3.9", "@common_pip_packages"]
-      - ["3.10", "@common_pip_packages"]
-      - ["3.11", "@common_pip_packages"]
-      - ["3.12", "@common_pip_packages"]
-    # C/C++
-    gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, fc: gfortran, gcov: gcov }  
-    gcc-14: { type: gnu, cc: gcc-14, cxx: g++-14, fc: gfortran, gcov: gcov }
+defaults:
+  apt_packages: [ca-certificates, curl, git, jq, less, libomp5, libunwind-dev make-guile,
+      ninja-build, valgrind, wget, zlib1g, zlib1g-dev, ccache, python3]
+  brew_packages: [ coreutils ]
+  repo: lifflander1/vt
 
-# Environments (OS, commpiler, dependencies)
+compilers:
+  gcc-9: { type: gnu, cc: gcc-9, cxx: g++-9, fc: gfortran, gcov: gcov }
+  gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, fc: gfortran, gcov: gcov }
+  gcc-12: { type: gnu, cc: gcc-12, cxx: g++-12, fc: gfortran, gcov: gcov }
+
+# Environments
 environments:
-
-  ubuntu-develop:
-    label: Ubuntu 24.04 / gcc-14 / Python[3.8-3.12] / MPI 5.0.4 / Zoltan / Mpich 4.0.2 / VTK 9.3.1
-    compiler: "@gcc-14"
-    # list of optional dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
-    # WIP: validating dependencies 1 by 1
-    deps: 
-      packages: "@apt_default_packages"
-      cmake: ['3.23.4']
-      # conda: ~                                        # >>> OK
-      # conda-python-env: [ "@conda-py[3.8-3.12]" ]     # >>> OK
-      openmpi: ['v5.0', '5.0.4', '-j4']
-      # zoltan: [-j4', '/trilinos-install']               # !!!!!TO BE TESTED
-      # mpich: ['4.0.2', '-j4']                         # !!!!!KO
-      # vtk: [ '9.3.1' ]                                # >>> OK
-
-  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
-    label: Ubuntu 22.04 / gcc-11 / Python[3.8-3.12] / MPI 5.0.4 / VTK 9.3.1
-    compiler: "@gcc-11"
-    # list dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
+  ubuntu-20.04-gcc-9-12.2.0-cpp:
+    label: gcc-9, ubuntu, mpich, zoltan
+    compiler: "@compilers.gcc-9"
     deps:
-      packages: "@apt_default_packages"
+      packages: "@defaults.apt_packages"
       cmake: ['3.23.4']
-      conda: [ ]
-      conda-python-env: [ "@conda-py[3.8-3.12]" ]
       vtk: [ '9.3.1' ]
       openmpi: ['v5.0', '5.0.4']
+      zoltan: [-j4', '/trilinos-install']
 
-  macos-12-clang-14-vtk-9.3.1:
-    label: MacOS 14 Sonoma / clang-14 / VTK 9.3.1
-    compiler: { type: clang, cc: clang-14, cxx: clang-14++, gcov: llvm-gcov }
-    deps:
-      packages: "@brew_default_packages"
-      conda: [ ]
-      conda-python-env: [ "@conda-py[3.8-3.12]" ]
-      vtk: [ '9.3.1' ]
-
-# Docker containers
+# Docker images
+# ${ARCH}-ubuntu-${UBUNTU}-${HOST_COMPILER}-${COMPILER}-cpp
 images:
-
-  ubuntu-develop:
-    repository: lifflander1/vt
+  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
+    repository: "@defaults.repo"
+    tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
-    base: ubuntu:24.04
-    environment: ubuntu-develop
-  
-  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
-    repository: lifflander1/vt
-    dockerfile: ubuntu-cpp-base.dockerfile
-    arch: amd64
-    base: ubuntu:22.04
-    environment: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi
+    base: ubuntu:20.04
+    environment: ubuntu-20.04-gcc-9-12.2.0-cpp
 
 # Runners (CI host machines to setup the environments on)
 runners:
-  ubuntu-develop:
-    type: github
-    runs-on: ubuntu-24.04
-    setup-mode: docker
-    image: ubuntu-develop
-
-  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
-    type: github
-    runs-on: ubuntu-22.04
-    setup-mode: docker
-    image: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi
-
-  macos-12-clang-14-vtk-9.3.1:
-    type: github
-    runs-on: macos-12
-    setup-mode: runner
-    environment: macos-12-clang-14-vtk-9.3.1
+  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: { type: github, runs-on: ubuntu-20.04, setup-mode: docker, image: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp }
