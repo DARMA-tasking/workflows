@@ -52,23 +52,29 @@ class DockerBuilder:
         repo = image.get("repository")
         tag = image_key
         environment = environments.get(image.get('environment'))
+        deps = environment.get("deps", {})
 
         # Add compiler packages
         compiler = environment.get('compiler')
+        args = {
+            # General
+            "ARCH": image.get('arch'),
+            "BASE": image.get('base'),
+            "ENVIRONMENT_ID": image.get('environment'),
+            # Compiler
+            "CC": compiler.get('cc', '') if compiler is not None else '',
+            "CXX": compiler.get('cxx', '') if compiler is not None else '',
+            "FC": compiler.get('fc', '') if compiler is not None else '',
+            "GCOV": compiler.get('gcov', '') if compiler is not None else ''
+        }
+
+        space = ' '
         cmd = ("docker build"
-                # General
-                f" --tag {repo}:{tag}"
-                f" --build-arg ARCH={image.get('arch')}"
-                f" --build-arg BASE={image.get('base')}"
-                # Compiler
-                f" --build-arg CC={compiler.get('cc', '') if compiler is not None else ''}"
-                f" --build-arg CXX={compiler.get('cxx', '') if compiler is not None else ''}"
-                f" --build-arg GCOV={compiler.get('gcov', '') if compiler is not None else ''}"
-                f" --build-arg CI_ENVIRONMENT={image.get('environment')}"
-                #
+                f" --tag {repo}:{tag}"             
                 f" --file {os.path.dirname(__file__)}/docker/base.dockerfile ."
+                f" {space.join([f'--build-arg {k}={v}' for (k,v) in args.items()])}"  
                 " --progress=plain"
-                # " --no-cache"
+                " --no-cache"
             )
         print(cmd)
         os.system(cmd)

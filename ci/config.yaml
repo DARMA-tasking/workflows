@@ -28,8 +28,8 @@ parameters:
       - ["3.11", "@common_pip_packages"]
       - ["3.12", "@common_pip_packages"]
     # C/C++
-    gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, gcov: gcov }  
-    gcc-14: { type: gnu, cc: gcc-14, cxx: g++-14, gcov: gcov }
+    gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, fc: gfortran, gcov: gcov }  
+    gcc-14: { type: gnu, cc: gcc-14, cxx: g++-14, fc: gfortran, gcov: gcov }
 
 # Environments (OS, commpiler, dependencies)
 environments:
@@ -38,15 +38,16 @@ environments:
     label: Ubuntu 24.04 / gcc-14 / Python[3.8-3.12] / MPI 5.0.4 / Zoltan / Mpich 4.0.2 / VTK 9.3.1
     compiler: "@gcc-14"
     # list of optional dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
-    deps:
+    # WIP: validating dependencies 1 by 1
+    deps: 
       packages: "@apt_default_packages"
       cmake: ['3.23.4']
-      conda: ~
-      conda-python-env: [ "@conda-py[3.8-3.12]" ]
+      # conda: ~                                        # >>> OK
+      # conda-python-env: [ "@conda-py[3.8-3.12]" ]     # >>> OK
       openmpi: ['v5.0', '5.0.4', '-j4']
-      zoltan: [-j4', '/trilinos-install']
-      mpich: ['4.0.2', '-j4']
-      vtk: [ '9.3.1' ]
+      # zoltan: [-j4', '/trilinos-install']               # !!!!!TO BE TESTED
+      # mpich: ['4.0.2', '-j4']                         # !!!!!KO
+      # vtk: [ '9.3.1' ]                                # >>> OK
 
   ubuntu-22.04-gcc-11-vtk-9.2.2-py-3x-mpi:
     label: Ubuntu 22.04 / gcc-11 / Python[3.8-3.12] / MPI 5.0.4 / VTK 9.3.1

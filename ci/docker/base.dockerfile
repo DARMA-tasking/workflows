@@ -1,9 +1,11 @@
 # Build an image with some configured packages and dependencies
+
 ARG ARCH=amd64
 ARG BASE=ubuntu:22.04
+ARG ENVIRONMENT_ID=${ENVIRONMENT_ID:-"ubuntu-develop"}
 ARG CC=${CC:-""}
 ARG CXX=${CXX:-""}
-ARG CI_ENVIRONMENT=${CXX:-"ubuntu-develop"}
+ARG FC=${FC:-""}
 
 FROM ${ARCH}/${BASE} as base
 
@@ -11,12 +13,16 @@ FROM ${ARCH}/${BASE} as base
 RUN apt-get update && \
     apt-get install -y wget git
 
-ARG CI_ENVIRONMENT
-COPY ci/shared/scripts/setup-${CI_ENVIRONMENT}.sh setup.sh
+ARG ENVIRONMENT_ID
+ARG CC
+ARG CXX
+ARG GCOV
+
+COPY ci/shared/scripts/setup-${ENVIRONMENT_ID}.sh setup.sh
 
 SHELL ["/bin/bash", "-c"]
 
-# Environment variables (conda path, python environments, compiler, cmake path, vtk)
+# Environment
 ENV PATH=/opt/cmake/bin:$PATH
 ENV CC=$CC
 ENV CXX=$CXX
@@ -25,5 +31,4 @@ ENV CONDA_INSTALL_DIR=/opt/conda
 ENV CONDA_AUTO_ACTIVATE_BASE=false
 ENV VTK_DIR=/opt/vtk/build
 
-# Setup
 RUN bash setup.sh
