@@ -59,11 +59,12 @@ jobs:
 
       - name: Run (example)
         run: |
+          CMD="uname -a"
           if [[ "${{ matrix.runner.setup-in }}" == "docker" ]]
           then
-            docker run ${{ matrix.runner.image }} uname -a
+            docker run ${{ matrix.runner.image }} $CMD
           else
-            uname -a
+            $CMD
           fi
 
       # - name: Build and test
