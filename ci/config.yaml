@@ -183,14 +183,12 @@ runners:
   -
     type: github
     runs-on: macos-14
-    setup-in: runner
     setup: macos-14-clang-14-demo
 
   # vt
   -
     type: github
     runs-on: ubuntu-20.04
-    setup-in: docker
     image: { repository: "@defaults.docker-repository", tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp }
 
   # TODO: add the following
@@ -217,7 +215,6 @@ runners:
   -
     type: github
     runs-on: ubuntu-24.04
-    setup-in: docker
     image:
       repository: "@defaults.docker-repository"
       tag: ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all
@@ -225,7 +222,6 @@ runners:
   -
     type: github
     runs-on: ubuntu-22.04
-    setup-in: docker
     image:
       repository: "@defaults.docker-repository"
       tag: ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all
@@ -233,7 +229,6 @@ runners:
   -
     type: github
     runs-on: ubuntu-22.04
-    setup-in: docker
     image:
       repository: "@defaults.docker-repository"
       tag: ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all
@@ -241,7 +236,6 @@ runners:
   -
     type: github
     runs-on: ubuntu-22.04
-    setup-in: docker
     image:
       repository: "@defaults.docker-repository"
       tag: ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all

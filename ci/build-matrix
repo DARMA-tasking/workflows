@@ -25,34 +25,38 @@ class MatrixGenerator:
 
             matrix = []
             for runner in runners:
-                setup = {}
-                setup_in = runner.get("setup-in")
-                image = None
-                if setup_in == "docker":
-                    image_name = (runner.get("image", {}).get("repository", "") + ":"
-                                + runner.get("image", {}).get("tag", ""))
-                    image = config.get("images").get(image_name)
-                    if image is None:
-                        raise RuntimeError(f"Image not found {runner.get('image')}")
-                    setup_id = image.get("setup")
-                elif setup_in == "runner" or setup_in is None:
-                    setup_id = runner.get("setup")
-                else:
-                    raise ValueError(f"Invalid option {setup_id} for key `setup-in`."
-                                       "Supported values are docker|runner (runner if unset)")
-                setup = config.get("setup").get(setup_id)
-                if setup is None:
-                    raise ValueError(f"Environment {setup_id} not found")
-
                 matrix_item = {
-                    "label": setup.get("label", setup_id),
+                    "label": runner.get("label"),
                     "runs-on": runner.get("runs-on")
                 }
 
-                if setup_in == "docker":
+                if runner.get("setup") is not None:
+                    setup = config.get("setup").get(runner.get("setup"))
+
+                    if setup is None:
+                        raise RuntimeError(f"Setup not found {runner.get('setup')}")
+
+                    matrix_item["setup"] = runner.get("setup")
+
+                if runner.get("image") is not None:
+                    image_name = (runner.get("image", {}).get("repository", "") + ":"
+                                + runner.get("image", {}).get("tag", ""))
+                    image = config.get("images").get(image_name)
+
+                    if image is None:
+                        raise RuntimeError(f"Image not found {runner.get('image')}")
+
+                    setup = config.get("setup").get(image.get("setup"))
+                    if setup is None:
+                        raise RuntimeError(f"Setup not found {runner.get('setup')}")
+
                     matrix_item["image"] = image.get("repository") + ":" + image.get("tag")
-                else:
-                    matrix_item["setup"] = setup_id
+
+                    if matrix_item["label"] is None:
+                        matrix_item["label"] = image.get("label")
+
+                if matrix_item["label"] is None:
+                    matrix_item["label"] = setup.get("label")
 
                 matrix.append(matrix_item)
 

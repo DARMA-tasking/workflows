@@ -48,8 +48,8 @@ jobs:
 
       - name: Set up dependencies
         run: |
-          if [[ "${{ matrix.runner.image }}" == "" ]]
-          then
+          if [[ "${{ matrix.runner.image }}" == "" ]]; then
+            echo "::group::Setup in runner"
             echo "Set setup permissions..."
             sudo mkdir -p /opt
             sudo chown $(whoami) /opt
@@ -57,8 +57,13 @@ jobs:
             wget -O setup.sh https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/setup-${{ matrix.runner.setup }}.sh
             chmod +x setup.sh
             ./setup.sh
-          else
+            echo "::endgroup::"
+          fi
+
+          if [[ "${{ matrix.runner.image }}" != "" ]]; then
+            echo "::group::Pull Docker image"
             docker image pull ${{ matrix.runner.image }}
+            echo "::endgroup::"
           fi
 
       - name: Run (example)
