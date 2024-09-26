@@ -2,28 +2,33 @@
   "_comment": "This file has been generated. Please do not edit",
   "matrix": [
     {
-      "runs-on": "ubuntu-20.04",
+      "label": "(Demo) MacOS 14 Sonoma / clang-14",
+      "runs-on": "macos-14",
+      "setup": "macos-14-clang-14-demo"
+    },
+    {
       "label": "vt, gcc-9, ubuntu, mpich, zoltan",
+      "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-9-12.2.0-cpp"
     },
     {
-      "runs-on": "ubuntu-24.04",
       "label": "vt-tv, gcc-13, ubuntu, vtk 9.3.1, py3[8-12]",
+      "runs-on": "ubuntu-24.04",
       "image": "lifflander1/vt:ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all"
     },
     {
-      "runs-on": "ubuntu-22.04",
       "label": "vt-tv, gcc-12, ubuntu, vtk 9.3.0, py3[8-12]",
+      "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all"
     },
     {
-      "runs-on": "ubuntu-22.04",
       "label": "vt-tv, clang-11, ubuntu, vtk 9.2.2, py3[8-12]",
+      "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all"
     },
     {
-      "runs-on": "ubuntu-22.04",
       "label": "vt-tv, gcc-11, ubuntu, vtk 9.2.2, py3[8-12]",
+      "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all"
     }
   ]

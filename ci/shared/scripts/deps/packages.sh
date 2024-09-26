@@ -7,7 +7,8 @@ PACKAGES=$@
 
 echo "Install system packages..."
 if [[ $(uname -a) == *"Darwin"* ]]; then
-    brew install -y -q && \
+    brew update && \
+    brew install \
         $PACKAGES
     exit 0
 elif [[ $(uname -a) == *"Linux"* ]]; then

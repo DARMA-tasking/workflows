@@ -33,6 +33,13 @@ compilers:
   gcc-13: { type: gnu, cc: gcc-13, cxx: g++-13, fc: gfortran-13, gcov: gcov-13 }
 
 setup:
+  # demo
+  macos-14-clang-14-demo:
+      label: demo, macos-14, clang-14
+      compiler: { type: clang, cc: clang-14, cxx: clang-14++, gcov: llvm-gcov }
+      deps:
+        packages: "@defaults.brew-packages"
+
   #vt
   ubuntu-20.04-gcc-9-12.2.0-cpp:
     label: vt, gcc-9, ubuntu, mpich, zoltan
@@ -171,6 +178,14 @@ images:
     setup: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all
 
 runners:
+
+  # MacOS demo
+  -
+    type: github
+    runs-on: macos-14
+    setup-in: runner
+    setup: macos-14-clang-14-demo
+
   # vt
   -
     type: github

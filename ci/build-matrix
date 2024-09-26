@@ -45,8 +45,8 @@ class MatrixGenerator:
                     raise ValueError(f"Environment {setup_id} not found")
 
                 matrix_item = {
-                    "runs-on": runner.get("runs-on"),
-                    "label": setup.get("label", setup_id)
+                    "label": setup.get("label", setup_id),
+                    "runs-on": runner.get("runs-on")
                 }
 
                 if setup_in == "docker":
