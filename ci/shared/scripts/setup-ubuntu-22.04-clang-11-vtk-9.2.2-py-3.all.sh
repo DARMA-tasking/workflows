@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 #
 # vt-tv, clang-11, ubuntu, vtk 9.2.2, py3[8-12] - Installation
@@ -14,23 +14,69 @@ SCRIPTS_INSTALL_DIR=/opt/scripts/ci
 # TODO: change 2-implement-common-docker-containers to master once scripts when PR is ready
 SCRIPTS_DEPS_URL="https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/deps"
 
-mkdir -p $SCRIPTS_INSTALL_DIR
+OS=
+OS_VERSION=
+UNAME=$(uname)
+DOCKER_RUN=${DOCKER_RUN:-"0"}
+if [ "$UNAME" = "Darwin" ]
+then
+    OS_NAME=$(sw_vers -productName)
+    OS_VERSION=$(sw_vers -productVersion)
+elif [ "$UNAME" = "Linux" ]
+then
+    OS_NAME=$(cat /etc/os-release | grep -E "^NAME=*" | cut -d = -f 2 | tr -d '"')
+    OS_VERSION=$(cat /etc/os-release | grep -E "^VERSION_ID=*" | cut -d = -f 2 | tr -d '"')
+fi
 
-# Dependencies
+# Save setup environment
+echo "export OS_NAME=\"$OS_NAME\"" >> ~/.setuprc
+echo "export OS_VERSION=\"$OS_VERSION\"" >> ~/.setuprc
+echo "export SETUP_ID=\"$SETUP_ID\"" >> ~/.setuprc
+echo "export DOCKER_RUN=\"$DOCKER_RUN\"" >> ~/.setuprc
+
+echo "/////////////////////////////////////////////////"
+echo "Setup script"
+echo "/////////////////////////////////////////////////"
+echo "Operating system: $OS_NAME / Version: $OS_VERSION"
+echo "Setup configuration: $SETUP_ID"
+echo "C Compiler (CC): $CC"
+echo "C++ Compiler (CXX): $CXX"
+echo "Fortran Compiler (FC): $FC"
+
+echo "/////////////////////////////////////////////////"
+
+### UPDATE PACKAGE LIST AND INSTALL START-UP PACKAGES: git, wget, bash.
+if [ "$OS_NAME" = "Ubuntu" ]
+then
+    apt-get update -y -q
+    apt-get install -y -q --no-install-recommends ca-certificates wget git
+elif [ "$OS_NAME" = "Alpine Linux" ]
+then
+    apk update
+    apk add --no-cache wget git bash
+elif [ "$OS_NAME" = "macOS" ]
+then
+    brew update
+else
+    echo "Error. Please implement the pre-setup instructions for OS=$OS_NAME"
+    exit 1
+fi
+
+### SETUP DEPENDENCIES
+mkdir -p $SCRIPTS_INSTALL_DIR
 mkdir -p $SCRIPTS_INSTALL_DIR/deps
-# > Retrieve .sh scripts
-pushd $SCRIPTS_INSTALL_DIR/deps
+# 1. Download dependency installation script
+cd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
 wget $SCRIPTS_DEPS_URL/mesa.sh
 wget $SCRIPTS_DEPS_URL/conda.sh
 wget $SCRIPTS_DEPS_URL/conda-python-env.sh
 wget $SCRIPTS_DEPS_URL/cmake.sh
 wget $SCRIPTS_DEPS_URL/vtk.sh
-
-# > Run install instructions
+# 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "ca-certificates" "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-11" "clang++-11"
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-11" "clang++-11"
 ./mesa.sh
 ./conda.sh
 ./conda-python-env.sh "3.8" "nanobind yaml setuptools"
@@ -41,7 +87,44 @@ ls -l
 ./cmake.sh "3.30.3"
 ./vtk.sh "9.2.2"
 
-popd # $SCRIPTS_INSTALL_DIR/deps
-
-echo "Cleaning..."
+# Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
+if [ DOCKER_RUN == "1" ]; then
+    rm -rf /var/lib/apt/lists/*
+fi
+
+### CLEAN-UP
+if [ "$OS_NAME" = "Ubuntu" ]
+then
+    rm -rf /var/lib/apt/lists/*
+elif [ "$OS_NAME" = "Alpine Linux" ]
+then
+    :
+elif [ "$OS_NAME" = "macOS" ]
+then
+   :
+else
+    echo "No cleanup instructions defined for OS=$OS."
+fi
+
+### OUTPUT COMPILER INFORMATION
+if test -n "$CC"
+then
+    echo "------------"
+    echo "C Compiler:"
+    $CC --version
+fi
+
+if test -n "$CXX"
+then
+    echo "--------------------"
+    echo "C++ Compiler:"
+    $CXX --version
+fi
+
+if test -n "$FC"
+then
+    echo "------------------------"
+    echo "Fortran Compiler:"
+    $FC --version
+fi

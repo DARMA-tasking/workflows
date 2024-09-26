@@ -56,6 +56,7 @@ jobs:
 
             wget -O setup.sh https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/setup-${{ matrix.runner.setup }}.sh
             chmod +x setup.sh
+            export SETUP_ID=${{ matrix.runner.setup }}
             ./setup.sh
             echo "::endgroup::"
           fi

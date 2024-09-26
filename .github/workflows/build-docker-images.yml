@@ -35,9 +35,11 @@ jobs:
       matrix:
         runner: ${{ fromJson(needs.get-matrix.outputs.matrix ) }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
       - name: Docker image build
         run: |
           python ci/build-docker-image ${{ matrix.runner.image }}

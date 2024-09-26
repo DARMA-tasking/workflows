@@ -14,7 +14,7 @@
 
 defaults:
   apt-packages: [
-    ca-certificates, curl, jq, less, libomp5, libunwind-dev make-guile, ninja-build,
+    curl, jq, less, libomp5, libunwind-dev make-guile, ninja-build,
     valgrind, zlib1g, zlib1g-dev, ccache, python3
   ]
   apk-packages: [
@@ -22,7 +22,7 @@ defaults:
     libdwarf-dev, libunwind-dev, libtool, linux-headers, m4, make, ninja, zlib,
     zlib-dev
   ]
-  brew-packages: [ coreutils ]
+  brew-packages: [ ccache, coreutils ]
   docker-repository: lifflander1/vt
   pip-packages: "nanobind yaml setuptools"
   conda-py3.all:
@@ -47,7 +47,7 @@ setup:
       packages: "@defaults.brew-packages"
 
   amd64-alpine-clang-13-clang-13-cpp:
-    label: macos-14-arm64, clang-14
+    label: alpine-3.16, clang-13
     compiler: { type: clang, cc: clang, cxx: clang++, gcov: llvm-gcov, packages: [ clang, clang-dev ] }
     deps:
       packages: "@defaults.apk-packages"
@@ -212,8 +212,7 @@ runners:
   -
     type: github
     runs-on: ubuntu-latest
-    setup: amd64-alpine-clang-13-clang-13-cpp
-    # image: { repository: "@defaults.docker-repository", tag: amd64-alpine-clang-13-clang-13-cpp }
+    image: { repository: "@defaults.docker-repository", tag: amd64-alpine-clang-13-clang-13-cpp }
 
 
   # TODO: add the following

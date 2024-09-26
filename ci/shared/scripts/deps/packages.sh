@@ -5,27 +5,25 @@
 DEPS_DIR="$(cd "$(dirname "$0")" && pwd)"
 PACKAGES=$@
 
+. ~/.setuprc
+
 echo "Install system packages..."
-if [[ $(uname -a) == *"Darwin"* ]]; then
-    brew update && \
-    brew install \
-        $PACKAGES
-    exit 0
-elif [[ $(uname -a) == *"Linux"* ]]; then
-    OS=$(cat /etc/os-release | grep -E "^NAME=*" | cut -d = -f 2 | tr -d '"')
-    if [[ $OS == "Ubuntu" ]]; then
-        apt-get update -y -q && \
-        apt-get install -y -q --no-install-recommends \
+if [ "$OS_NAME" == "Ubuntu" ]
+then
+    apt-get install -y -q --no-install-recommends \
             $PACKAGES && \
             apt-get clean
         exit 0
-    elif [[ $OS == "Alpine Linux" ]]; then
-        apk update && apk add --no-cache $PACKAGES
-    else
-        echo "Not implemented for OS $OS !"
-        exit 1
-    fi
+elif [ "$OS_NAME" == "Alpine Linux" ]
+then
+    apk update && apk add --no-cache \
+        $PACKAGES
+elif [ "$OS_NAME" == "macOS" ]
+then
+    brew install \
+        $PACKAGES
+    exit 0
+else
+    echo "Not implemented for OS `$OS_NAME` !"
+    exit 1
 fi
-
-echo "Not implemented for $(uname -a) !"
-exit 1
