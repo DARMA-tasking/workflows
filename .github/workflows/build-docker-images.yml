@@ -5,7 +5,7 @@ name: Build docker images
 
 on:
   push:
-    branches: 
+    branches:
       - 2-implement-common-docker-containers
 
 jobs:
@@ -16,12 +16,12 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CI_REPO: DARMA-tasking/workflows
       CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
-    steps:  
+    steps:
       - name: Retrieve Setup matrix
         id: get-matrix
         run: |
           wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/matrix/github.json
-          matrix=$(cat github.json | jq '.matrix' | jq -c '[ .[] | select( ."setup-in" == "docker") ]')
+          matrix=$(cat github.json | jq '.matrix' | jq -c '[ .[] | select( .image != null) ]')
           echo "runner=$(echo $matrix)" >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.get-matrix.outputs.runner }}

@@ -23,7 +23,10 @@ class SetupBuilder:
 
             call_args = [ f"\"{a}\"" for a in args]
 
-        return [ f"./{dep_id}.sh {' '.join(call_args)}" ]
+        cmd = f"./{dep_id}.sh"
+        if len(call_args) > 0:
+            cmd = f"{cmd} {' '.join(call_args)}"
+        return [ cmd ]
 
     def build(self):
         """Build setup scripts for each setup configuration defined in config"""

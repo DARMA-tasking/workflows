@@ -1,6 +1,6 @@
 # Configuration of the desired CI target platforms
 # This way to separate environment definitions and runner definitions open the possibility run an environment on different runners
-# 
+#
 # This file defines all the configurations to test in CI
 # NOTE: This is an investigation about a more complex but more scalable way to difine th platforms to target in CI.
 # This file might be used as an input to scripts to
@@ -16,7 +16,7 @@ defaults:
   apt-packages: [ca-certificates, curl, git, jq, less, libomp5, libunwind-dev make-guile,
       ninja-build, valgrind, wget, zlib1g, zlib1g-dev, ccache, python3]
   brew-packages: [ coreutils ]
-  repo: lifflander1/vt
+  docker-repository: lifflander1/vt
   pip-packages: "nanobind yaml setuptools"
   conda-py3.all:
       - ["3.8", "@defaults.pip-packages"]
@@ -43,7 +43,7 @@ setup:
       cmake: ['3.23.4']
       openmpi: ['v5.0', '5.0.4']
       zoltan: [-j4', '/trilinos-install']
-      mpich: ['4.0.2', '-j4']   
+      mpich: ['4.0.2', '-j4']
 
   # TODO: add the following
   # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
@@ -112,8 +112,8 @@ setup:
 
 images:
   # vt
-  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
-    repository: "@defaults.repo"
+  -
+    repository: "@defaults.docker-repository"
     tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
@@ -141,29 +141,29 @@ images:
   # amd64-ubuntu-20.04-clang-9-clang-9-cpp:
 
   # vt-tv
-  ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all:
-    repository: "@defaults.repo"
+  -
+    repository: "@defaults.docker-repository"
     tag: ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:24.04
     setup: ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all
-  ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all:
-    repository: "@defaults.repo"
+  -
+    repository: "@defaults.docker-repository"
     tag: ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:22.04
     setup: ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all
-  ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all:
-    repository: "@defaults.repo"
+  -
+    repository: "@defaults.docker-repository"
     tag: ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:22.04
     setup: ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all
-  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all:
-    repository: "@defaults.repo"
+  -
+    repository: "@defaults.docker-repository"
     tag: ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
@@ -172,11 +172,11 @@ images:
 
 runners:
   # vt
-  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
+  -
     type: github
     runs-on: ubuntu-20.04
     setup-in: docker
-    image: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
+    image: { repository: "@defaults.docker-repository", tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp }
 
   # TODO: add the following
   # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
@@ -199,26 +199,34 @@ runners:
   # amd64-ubuntu-20.04-clang-9-clang-9-cpp:
 
   # vt-tv
-  ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all:
+  -
     type: github
     runs-on: ubuntu-24.04
     setup-in: docker
-    image: ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all
+    image:
+      repository: "@defaults.docker-repository"
+      tag: ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all
 
-  ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all:
+  -
     type: github
     runs-on: ubuntu-22.04
     setup-in: docker
-    image: ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all
+    image:
+      repository: "@defaults.docker-repository"
+      tag: ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all
 
-  ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all:
+  -
     type: github
     runs-on: ubuntu-22.04
     setup-in: docker
-    image: ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all
+    image:
+      repository: "@defaults.docker-repository"
+      tag: ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all
 
-  ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all:
+  -
     type: github
     runs-on: ubuntu-22.04
     setup-in: docker
-    image: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all
+    image:
+      repository: "@defaults.docker-repository"
+      tag: ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all

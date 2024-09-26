@@ -1,6 +1,6 @@
 # Configuration of the desired CI target platforms
 # This way to separate environment definitions and runner definitions open the possibility run an environment on different runners
-# 
+#
 # This file defines all the configurations to test in CI
 # NOTE: This is an investigation about a more complex but more scalable way to difine th platforms to target in CI.
 # This file might be used as an input to scripts to
@@ -15,7 +15,7 @@
 # Common parameters
 parameters:
     # Dependencies to install using package manager
-    apt_default_packages: [ 
+    apt_default_packages: [
       ca-certificates, curl, git, jq, less, libomp5, libunwind-dev make-guile,
       ninja-build, valgrind, wget, zlib1g, zlib1g-dev, ccache, python3 ]
     brew_default_packages: [ coreutils ]
@@ -38,7 +38,7 @@ setup:
     compiler: "@gcc-14"
     # list of optional dependencies to install (matching script at ci/scripts/deps/{dep}.sh {arg1} {arg2} ...)
     # WIP: validating dependencies 1 by 1
-    deps: 
+    deps:
       packages: ["@apt_default_packages", "gcc-14", "g++14"]
       cmake: ['3.23.4']
       # conda: ~                                          # >>> OK

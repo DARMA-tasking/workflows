@@ -3,43 +3,28 @@
   "matrix": [
     {
       "runs-on": "ubuntu-20.04",
-      "id": "amd64-ubuntu-20.04-gcc-9-12.2.0-cpp",
       "label": "vt, gcc-9, ubuntu, mpich, zoltan",
-      "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-9-12.2.0-cpp",
-      "setup": "ubuntu-20.04-gcc-9-12.2.0-cpp",
-      "setup-in": "docker"
+      "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-9-12.2.0-cpp"
     },
     {
       "runs-on": "ubuntu-24.04",
-      "id": "ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all",
       "label": "vt-tv, gcc-13, ubuntu, vtk 9.3.1, py3[8-12]",
-      "image": "lifflander1/vt:ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all",
-      "setup": "ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all",
-      "setup-in": "docker"
+      "image": "lifflander1/vt:ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all"
     },
     {
       "runs-on": "ubuntu-22.04",
-      "id": "ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all",
       "label": "vt-tv, gcc-12, ubuntu, vtk 9.3.0, py3[8-12]",
-      "image": "lifflander1/vt:ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all",
-      "setup": "ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all",
-      "setup-in": "docker"
+      "image": "lifflander1/vt:ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all"
     },
     {
       "runs-on": "ubuntu-22.04",
-      "id": "ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all",
       "label": "vt-tv, clang-11, ubuntu, vtk 9.2.2, py3[8-12]",
-      "image": "lifflander1/vt:ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all",
-      "setup": "ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all",
-      "setup-in": "docker"
+      "image": "lifflander1/vt:ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all"
     },
     {
       "runs-on": "ubuntu-22.04",
-      "id": "ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all",
       "label": "vt-tv, gcc-11, ubuntu, vtk 9.2.2, py3[8-12]",
-      "image": "lifflander1/vt:ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all",
-      "setup": "ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all",
-      "setup-in": "docker"
+      "image": "lifflander1/vt:ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all"
     }
   ]
 }

@@ -25,7 +25,7 @@ elif [[ $(uname -a) == *"Linux"* ]]; then
     else
         echo "Distribution info not found !"
     fi
-fi 
+fi
 
 echo "Packages installation not supported ! Currently supported are Ubuntu/apt-get, Darwin/brew  "
 exit 1

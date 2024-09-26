@@ -20,18 +20,18 @@ class MatrixGenerator:
         config = resolve_conf(copy.deepcopy(raw_config))
 
         for runner_type in ["github", "azure-pipelines"]:
-            runners = dict(
-                (k, v) for k, v in config.get("runners").items()
-                if v.get("type") == runner_type
-            )
+            runners = [runner for runner in config.get("runners")
+                if runner.get("type") == runner_type]
 
             matrix = []
-            for (runner_id, runner) in runners.items():
+            for runner in runners:
                 setup = {}
                 setup_in = runner.get("setup-in")
                 image = None
                 if setup_in == "docker":
-                    image = config.get("images").get(runner.get("image"))
+                    image_name = (runner.get("image", {}).get("repository", "") + ":"
+                                + runner.get("image", {}).get("tag", ""))
+                    image = config.get("images").get(image_name)
                     if image is None:
                         raise RuntimeError(f"Image not found {runner.get('image')}")
                     setup_id = image.get("setup")
@@ -43,15 +43,18 @@ class MatrixGenerator:
                 setup = config.get("setup").get(setup_id)
                 if setup is None:
                     raise ValueError(f"Environment {setup_id} not found")
-                matrix.append({
+
+                matrix_item = {
                     "runs-on": runner.get("runs-on"),
-                    "id": runner_id,
-                    "label": setup.get("label", setup_id),
-                    "image": image.get("repository") + ":" + image.get("tag")
-                             if image is not None else None,
-                    "setup": setup_id,
-                    "setup-in": setup_in
-                })
+                    "label": setup.get("label", setup_id)
+                }
+
+                if setup_in == "docker":
+                    matrix_item["image"] = image.get("repository") + ":" + image.get("tag")
+                else:
+                    matrix_item["setup"] = setup_id
+
+                matrix.append(matrix_item)
 
             data = json.dumps({
                 "_comment": "This file has been generated. Please do not edit",

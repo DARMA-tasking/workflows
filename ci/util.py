@@ -3,7 +3,7 @@
 
 from typing import Union
 
-def resolve_item(item, root: Union[dict,list] = None):
+def resolve_item_params(item, root: Union[dict,list] = None):
     if isinstance(item, str) and item.startswith('@'):
         ref_name = item[1:]
         ref_path = ref_name.split(".", 1)
@@ -19,7 +19,7 @@ def resolve_item(item, root: Union[dict,list] = None):
         return ref_group.get(ref_name)
     return item
 
-def resolve_conf(data: Union[dict,list], root: Union[dict,list] = None) -> dict:
+def resolve_params(data: Union[dict,list], root: Union[dict,list] = None) -> dict:
     """Replace parameters variables '@parameter_name' by the corresponding
     parameter value recursively.
     """
@@ -30,14 +30,23 @@ def resolve_conf(data: Union[dict,list], root: Union[dict,list] = None) -> dict:
     if isinstance(data, list):
         for i, item in enumerate(data):
             if isinstance(item, dict) or isinstance(item, list):
-                data[i] = resolve_conf(item, root)
+                data[i] = resolve_params(item, root)
             else:
-                data[i] = resolve_item(item, root)
+                data[i] = resolve_item_params(item, root)
     else:
         if isinstance(data, dict):
             for item in data:
                 if isinstance(data[item], dict) or isinstance(data[item], list):
-                    data[item] = resolve_conf(data[item], root)
+                    data[item] = resolve_params(data[item], root)
                 else:
-                    data[item] = resolve_item(data[item], root)
+                    data[item] = resolve_item_params(data[item], root)
     return data
+
+def resolve_conf(config: Union[dict,list]) -> dict:
+    config = resolve_params(config)
+
+    # Index Docker images by their full name
+    config["images"] = dict((image.get("repository") + ":" + image.get("tag"), image)
+                for image in config.get("images"))
+
+    return config
