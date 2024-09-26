@@ -19,6 +19,7 @@ ARG CXX
 ARG GCOV
 
 COPY ci/shared/scripts/setup-${SETUP_ID}.sh setup.sh
+COPY ci/docker/post-setup.sh post-setup.sh
 
 SHELL ["/bin/bash", "-c"]
 
@@ -32,3 +33,6 @@ ENV CONDA_AUTO_ACTIVATE_BASE=false
 ENV VTK_DIR=/opt/vtk/build
 
 RUN bash setup.sh
+
+# Docker finalize script
+RUN bash post-setup.sh

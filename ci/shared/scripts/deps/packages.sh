@@ -12,7 +12,8 @@ if [[ $(uname -a) == *"Darwin"* ]]; then
         $PACKAGES
     exit 0
 elif [[ $(uname -a) == *"Linux"* ]]; then
-    if [[ -f "/etc/lsb-release" ]]
+    OS=$(cat /etc/os-release | grep -E "^NAME=*" | cut -d = -f 2 | tr -d '"')
+    if [[ $OS == "Ubuntu" ]]
     then
         . /etc/lsb-release
         if [[ $DISTRIB_ID == "Ubuntu" ]]
@@ -24,9 +25,10 @@ elif [[ $(uname -a) == *"Linux"* ]]; then
             exit 0
         fi
     else
-        echo "Distribution info not found !"
+        echo "Not implemented for OS $OS !"
+        exit 1
     fi
 fi
 
-echo "Packages installation not supported ! Currently supported are Ubuntu/apt-get, Darwin/brew  "
+echo "Not implemented for $(uname -a) !"
 exit 1

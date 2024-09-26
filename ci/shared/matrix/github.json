@@ -2,14 +2,19 @@
   "_comment": "This file has been generated. Please do not edit",
   "matrix": [
     {
-      "label": "demo, macos-14, clang-14",
+      "label": "macos-14-arm64, clang-14",
       "runs-on": "macos-14",
-      "setup": "macos-14-clang-14-demo"
+      "setup": "macos-14-clang-14"
     },
     {
       "label": "vt, gcc-9, ubuntu, mpich, zoltan",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-9-12.2.0-cpp"
+    },
+    {
+      "label": "macos-14-arm64, clang-14",
+      "runs-on": "ubuntu-latest",
+      "setup": "amd64-alpine-clang-13-clang-13-cpp"
     },
     {
       "label": "vt-tv, gcc-13, ubuntu, vtk 9.3.1, py3[8-12]",
