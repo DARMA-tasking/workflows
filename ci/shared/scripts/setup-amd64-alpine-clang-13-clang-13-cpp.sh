@@ -25,7 +25,7 @@ wget $SCRIPTS_DEPS_URL/packages.sh
 # > Run install instructions
 chmod u+x *.sh
 ls -l
-./packages.sh "alpine-sdk" "autoconf" "automake" "bash" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "wget" "zlib" "zlib-dev" "clang" "clang-dev"
+./packages.sh "alpine-sdk" "autoconf" "automake" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "zlib" "zlib-dev" "clang" "clang-dev"
 
 popd # $SCRIPTS_INSTALL_DIR/deps
 

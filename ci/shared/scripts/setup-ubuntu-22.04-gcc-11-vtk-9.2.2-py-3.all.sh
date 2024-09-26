@@ -30,7 +30,7 @@ wget $SCRIPTS_DEPS_URL/vtk.sh
 # > Run install instructions
 chmod u+x *.sh
 ls -l
-./packages.sh "ca-certificates" "curl" "git" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "wget" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-11" "g++-11"
+./packages.sh "ca-certificates" "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-11" "g++-11"
 ./mesa.sh
 ./conda.sh
 ./conda-python-env.sh "3.8" "nanobind yaml setuptools"

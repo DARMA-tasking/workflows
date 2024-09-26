@@ -14,12 +14,12 @@
 
 defaults:
   apt-packages: [
-    ca-certificates, curl, git, jq, less, libomp5, libunwind-dev make-guile, ninja-build,
-    valgrind, wget, zlib1g, zlib1g-dev, ccache, python3
+    ca-certificates, curl, jq, less, libomp5, libunwind-dev make-guile, ninja-build,
+    valgrind, zlib1g, zlib1g-dev, ccache, python3
   ]
   apk-packages: [
-    alpine-sdk, autoconf, automake, bash, binutils-dev, ccache, cmake, dpkg,
-    libdwarf-dev, libunwind-dev, libtool, linux-headers, m4, make, ninja, wget, zlib,
+    alpine-sdk, autoconf, automake, binutils-dev, ccache, cmake, dpkg,
+    libdwarf-dev, libunwind-dev, libtool, linux-headers, m4, make, ninja, zlib,
     zlib-dev
   ]
   brew-packages: [ coreutils ]

@@ -13,17 +13,14 @@ if [[ $(uname -a) == *"Darwin"* ]]; then
     exit 0
 elif [[ $(uname -a) == *"Linux"* ]]; then
     OS=$(cat /etc/os-release | grep -E "^NAME=*" | cut -d = -f 2 | tr -d '"')
-    if [[ $OS == "Ubuntu" ]]
-    then
-        . /etc/lsb-release
-        if [[ $DISTRIB_ID == "Ubuntu" ]]
-        then
-            apt-get update -y -q && \
-            apt-get install -y -q --no-install-recommends \
-                $PACKAGES && \
-                apt-get clean
-            exit 0
-        fi
+    if [[ $OS == "Ubuntu" ]]; then
+        apt-get update -y -q && \
+        apt-get install -y -q --no-install-recommends \
+            $PACKAGES && \
+            apt-get clean
+        exit 0
+    elif [[ $OS == "Alpine Linux" ]]; then
+        apk update && apk add --no-cache $PACKAGES
     else
         echo "Not implemented for OS $OS !"
         exit 1
