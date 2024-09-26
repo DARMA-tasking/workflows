@@ -42,17 +42,18 @@ class SetupBuilder:
             # Add compiler packages
             compiler = environment.get('compiler')
             packages = copy.deepcopy(environment.get("deps", {}).get("packages", []))
-            if compiler is not None:
+            compiler_packages = compiler.get("packages",
+                                            [ c for c in [compiler.get("cc"), compiler.get("cxx")]
+                                                            if c is not None])
+            if compiler_packages is None or compiler_packages is False:
+                compiler_packages = []
+
+            for compiler_package in compiler_packages:
                 if packages is None:
                     packages = []
+                packages.append(compiler_package)
 
-                if compiler.get("cc") is not None and not compiler.get("cc") in packages:
-                    packages.append(compiler.get("cc"))
-                if compiler.get("cxx") is not None and not compiler.get("cxx") in packages:
-                    packages.append(compiler.get("cxx"))
-
-                if environment.get("deps") is None:
-                    environment["deps"] = {}
+            if len(packages) > 0:
                 environment["deps"]["packages"] = packages
 
             # generate install instructions and install dependencies commands

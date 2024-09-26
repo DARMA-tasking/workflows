@@ -36,7 +36,7 @@ setup:
   # demo
   macos-14-clang-14-demo:
       label: demo, macos-14, clang-14
-      compiler: { type: clang, cc: clang-14, cxx: clang-14++, gcov: llvm-gcov }
+      compiler: { type: clang, cc: clang, cxx: clang++, gcov: llvm-gcov, packages: false }
       deps:
         packages: "@defaults.brew-packages"
 

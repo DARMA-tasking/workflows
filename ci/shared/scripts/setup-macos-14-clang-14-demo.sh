@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# (Demo) MacOS 14 Sonoma / clang-14 - Installation
+# demo, macos-14, clang-14 - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -25,7 +25,7 @@ wget $SCRIPTS_DEPS_URL/packages.sh
 # > Run install instructions
 chmod u+x *.sh
 ls -l
-./packages.sh "coreutils" "clang-14" "clang-14++"
+./packages.sh "coreutils"
 
 popd # $SCRIPTS_INSTALL_DIR/deps
 

@@ -50,8 +50,8 @@ jobs:
         run: |
           if [[ "${{ matrix.runner.image }}" == "" ]]
           then
+            echo "Set setup permissions..."
             sudo mkdir -p /opt
-            ls -l /opt
             sudo chown $(whoami) /opt
 
             wget -O setup.sh https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/setup-${{ matrix.runner.setup }}.sh

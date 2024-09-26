@@ -2,7 +2,7 @@
   "_comment": "This file has been generated. Please do not edit",
   "matrix": [
     {
-      "label": "(Demo) MacOS 14 Sonoma / clang-14",
+      "label": "demo, macos-14, clang-14",
       "runs-on": "macos-14",
       "setup": "macos-14-clang-14-demo"
     },

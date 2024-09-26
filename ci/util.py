@@ -45,6 +45,19 @@ def resolve_params(data: Union[dict,list], root: Union[dict,list] = None) -> dic
 def resolve_conf(config: Union[dict,list]) -> dict:
     config = resolve_params(config)
 
+    if config.get("images") is None:
+        config["images"] = []
+
+    if config.get("runners") is None:
+        config["runners"] = []
+
+    if config.get("setup") is None:
+        config["setup"] = {}
+
+    for (_setup_id, setup) in config.get("setup").items():
+        if setup.get("deps") is None:
+            setup["deps"] = {}
+
     # Index Docker images by their full name
     config["images"] = dict((image.get("repository") + ":" + image.get("tag"), image)
                 for image in config.get("images"))
