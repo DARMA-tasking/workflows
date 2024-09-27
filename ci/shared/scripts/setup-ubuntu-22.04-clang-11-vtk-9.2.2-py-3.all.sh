@@ -85,7 +85,7 @@ ls -l
 ./conda-python-env.sh "3.10" "nanobind yaml setuptools"
 ./conda-python-env.sh "3.11" "nanobind yaml setuptools"
 ./conda-python-env.sh "3.12" "nanobind yaml setuptools"
-./cmake.sh "3.23.4"
+./cmake.sh "3.30.3"
 ./vtk.sh "9.2.2"
 
 # Remove install scripts
@@ -106,29 +106,4 @@ then
    :
 else
     echo "No cleanup instructions defined for OS=$OS."
-fi
-
-### OUTPUT COMPILER INFORMATION
-if test -n "$CC"
-then
-    echo "------------"
-    which $CC
-    echo "C Compiler:"
-    $(which $CC) --version
-fi
-
-if test -n "$CXX"
-then
-    echo "--------------------"
-    which $CXX
-    echo "C++ Compiler:"
-    $(which $CXX) --version
-fi
-
-if test -n "$FC"
-then
-    echo "------------------------"
-    which $FC
-    echo "Fortran Compiler:"
-    $(which $FC) --version
 fi

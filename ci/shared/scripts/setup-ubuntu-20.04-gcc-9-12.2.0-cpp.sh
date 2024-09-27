@@ -77,7 +77,7 @@ wget $SCRIPTS_DEPS_URL/mpich.sh
 chmod u+x *.sh
 ls -l
 ./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
-./cmake.sh "3.23.4"
+./cmake.sh "3.30.3"
 ./openmpi.sh "v5.0" "5.0.4"
 ./zoltan.sh "-j4'" "/trilinos-install"
 ./mpich.sh "4.0.2" "-j4"
@@ -100,29 +100,4 @@ then
    :
 else
     echo "No cleanup instructions defined for OS=$OS."
-fi
-
-### OUTPUT COMPILER INFORMATION
-if test -n "$CC"
-then
-    echo "------------"
-    which $CC
-    echo "C Compiler:"
-    $(which $CC) --version
-fi
-
-if test -n "$CXX"
-then
-    echo "--------------------"
-    which $CXX
-    echo "C++ Compiler:"
-    $(which $CXX) --version
-fi
-
-if test -n "$FC"
-then
-    echo "------------------------"
-    which $FC
-    echo "Fortran Compiler:"
-    $(which $FC) --version
 fi

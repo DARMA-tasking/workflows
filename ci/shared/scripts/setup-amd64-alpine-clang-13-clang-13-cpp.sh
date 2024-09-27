@@ -95,28 +95,3 @@ then
 else
     echo "No cleanup instructions defined for OS=$OS."
 fi
-
-### OUTPUT COMPILER INFORMATION
-if test -n "$CC"
-then
-    echo "------------"
-    which $CC
-    echo "C Compiler:"
-    $(which $CC) --version
-fi
-
-if test -n "$CXX"
-then
-    echo "--------------------"
-    which $CXX
-    echo "C++ Compiler:"
-    $(which $CXX) --version
-fi
-
-if test -n "$FC"
-then
-    echo "------------------------"
-    which $FC
-    echo "Fortran Compiler:"
-    $(which $FC) --version
-fi
