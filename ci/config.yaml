@@ -13,56 +13,75 @@
 # THIS IS A LOT OF WORK BUT MIGHT BE VERY USEFUL
 
 defaults:
-  apt-packages: [
+  # default packages
+  apt-packages: &apt-packages [
     curl, jq, less, libomp5, libunwind-dev make-guile, ninja-build,
     valgrind, zlib1g, zlib1g-dev, ccache, python3
   ]
-  apk-packages: [
+  apk-packages: &apk-packages [
     alpine-sdk, autoconf, automake, binutils-dev, ccache, cmake, dpkg,
     libdwarf-dev, libunwind-dev, libtool, linux-headers, m4, make, ninja, zlib,
     zlib-dev
   ]
-  brew-packages: [ ccache, coreutils ]
-  docker-repository: lifflander1/vt
-  pip-packages: "nanobind yaml setuptools"
-  conda-py3.all:
-      - ["3.8", "@defaults.pip-packages"]
-      - ["3.9", "@defaults.pip-packages"]
-      - ["3.10", "@defaults.pip-packages"]
-      - ["3.11", "@defaults.pip-packages"]
-      - ["3.12", "@defaults.pip-packages"]
+  brew-packages: &brew-packages [ ccache, coreutils ]
+  pip-packages: &pip-packages "nanobind yaml setuptools"
 
-compilers:
-  clang-11: { type: clang, cc: clang-11, cxx: clang++-11, fc: flang-11, gcov: llvm-gcov }
-  gcc-9: { type: gnu, cc: gcc-9, cxx: g++-9, fc: gfortran-9, gcov: gcov-9 }
-  gcc-11: { type: gnu, cc: gcc-11, cxx: g++-11, fc: gfortran-11, gcov: gcov-11 }
-  gcc-12: { type: gnu, cc: gcc-12, cxx: g++-12, fc: gfortran-12, gcov: gcov-12 }
-  gcc-13: { type: gnu, cc: gcc-13, cxx: g++-13, fc: gfortran-13, gcov: gcov-13 }
+  # default arguments for dependency installation scripts
+  cmake-args: &cmake-args '3.23.4'
+  openmpi-args: &openmpi-args ['v5.0', '5.0.4']
+  zoltan-args: &zoltan-args [-j4', '/trilinos-install']
+  mpich-args: &mpich-args ['4.0.2', '-j4']
+  vtk-args: &vtk-args '9.3.1'
+
+  # other
+  docker-repository: &docker-repository lifflander1/vt 
+  conda-py3-all: &conda-py3-all [
+    ["3.8", *pip-packages], ["3.9", *pip-packages], ["3.10", *pip-packages],
+    ["3.11", *pip-packages], ["3.12", *pip-packages]
+  ]
+
+
+# compilers:
+#   clang-11: &clang-11 { type: clang, cc: clang-11, cxx: clang++-11, fc: flang-11, gcov: llvm-gcov }
+#   gcc-9: &gcc-9 { type: gnu, cc: gcc-9, cxx: g++-9, fc: gfortran-9, gcov: gcov-9 }
+#   gcc-11: &gcc-11 { type: gnu, cc: gcc-11, cxx: g++-11, fc: gfortran-11, gcov: gcov-11 }
+#   gcc-12: &gcc-12 { type: gnu, cc: gcc-12, cxx: g++-12, fc: gfortran-12, gcov: gcov-12 }
+#   gcc-13: &gcc-13 { type: gnu, cc: gcc-13, cxx: g++-13, fc: gfortran-13, gcov: gcov-13 }
 
 setup:
   macos-14-clang-14:
     label: macos-14-arm64, clang-14
-    compiler: { type: clang, cc: clang, cxx: clang++, gcov: llvm-gcov, packages: false }
+    env:
+      CC: clang
+      CXX: clang++
+      GCOV: llvm-gcov
     deps:
-      packages: "@defaults.brew-packages"
+      packages: [ *brew-packages, clang, clang++ ]
 
   amd64-alpine-clang-13-clang-13-cpp:
     label: alpine-3.16, clang-13
-    compiler: { type: clang, cc: clang, cxx: clang++, gcov: llvm-gcov, packages: [ clang, clang-dev ] }
+    env:
+      CC: mpicc
+      CXX: mpicxx
+      GCOV: llvm-gcov
     deps:
-      packages: "@defaults.apk-packages"
+      packages: [ *apk-packages, clang, clang-dev ]
+      mpich: ['3.3.2', '-j4', '', 'clang', 'clang++']
 
   #vt
   ubuntu-20.04-gcc-9-12.2.0-cpp:
     label: vt, gcc-9, ubuntu, mpich, zoltan
-    compiler: "@compilers.gcc-9"
+    env:
+      CC: gcc-9
+      CXX: g++-9
+      GCOV: gcov
     # deps and versions to find in vt
     deps:
-      packages: "@defaults.apt-packages"
-      cmake: ['3.23.4']
-      openmpi: ['v5.0', '5.0.4']
-      zoltan: [-j4', '/trilinos-install']
-      mpich: ['4.0.2', '-j4']
+      packages: [ *apt-packages, gcc-9, g++-9 ]
+      cmake: *cmake-args
+      openmpi: *openmpi-args
+      zoltan: *zoltan-args
+      mpich: *mpich-args
 
   # TODO: add the following
   # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
@@ -86,52 +105,64 @@ setup:
   # vt-tv
   ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all:
     label: vt-tv, gcc-13, ubuntu, vtk 9.3.1, py3[8-12]
-    compiler: "@compilers.gcc-13"
+    env:
+      CC: gcc-13
+      CXX: g++-13
+      GCOV: gcov
     deps:
-      packages: "@defaults.apt-packages"
+      packages: [ *apt-packages, gcc-13, g++-13 ]
       mesa: ~
       conda: ~
-      conda-python-env: "@defaults.conda-py3.all"
-      cmake: ['3.30.3']
-      vtk: [ '9.3.1' ]
+      conda-python-env: *conda-py3-all
+      cmake: *cmake-args
+      vtk: *vtk-args
 
   ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all:
     label: vt-tv, gcc-12, ubuntu, vtk 9.3.0, py3[8-12]
-    compiler: "@compilers.gcc-12"
+    env:
+      CC: gcc-12
+      CXX: g++-12
+      GCOV: gcov
     deps:
-      packages: "@defaults.apt-packages"
+      packages: [ *apt-packages, gcc-12, g++-12 ]
       mesa: ~
       conda: ~
-      conda-python-env: "@defaults.conda-py3.all"
-      cmake: ['3.30.3']
+      conda-python-env: *conda-py3-all
+      cmake: *cmake-args
       vtk: [ '9.3.0' ]
 
   ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all:
     label: vt-tv, clang-11, ubuntu, vtk 9.2.2, py3[8-12]
-    compiler: "@compilers.clang-11"
+    env:
+      CC: gcc-11
+      CXX: g++-11
+      GCOV: gcov
     deps:
-      packages: "@defaults.apt-packages"
+      packages: [*apt-packages, gcc-11, g++-11 ]
       mesa: ~
       conda: ~
-      conda-python-env: "@defaults.conda-py3.all"
-      cmake: ['3.30.3']
+      conda-python-env: *conda-py3-all
+      cmake: *cmake-args
       vtk: [ '9.2.2' ]
 
   ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all:
     label: vt-tv, gcc-11, ubuntu, vtk 9.2.2, py3[8-12]
-    compiler: "@compilers.gcc-11"
+    env:
+      CC: gcc-11
+      CXX: g++-11
+      GCOV: gcov
     deps:
-      packages: "@defaults.apt-packages"
+      packages: [*apt-packages, gcc-11, g++-11 ]
       mesa: ~
       conda: ~
-      conda-python-env: "@defaults.conda-py3.all"
-      cmake: ['3.30.3']
+      conda-python-env: *conda-py3-all
+      cmake: *cmake-args
       vtk: [ '9.2.2' ]
 
 images:
   # vt
   -
-    repository: "@defaults.docker-repository"
+    repository: *docker-repository
     tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
@@ -139,7 +170,7 @@ images:
     setup: ubuntu-20.04-gcc-9-12.2.0-cpp
 
   -
-    repository: "@defaults.docker-repository"
+    repository: *docker-repository
     tag: amd64-alpine-clang-13-clang-13-cpp
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
@@ -167,28 +198,28 @@ images:
 
   # vt-tv
   -
-    repository: "@defaults.docker-repository"
+    repository: *docker-repository
     tag: ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:24.04
     setup: ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all
   -
-    repository: "@defaults.docker-repository"
+    repository: *docker-repository
     tag: ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:22.04
     setup: ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all
   -
-    repository: "@defaults.docker-repository"
+    repository: *docker-repository
     tag: ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64
     base: ubuntu:22.04
     setup: ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all
   -
-    repository: "@defaults.docker-repository"
+    repository: *docker-repository
     tag: ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: amd64

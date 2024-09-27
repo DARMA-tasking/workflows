@@ -38,10 +38,11 @@ echo "/////////////////////////////////////////////////"
 echo "Setup script"
 echo "/////////////////////////////////////////////////"
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
-echo "Setup configuration: $SETUP_ID"
-echo "C Compiler (CC): $CC"
-echo "C++ Compiler (CXX): $CXX"
-echo "Fortran Compiler (FC): $FC"
+echo "Setup configuration:"
+echo "> Setup Id (SETUP_ID): $SETUP_ID"
+echo "> C Compiler (CC): $CC"
+echo "> C++ Compiler (CXX): $CXX"
+echo "> Fortran Compiler (FC): $FC"
 
 echo "/////////////////////////////////////////////////"
 
@@ -105,20 +106,23 @@ fi
 if test -n "$CC"
 then
     echo "------------"
+    which $CC
     echo "C Compiler:"
-    $CC --version
+    $(which $CC) --version
 fi
 
 if test -n "$CXX"
 then
     echo "--------------------"
+    which $CXX
     echo "C++ Compiler:"
-    $CXX --version
+    $(which $CXX) --version
 fi
 
 if test -n "$FC"
 then
     echo "------------------------"
+    which $FC
     echo "Fortran Compiler:"
-    $FC --version
+    $(which $FC) --version
 fi

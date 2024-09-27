@@ -38,10 +38,11 @@ echo "/////////////////////////////////////////////////"
 echo "Setup script"
 echo "/////////////////////////////////////////////////"
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
-echo "Setup configuration: $SETUP_ID"
-echo "C Compiler (CC): $CC"
-echo "C++ Compiler (CXX): $CXX"
-echo "Fortran Compiler (FC): $FC"
+echo "Setup configuration:"
+echo "> Setup Id (SETUP_ID): $SETUP_ID"
+echo "> C Compiler (CC): $CC"
+echo "> C++ Compiler (CXX): $CXX"
+echo "> Fortran Compiler (FC): $FC"
 
 echo "/////////////////////////////////////////////////"
 
@@ -68,10 +69,12 @@ mkdir -p $SCRIPTS_INSTALL_DIR/deps
 # 1. Download dependency installation script
 cd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
+wget $SCRIPTS_DEPS_URL/mpich.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
 ./packages.sh "alpine-sdk" "autoconf" "automake" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "zlib" "zlib-dev" "clang" "clang-dev"
+./mpich.sh "3.3.2" "-j4" "" "clang" "clang++"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
@@ -97,20 +100,23 @@ fi
 if test -n "$CC"
 then
     echo "------------"
+    which $CC
     echo "C Compiler:"
-    $CC --version
+    $(which $CC) --version
 fi
 
 if test -n "$CXX"
 then
     echo "--------------------"
+    which $CXX
     echo "C++ Compiler:"
-    $CXX --version
+    $(which $CXX) --version
 fi
 
 if test -n "$FC"
 then
     echo "------------------------"
+    which $FC
     echo "Fortran Compiler:"
-    $FC --version
+    $(which $FC) --version
 fi
