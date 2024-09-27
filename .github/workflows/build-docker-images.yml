@@ -42,4 +42,4 @@ jobs:
       - run: pip install pyyaml
       - name: Docker image build
         run: |
-          python ci/build-docker-image ${{ matrix.runner.image }}
+          python ci/build-docker-image.py ${{ matrix.runner.image }}
