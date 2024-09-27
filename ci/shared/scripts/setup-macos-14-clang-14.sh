@@ -72,7 +72,7 @@ wget $SCRIPTS_DEPS_URL/packages.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "ccache" "coreutils" "clang" "clang++"
+./packages.sh "ccache" "coreutils"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
