@@ -1,3 +1,4 @@
+"""This script enable to build a docker image"""
 import copy
 import os
 import sys
@@ -53,21 +54,19 @@ class DockerBuilder:
         print("---------------------------")
 
         image_setup = setup.get(image.get('setup'))
-
         env = image_setup.get('env')
+
         args = {
-            # General
             "ARCH": image.get('arch'),
             "BASE": image.get('base'),
-            "SETUP_ID": image.get('setup'),
-            # Environment
-            "CC": env.get('CC', ''),
-            "CXX": env.get('CXX', ''),
-            "FC": env.get('FC', ''),
-            "GCOV": env.get('GCOV', ''),
-            "MPICH_CC": env.get('MPICH_CC', ''),
-            "MPICH_CXX": env.get('MPICH_CXX', '')
+            "SETUP_ID": image.get('setup')
         }
+        # Env args
+        supported_env_keys = [
+            "CC", "CXX", "FC", "GCOV", "MPICH_CC", "MPICH_CXX",
+            "CMAKE_CXX_STANDARD"]
+        for env_key in supported_env_keys:
+            args[env_key] = env.get(env_key, '')
 
         space = ' '
         cmd = ("docker build . "
@@ -80,6 +79,6 @@ class DockerBuilder:
         print(cmd)
         os.system(cmd)
 
-        # TODO: option to push to Dockerhub
+        # ENHANCEMENT: option to push to Dockerhub
 
 DockerBuilder().build(sys.argv[1:])

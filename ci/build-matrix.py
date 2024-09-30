@@ -1,3 +1,4 @@
+"""This script generates CI matrix file(s)"""
 import copy
 import os
 import json
@@ -6,8 +7,8 @@ from util import resolve_conf
 import yaml
 
 
-class MatrixGenerator:
-    """MatrixGenerator to generate a matrix file for Github and Azure Pipelines"""
+class MatrixBuilder:
+    """A class to generate matrix files for either Github or Azure Pipelines"""
 
     def generate(self):
         """Generate a matrix of runners and inner environments to be used by CI pipelines"""
@@ -68,4 +69,4 @@ class MatrixGenerator:
             ) as file:
                 file.write(data)
 
-MatrixGenerator().generate()
+MatrixBuilder().generate()

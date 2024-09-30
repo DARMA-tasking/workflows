@@ -9,7 +9,7 @@ ARG MPICH_CC=${MPICH_CC:-""}
 ARG MPICH_CXX=${MPICH_CXX:-""}
 ARG FC=${FC:-""}
 
-FROM ${ARCH}/${BASE} as base
+FROM --platform=${ARCH} ${BASE} as base
 
 ARG SETUP_ID
 ARG CC

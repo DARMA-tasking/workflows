@@ -1,3 +1,4 @@
+"""This script generates setup scripts"""
 import copy
 import os
 from typing import List
@@ -6,7 +7,7 @@ from util import resolve_conf
 import yaml
 
 class SetupBuilder:
-    """Dockerfile generator class"""
+    """Setup files generator class"""
 
     def __instructions(self, dep_id, args: list) -> List[str]:
         """ Generate shell instructions to setup a dependency"""

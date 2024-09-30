@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# vt, gcc-9, ubuntu, mpich, zoltan - Installation
+# vt, gcc-9, ubuntu, cuda 12.2, mpich, zoltan - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root

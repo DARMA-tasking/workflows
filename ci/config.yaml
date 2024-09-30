@@ -32,7 +32,7 @@ defaults:
   cmake-args: &cmake-args '3.30.3'
   openmpi-args: &openmpi-args ['v5.0', '5.0.4']
   zoltan-args: &zoltan-args [-j4', '/trilinos-install']
-  mpich-args: &mpich-args ['4.0.2', '-j4']
+  mpich-args: &mpich-args ['4.0.2', '-j4'] # use 3.3.2 for Ubuntu 18.04
   vtk-args: &vtk-args '9.3.1'
 
   # other
@@ -42,10 +42,17 @@ defaults:
     ["3.11", *pip-packages], ["3.12", *pip-packages]
   ]
 
+  env: &env
+    CC: ~
+    CXX: ~
+    GCOV: gcov
+    CMAKE_CXX_STANDARD: 17
+
 setup:
   macos-14-clang-14:
     label: macos-14-arm64, clang-14
     env:
+      <<: *env
       CC: clang
       CXX: clang++
       GCOV: llvm-gcov
@@ -55,6 +62,7 @@ setup:
   amd64-alpine-clang-13-clang-13-cpp:
     label: alpine-3.16, clang-13
     env:
+      <<: *env
       CC: mpicc
       CXX: mpicxx
       GCOV: llvm-gcov
@@ -62,13 +70,13 @@ setup:
       packages: !extend [ *apk-packages, clang, clang-dev ]
       mpich: ['3.3.2', '-j4', '', 'clang', 'clang++']
 
-  #vt
-  ubuntu-20.04-gcc-9-12.2.0-cpp:
-    label: vt, gcc-9, ubuntu, mpich, zoltan
+  # setup from vt
+  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
+    label: vt, gcc-9, ubuntu, cuda 12.2, mpich, zoltan
     env:
+      <<: *env
       CC: gcc-9
       CXX: g++-9
-      GCOV: gcov
     # deps and versions to find in vt
     deps:
       packages: !extend [ *apt-packages, gcc-9, g++-9 ]
@@ -77,8 +85,15 @@ setup:
       zoltan: *zoltan-args
       mpich: *mpich-args
 
+  amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
+    label: vt, gcc-9, ubuntu, cuda 11.2, mpich, zoltan
+    env:
+      <<: *env
+      CC: gcc-9
+      CXX: g++-9
+
   # TODO: add the following
-  # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
+  # :
   # amd64-ubuntu-20.04-icpc-icpc-cpp:
   # amd64-ubuntu-24.04-clang-16-clang-16-cpp:
   # develop:
@@ -96,13 +111,13 @@ setup:
   # amd64-ubuntu-18.04-gcc-8-gcc-8-cpp:
   # amd64-ubuntu-20.04-clang-9-clang-9-cpp:
 
-  # vt-tv
+  # setup from vt-tv
   ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all:
     label: vt-tv, gcc-13, ubuntu, vtk 9.3.1, py3[8-12]
     env:
+      <<: *env
       CC: gcc-13
       CXX: g++-13
-      GCOV: gcov
     deps:
       packages: !extend [ *apt-packages, gcc-13, g++-13 ]
       mesa: ~
@@ -114,9 +129,9 @@ setup:
   ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all:
     label: vt-tv, gcc-12, ubuntu, vtk 9.3.0, py3[8-12]
     env:
+      <<: *env
       CC: gcc-12
       CXX: g++-12
-      GCOV: gcov
     deps:
       packages: !extend [ *apt-packages, gcc-12, g++-12 ]
       mesa: ~
@@ -128,9 +143,9 @@ setup:
   ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all:
     label: vt-tv, clang-11, ubuntu, vtk 9.2.2, py3[8-12]
     env:
+      <<: *env
       CC: gcc-11
       CXX: g++-11
-      GCOV: gcov
     deps:
       packages: !extend [*apt-packages, gcc-11, g++-11 ]
       mesa: ~
@@ -142,9 +157,9 @@ setup:
   ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all:
     label: vt-tv, gcc-11, ubuntu, vtk 9.2.2, py3[8-12]
     env:
+      <<: *env
       CC: gcc-11
       CXX: g++-11
-      GCOV: gcov
     deps:
       packages: !extend [*apt-packages, gcc-11, g++-11 ]
       mesa: ~
@@ -154,22 +169,33 @@ setup:
       vtk: [ '9.2.2' ]
 
 images:
-  # vt
-  -
-    repository: *docker-repository
-    tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
-    dockerfile: ubuntu-cpp-base.dockerfile
-    arch: amd64
-    base: ubuntu:20.04
-    setup: ubuntu-20.04-gcc-9-12.2.0-cpp
 
+  # vt > basic
   -
     repository: *docker-repository
     tag: amd64-alpine-clang-13-clang-13-cpp
     dockerfile: ubuntu-cpp-base.dockerfile
-    arch: amd64
+    arch: linux/amd64
     base: alpine:3.16
     setup: amd64-alpine-clang-13-clang-13-cpp
+
+  # vt > nvidia
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
+    dockerfile: ubuntu-cpp-base.dockerfile
+    arch: linux/amd64
+    base: nvidia/cuda:12.2.0-devel-ubuntu20.04
+    setup: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
+    dockerfile: ubuntu-cpp-base.dockerfile
+    arch: linux/amd64
+    base: nvidia/cuda:11.2.2-devel-ubuntu20.04
+    setup: ubuntu-20.04-gcc-9-11.2.2-cpp
+  
 
   # TODO: add the following
   # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
@@ -195,28 +221,28 @@ images:
     repository: *docker-repository
     tag: ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
-    arch: amd64
+    arch: linux/amd64
     base: ubuntu:24.04
     setup: ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all
   -
     repository: *docker-repository
     tag: ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
-    arch: amd64
+    arch: linux/amd64
     base: ubuntu:22.04
     setup: ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all
   -
     repository: *docker-repository
     tag: ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
-    arch: amd64
+    arch: linux/amd64
     base: ubuntu:22.04
     setup: ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all
   -
     repository: *docker-repository
     tag: ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all
     dockerfile: ubuntu-cpp-base.dockerfile
-    arch: amd64
+    arch: linux/amd64
     base: ubuntu:22.04
     setup: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all
 
@@ -228,7 +254,13 @@ runners:
     runs-on: macos-14
     setup: macos-14-clang-14
 
-  # vt
+  # vt > basic
+  -
+    type: github
+    runs-on: ubuntu-latest
+    image: { repository: "@defaults.docker-repository", tag: amd64-alpine-clang-13-clang-13-cpp }
+
+  # vt > cuda
   -
     type: github
     runs-on: ubuntu-20.04
@@ -236,12 +268,11 @@ runners:
 
   -
     type: github
-    runs-on: ubuntu-latest
-    image: { repository: "@defaults.docker-repository", tag: amd64-alpine-clang-13-clang-13-cpp }
+    runs-on: ubuntu-20.04
+    image: { repository: "@defaults.docker-repository", tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp }
 
 
   # TODO: add the following
-  # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
   # amd64-ubuntu-20.04-icpc-icpc-cpp:
   # amd64-ubuntu-24.04-clang-16-clang-16-cpp:
   # develop:
