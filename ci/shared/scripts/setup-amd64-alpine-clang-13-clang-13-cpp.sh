@@ -31,7 +31,8 @@ then
 fi
 
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
-echo "In docker: $DOCKER_RUN"
+echo "DOCKER_RUN=$DOCKER_RUN"
+echo "CI=$CI"
 echo "----------------------------------"
 
 # Save setup environment to ~/.setuprc (used by packages.sh dep for example)
@@ -40,9 +41,10 @@ echo "export SETUP_ID=\"$SETUP_ID\"" >> ~/.setuprc
 echo "export DOCKER_RUN=\"$DOCKER_RUN\"" >> ~/.setuprc
 echo "export OS_NAME=\"$OS_NAME\"" >> ~/.setuprc
 echo "export OS_VERSION=\"$OS_VERSION\"" >> ~/.setuprc
+echo "export CI=\"$CI\"" >> ~/.setuprc
 
 ### UPDATE PACKAGE LIST AND INSTALL START-UP PACKAGES: git, wget, bash.
-echo "-- Installing Core packages..."
+echo "-- Installing Core packages ($OS_NAME)..."
 if [ "$OS_NAME" = "Ubuntu" ]
 then
     apt-get update -y -q
@@ -108,6 +110,7 @@ fi
 echo "---------- Setup OK ! ------------"
 echo "--"
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
+echo "CI: $CI / DOCKER_RUN: $DOCKER_RUN"
 echo "--"
 echo "Setup id: $SETUP_ID"
 echo "--"

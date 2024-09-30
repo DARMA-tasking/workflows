@@ -29,15 +29,17 @@ class MatrixBuilder:
                     "runs-on": runner.get("runs-on")
                 }
 
+                # xor
+                assert( (runner.get("setup") is not None) != (runner.get("image") is not None))
+
                 if runner.get("setup") is not None:
                     setup = config.get("setup").get(runner.get("setup"))
 
                     if setup is None:
                         raise RuntimeError(f"Setup not found {runner.get('setup')}")
-
                     matrix_item["setup"] = runner.get("setup")
 
-                if runner.get("image") is not None:
+                elif runner.get("image") is not None:
                     image_name = (runner.get("image", {}).get("repository", "") + ":"
                                 + runner.get("image", {}).get("tag", ""))
                     image = config.get("images").get(image_name)

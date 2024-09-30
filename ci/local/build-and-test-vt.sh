@@ -6,6 +6,7 @@ mkdir -p /opt/vt/src
 git clone https://github.com/DARMA-tasking/vt /opt/vt/src
 
 mkdir -p /opt/vt/build
+
 cd /opt/vt/src
 bash ci/build_cpp.sh /opt/vt/src /opt/vt/build
 bash ci/test_cpp.sh /opt/vt/src /opt/vt/build

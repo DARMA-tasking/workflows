@@ -8,10 +8,12 @@ ARG CXX=${CXX:-""}
 ARG MPICH_CC=${MPICH_CC:-""}
 ARG MPICH_CXX=${MPICH_CXX:-""}
 ARG FC=${FC:-""}
+ARG CI=${CI:-""}
 
 FROM --platform=${ARCH} ${BASE} as base
 
 ARG SETUP_ID \
+    CI \
     CC \
     CXX \
     GCOV \
@@ -22,6 +24,7 @@ ARG SETUP_ID \
 
 # Test environment variables
 ENV DOCKER_RUN=1 \
+    CI=$CI \
     CC=$CC \
     CXX=$CXX \
     GCOV=$GCOV \

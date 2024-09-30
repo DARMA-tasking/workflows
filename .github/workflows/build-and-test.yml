@@ -59,9 +59,7 @@ jobs:
             export SETUP_ID=${{ matrix.runner.setup }}
             ./setup.sh
             echo "::endgroup::"
-          fi
-
-          if [[ "${{ matrix.runner.image }}" != "" ]]; then
+          elif [[ "${{ matrix.runner.image }}" != "" ]]; then
             echo "::group::Pull Docker image"
             docker image pull ${{ matrix.runner.image }}
             echo "::endgroup::"
@@ -75,17 +73,23 @@ jobs:
             $CMD
           else
             docker run ${{ matrix.runner.image }} $CMD
-          fi
+          fi    
 
-      - name: Build and test vt (example)
+      - name: Build and test vt (example) - WIP
         run: |
-          mkdir -p /opt/vt/src
-          git clone https://github.com/DARMA-tasking/vt /opt/vt/src
+          CMD="mkdir -p /opt/vt/src;"
+          CMD+="git clone https://github.com/DARMA-tasking/vt /opt/vt/src;"
+          CMD+="mkdir -p /opt/vt/build;"
+          CMD+="cd /opt/vt/src;"
+          CMD+="bash ci/build_cpp.sh /opt/vt/src /opt/vt/build;"
+          CMD+="bash ci/test_cpp.sh /opt/vt/src /opt/vt/build;"
+          CMD+="rm -rf /opt/vt/src /opt/vt/build"
 
-          mkdir -p /opt/vt/build
-          cd /opt/vt/src
-          docker run ${{ matrix.runner.image }} ci/build_cpp.sh /opt/vt/src /opt/vt/build
-          docker run ${{ matrix.runner.image }} ci/test_cpp.sh /opt/vt/src /opt/vt/build
+          if [[ "${{ matrix.runner.image }}" == "" ]]; then
+            bash -c "$CMD";
+          else
+            docker run -e CI="1" ${{ matrix.runner.image }} bash -c $CMD
+          fi
 
       # - name: Build and test
       # TODO: Build an test step.

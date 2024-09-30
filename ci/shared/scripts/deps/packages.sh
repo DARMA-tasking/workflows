@@ -16,7 +16,7 @@ then
         exit 0
 elif [ "$OS_NAME" == "Alpine Linux" ]
 then
-    apk update && apk add --no-cache \
+    apk add --no-cache \
         $PACKAGES
 elif [ "$OS_NAME" == "macOS" ]
 then
