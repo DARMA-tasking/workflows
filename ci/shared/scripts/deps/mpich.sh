@@ -36,11 +36,7 @@ cd ${mpich_name}
 make ${make_flags}
 make install
 cd -
-# rm -rf ${mpich_name}
-
-echo "CC=$CC"
-echo "CXX=$CXX"
-echo "FC=$FC"
+rm -rf ${mpich_name}
 
 which mpicc
 which mpiexec
