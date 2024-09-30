@@ -74,18 +74,19 @@ setup:
 
   # setup from vt
   amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
-    label: vt, gcc-9, ubuntu, cuda 12.2, mpich
-    env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
+    label: vt, gcc-9, ubuntu, cuda 12.2.0, mpich
     deps:
       packages: !extend [ *apt-packages, gcc-9, g++-9 ]
       cmake: *cmake-args # 3.23.4 in vt but seems to be an error with vtk tiff build because error in Cmake CheckSize.
       mpich:
-        env: { CC: gcc-9, CXX: g++9 }
+        env: { CC: gcc-9, CXX: g++-9 }
         args: ['3.3.2', '-j4']
       nvcc_wrapper: ~
+    env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
 
   amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
     <<: *amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
+    label: vt, gcc-9, ubuntu, cuda 11.2.2, mpich
 
   # TODO: add the following
   # :

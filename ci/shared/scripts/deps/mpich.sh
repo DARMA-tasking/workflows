@@ -32,14 +32,11 @@ cd ${mpich_name}
     --enable-fast=all \
     --enable-g=none \
     --enable-timing=none \
-    CC=$CC \
-    CXX=$CXX \
-    FC=$FC \
     ${installation_prefix:+ --prefix"=${installation_prefix}"}
 make ${make_flags}
 make install
 cd -
-rm -rf ${mpich_name}
+# rm -rf ${mpich_name}
 
 echo "CC=$CC"
 echo "CXX=$CXX"

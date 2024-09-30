@@ -25,7 +25,7 @@ class SetupBuilder:
             env = []
             if isinstance(args, dict):
                 call_args = [ f"\"{a}\"" for a in args.get("args", [])]
-                env = [ f"{k}=\"v\"" for k, v in args.get("env", {}).items()]
+                env = [ f"{k}=\"{v}\"" for k, v in args.get("env", {}).items()]
             else:
                 call_args = [ f"\"{a}\"" for a in args]
                 env = []

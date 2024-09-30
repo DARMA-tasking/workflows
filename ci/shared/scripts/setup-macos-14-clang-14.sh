@@ -14,6 +14,8 @@ SCRIPTS_INSTALL_DIR=/opt/scripts/ci
 # TODO: change 2-implement-common-docker-containers to master once scripts when PR is ready
 SCRIPTS_DEPS_URL="https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/deps"
 
+echo "------------- Setup --------------"
+
 OS=
 OS_VERSION=
 UNAME=$(uname)
@@ -28,27 +30,19 @@ then
     OS_VERSION=$(cat /etc/os-release | grep -E "^VERSION_ID=*" | cut -d = -f 2 | tr -d '"')
 fi
 
-# Save setup environment
-echo "export OS_NAME=\"$OS_NAME\"" >> ~/.setuprc
-echo "export OS_VERSION=\"$OS_VERSION\"" >> ~/.setuprc
+echo "Operating system: $OS_NAME / Version: $OS_VERSION"
+echo "In docker: $DOCKER_RUN"
+echo "----------------------------------"
+
+# Save setup environment to ~/.setuprc (used by packages.sh dep for example)
+echo "-- Set up variables (SETUP_ID, OS_NAME, OS_VERSION, DOCKER_RUN) > ~/.setuprc"
 echo "export SETUP_ID=\"$SETUP_ID\"" >> ~/.setuprc
 echo "export DOCKER_RUN=\"$DOCKER_RUN\"" >> ~/.setuprc
-
-echo "/////////////////////////////////////////////////"
-echo "Setup script"
-echo "/////////////////////////////////////////////////"
-echo "Operating system: $OS_NAME / Version: $OS_VERSION"
-echo "Setup configuration:"
-echo "> Setup Id (SETUP_ID): $SETUP_ID"
-echo "> C Compiler (CC): $CC"
-echo "> C++ Compiler (CXX): $CXX"
-echo "> Fortran Compiler (FC): $FC"
-echo "> Build type (CMAKE_BUILD_TYPE): $CMAKE_BUILD_TYPE"
-echo "> C++ Standard (CMAKE_CXX_STANDARD): $CMAKE_CXX_STANDARD"
-
-echo "/////////////////////////////////////////////////"
+echo "export OS_NAME=\"$OS_NAME\"" >> ~/.setuprc
+echo "export OS_VERSION=\"$OS_VERSION\"" >> ~/.setuprc
 
 ### UPDATE PACKAGE LIST AND INSTALL START-UP PACKAGES: git, wget, bash.
+echo "-- Installing Core packages..."
 if [ "$OS_NAME" = "Ubuntu" ]
 then
     apt-get update -y -q
@@ -65,7 +59,16 @@ else
     exit 1
 fi
 
+echo "--"
+echo "-- Core packages installed !"
+echo "--"
+
 ### SETUP DEPENDENCIES
+
+echo "--"
+echo "-- Installing dependencies..."
+echo "--"
+
 mkdir -p $SCRIPTS_INSTALL_DIR
 mkdir -p $SCRIPTS_INSTALL_DIR/deps
 # 1. Download dependency installation script
@@ -82,6 +85,10 @@ if [ "$DOCKER_RUN" = "1" ]; then
     rm -rf /var/lib/apt/lists/*
 fi
 
+echo "--"
+echo "-- Dependencies installed !"
+echo "--"
+
 ### CLEAN-UP
 if [ "$OS_NAME" = "Ubuntu" ]
 then
@@ -96,7 +103,18 @@ else
     echo "No cleanup instructions defined for OS=$OS."
 fi
 
-if [ -e "opt/nvcc_wrapper/bin/nvcc_wrapper" ] 
-then
-    export CXX=nvcc_wrapper
-fi
+echo "---------- Setup OK ! ------------"
+echo "--"
+echo "Operating system: $OS_NAME / Version: $OS_VERSION"
+echo "--"
+echo "Setup id: $SETUP_ID"
+echo "--"
+echo "Environment:"
+echo "  CC=$CC"
+echo "  CXX=$CXX"
+echo "  CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"
+echo "  CMAKE_CXX_STANDARD=$CMAKE_CXX_STANDARD"
+echo "  FC=$FC"
+echo "--"
+echo "-------- Ready to test ! ---------"
+echo "--"

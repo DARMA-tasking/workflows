@@ -1,4 +1,4 @@
-# Build an image with some configured packages and dependencies
+# Base dockerfile to build images used in Darma testing.
 
 ARG ARCH=amd64
 ARG BASE=ubuntu:22.04
@@ -11,32 +11,25 @@ ARG FC=${FC:-""}
 
 FROM --platform=${ARCH} ${BASE} as base
 
-ARG SETUP_ID
-ARG CC
-ARG CXX
-ARG GCOV
-ARG MPICH_CC
-ARG MPICH_CXX
+ARG SETUP_ID \
+    CC \
+    CXX \
+    GCOV \
+    CMAKE_BUILD_TYPE \
+    CMAKE_CXX_STANDARD \
+    MPICH_CC \
+    MPICH_CXX
 
-ARG CMAKE_BUILD_TYPE
-ARG CMAKE_CXX_STANDARD
-
-# Environment
+# Test environment variables
 ENV DOCKER_RUN=1 \
     CC=$CC \
     CXX=$CXX \
-    MPICH_CC=$MPICH_CC \
-    MPICH_CXX=$MPICH_CXX \
     GCOV=$GCOV \
-    \
     CONDA_INSTALL_DIR=/opt/conda \
     CONDA_AUTO_ACTIVATE_BASE=false \
-    \
     VTK_DIR=/opt/vtk/build \
-    \
     LESSCHARSET=utf-8 \
-    \
-    PATH=/opt/cmake/bin:/opt/nvcc_wrapper/bin:/opt/vtk/bin:$PATH
+    PATH=/usr/lib/ccache:/opt/cmake/bin:/opt/nvcc_wrapper/bin:/opt/vtk/bin:$PATH
 
 COPY ci/shared/scripts/setup-${SETUP_ID}.sh setup.sh
 
