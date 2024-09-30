@@ -18,18 +18,28 @@ ARG GCOV
 ARG MPICH_CC
 ARG MPICH_CXX
 
+ARG CMAKE_BUILD_TYPE
+ARG CMAKE_CXX_STANDARD
+
 # Environment
-ENV PATH=/opt/cmake/bin:$PATH
-ENV CC=$CC
-ENV CXX=$CXX
-ENV MPICH_CC=$MPICH_CC
-ENV MPICH_CXX=$MPICH_CXX
-ENV GCOV=$GCOV
-ENV CONDA_INSTALL_DIR=/opt/conda
-ENV CONDA_AUTO_ACTIVATE_BASE=false
-ENV VTK_DIR=/opt/vtk/build
-ENV DOCKER_RUN=1
+ENV DOCKER_RUN=1 \
+    CC=$CC \
+    CXX=$CXX \
+    MPICH_CC=$MPICH_CC \
+    MPICH_CXX=$MPICH_CXX \
+    GCOV=$GCOV \
+    \
+    CONDA_INSTALL_DIR=/opt/conda \
+    CONDA_AUTO_ACTIVATE_BASE=false \
+    \
+    VTK_DIR=/opt/vtk/build \
+    \
+    LESSCHARSET=utf-8 \
+    \
+    PATH=/opt/cmake/bin:/opt/nvcc_wrapper/bin:/opt/vtk/bin:$PATH
 
 COPY ci/shared/scripts/setup-${SETUP_ID}.sh setup.sh
 
-RUN chmod +x setup.sh && ./setup.sh
+RUN chmod +x setup.sh && . ./setup.sh
+
+RUN echo "CXX=$CXX"

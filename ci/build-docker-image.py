@@ -64,9 +64,13 @@ class DockerBuilder:
         # Env args
         supported_env_keys = [
             "CC", "CXX", "FC", "GCOV", "MPICH_CC", "MPICH_CXX",
-            "CMAKE_CXX_STANDARD"]
+            "CMAKE_BUILD_TYPE", "CMAKE_CXX_STANDARD"]
         for env_key in supported_env_keys:
             args[env_key] = env.get(env_key, '')
+
+        invalid_keys = [k for k in env and not k in supported_env_keys]
+        if len(invalid_keys) > 0:
+            print(f"warning: env keys not supported: {invalid_keys}")
 
         space = ' '
         cmd = ("docker build . "

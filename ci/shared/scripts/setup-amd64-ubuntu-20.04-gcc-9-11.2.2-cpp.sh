@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# vt, gcc-9, ubuntu, cuda 11.2, mpich, zoltan - Installation
+# vt, gcc-9, ubuntu, cuda 12.2, mpich - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -43,6 +43,8 @@ echo "> Setup Id (SETUP_ID): $SETUP_ID"
 echo "> C Compiler (CC): $CC"
 echo "> C++ Compiler (CXX): $CXX"
 echo "> Fortran Compiler (FC): $FC"
+echo "> Build type (CMAKE_BUILD_TYPE): $CMAKE_BUILD_TYPE"
+echo "> C++ Standard (CMAKE_CXX_STANDARD): $CMAKE_CXX_STANDARD"
 
 echo "/////////////////////////////////////////////////"
 
@@ -68,15 +70,21 @@ mkdir -p $SCRIPTS_INSTALL_DIR
 mkdir -p $SCRIPTS_INSTALL_DIR/deps
 # 1. Download dependency installation script
 cd $SCRIPTS_INSTALL_DIR/deps
-
+wget $SCRIPTS_DEPS_URL/packages.sh
+wget $SCRIPTS_DEPS_URL/cmake.sh
+wget $SCRIPTS_DEPS_URL/mpich.sh
+wget $SCRIPTS_DEPS_URL/nvcc_wrapper.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
+./cmake.sh "3.30.3"
+./mpich.sh "3.3.2" "-j4"
+./nvcc_wrapper.sh "None"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
-if [ DOCKER_RUN == "1" ]; then
+if [ "$DOCKER_RUN" = "1" ]; then
     rm -rf /var/lib/apt/lists/*
 fi
 
@@ -92,4 +100,9 @@ then
    :
 else
     echo "No cleanup instructions defined for OS=$OS."
+fi
+
+if [ -e "opt/nvcc_wrapper/bin/nvcc_wrapper" ] 
+then
+    export CXX=nvcc_wrapper
 fi

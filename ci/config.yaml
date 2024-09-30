@@ -47,6 +47,7 @@ defaults:
     CXX: ~
     GCOV: gcov
     CMAKE_CXX_STANDARD: 17
+    CMAKE_BUILD_TYPE: Release
 
 setup:
   macos-14-clang-14:
@@ -68,29 +69,20 @@ setup:
       GCOV: llvm-gcov
     deps:
       packages: !extend [ *apk-packages, clang, clang-dev ]
-      mpich: ['3.3.2', '-j4', '', 'clang', 'clang++']
+      mpich: ['3.3.2', '-j4']
 
   # setup from vt
-  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
-    label: vt, gcc-9, ubuntu, cuda 12.2, mpich, zoltan
-    env:
-      <<: *env
-      CC: gcc-9
-      CXX: g++-9
-    # deps and versions to find in vt
+  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
+    label: vt, gcc-9, ubuntu, cuda 12.2, mpich
+    env: { <<: *env, CC: gcc-9, CXX: g++9 }
     deps:
       packages: !extend [ *apt-packages, gcc-9, g++-9 ]
       cmake: *cmake-args # 3.23.4 in vt but seems to be an error with vtk tiff build because error in Cmake CheckSize.
-      openmpi: *openmpi-args
-      zoltan: *zoltan-args
-      mpich: *mpich-args
+      mpich: ['3.3.2', '-j4']
+      nvcc_wrapper: ~
 
   amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
-    label: vt, gcc-9, ubuntu, cuda 11.2, mpich, zoltan
-    env:
-      <<: *env
-      CC: gcc-9
-      CXX: g++-9
+    <<: *amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
 
   # TODO: add the following
   # :
@@ -194,7 +186,7 @@ images:
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: linux/amd64
     base: nvidia/cuda:11.2.2-devel-ubuntu20.04
-    setup: ubuntu-20.04-gcc-9-11.2.2-cpp
+    setup: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
   
 
   # TODO: add the following

@@ -13,9 +13,6 @@ mpich_name="mpich-${mpich_version}"
 mpich_tar_name="${mpich_name}.tar.gz"
 make_flags="$2"
 installation_prefix="${3-}"
-make_cc="${4:-$CC}"
-make_cxx="${5:-$CXX}"
-make_fc="${6:-$FC}"
 
 echo "${mpich_version}"
 echo "${mpich_name}"
@@ -35,9 +32,9 @@ cd ${mpich_name}
     --enable-fast=all \
     --enable-g=none \
     --enable-timing=none \
-    CC=$make_cc \
-    CXX=$make_cxx \
-    FC=$make_fc \
+    CC=$CC \
+    CXX=$CXX \
+    FC=$FC \
     ${installation_prefix:+ --prefix"=${installation_prefix}"}
 make ${make_flags}
 make install

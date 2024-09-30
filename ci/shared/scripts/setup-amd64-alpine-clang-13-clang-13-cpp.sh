@@ -43,6 +43,8 @@ echo "> Setup Id (SETUP_ID): $SETUP_ID"
 echo "> C Compiler (CC): $CC"
 echo "> C++ Compiler (CXX): $CXX"
 echo "> Fortran Compiler (FC): $FC"
+echo "> Build type (CMAKE_BUILD_TYPE): $CMAKE_BUILD_TYPE"
+echo "> C++ Standard (CMAKE_CXX_STANDARD): $CMAKE_CXX_STANDARD"
 
 echo "/////////////////////////////////////////////////"
 
@@ -74,11 +76,11 @@ wget $SCRIPTS_DEPS_URL/mpich.sh
 chmod u+x *.sh
 ls -l
 ./packages.sh "alpine-sdk" "autoconf" "automake" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "zlib" "zlib-dev" "clang" "clang-dev"
-./mpich.sh "3.3.2" "-j4" "" "clang" "clang++"
+./mpich.sh "3.3.2" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
-if [ DOCKER_RUN == "1" ]; then
+if [ "$DOCKER_RUN" = "1" ]; then
     rm -rf /var/lib/apt/lists/*
 fi
 
@@ -94,4 +96,9 @@ then
    :
 else
     echo "No cleanup instructions defined for OS=$OS."
+fi
+
+if [ -e "opt/nvcc_wrapper/bin/nvcc_wrapper" ] 
+then
+    export CXX=nvcc_wrapper
 fi
