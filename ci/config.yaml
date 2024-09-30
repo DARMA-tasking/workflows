@@ -32,7 +32,6 @@ defaults:
   cmake-args: &cmake-args '3.30.3'
   openmpi-args: &openmpi-args ['v5.0', '5.0.4']
   zoltan-args: &zoltan-args [-j4', '/trilinos-install']
-  mpich-args: &mpich-args ['4.0.2', '-j4'] # use 3.3.2 for Ubuntu 18.04
   vtk-args: &vtk-args '9.3.1'
 
   # other
@@ -69,16 +68,20 @@ setup:
       GCOV: llvm-gcov
     deps:
       packages: !extend [ *apk-packages, clang, clang-dev ]
-      mpich: ['3.3.2', '-j4']
+      mpich:
+        env: { CC: clang, CXX: clang++ }
+        args: ['3.3.2', '-j4']
 
   # setup from vt
   amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
     label: vt, gcc-9, ubuntu, cuda 12.2, mpich
-    env: { <<: *env, CC: gcc-9, CXX: g++9 }
+    env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
     deps:
       packages: !extend [ *apt-packages, gcc-9, g++-9 ]
       cmake: *cmake-args # 3.23.4 in vt but seems to be an error with vtk tiff build because error in Cmake CheckSize.
-      mpich: ['3.3.2', '-j4']
+      mpich:
+        env: { CC: gcc-9, CXX: g++9 }
+        args: ['3.3.2', '-j4']
       nvcc_wrapper: ~
 
   amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:

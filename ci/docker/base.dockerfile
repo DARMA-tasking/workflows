@@ -41,5 +41,3 @@ ENV DOCKER_RUN=1 \
 COPY ci/shared/scripts/setup-${SETUP_ID}.sh setup.sh
 
 RUN chmod +x setup.sh && . ./setup.sh
-
-RUN echo "CXX=$CXX"

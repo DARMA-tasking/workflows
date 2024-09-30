@@ -68,7 +68,7 @@ class DockerBuilder:
         for env_key in supported_env_keys:
             args[env_key] = env.get(env_key, '')
 
-        invalid_keys = [k for k in env and not k in supported_env_keys]
+        invalid_keys = list(key for key in env if not key in supported_env_keys)
         if len(invalid_keys) > 0:
             print(f"warning: env keys not supported: {invalid_keys}")
 

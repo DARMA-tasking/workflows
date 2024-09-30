@@ -1,7 +1,7 @@
 """This script generates setup scripts"""
 import copy
 import os
-from typing import List
+from typing import List, Union
 
 from util import resolve_conf
 import yaml
@@ -9,22 +9,33 @@ import yaml
 class SetupBuilder:
     """Setup files generator class"""
 
-    def __instructions(self, dep_id, args: list) -> List[str]:
+    def __instructions(self, dep_id, args: Union[list, dict]) -> List[str]:
         """ Generate shell instructions to setup a dependency"""
+
         call_args = []
         # repeat instructions if args is an array of array
         if args is not None and len(args) > 0:
-            if isinstance(args[0], list):
+
+            if isinstance(args, list) and isinstance(args[0], list):
                 instructions = []
                 for (_, sub_args) in enumerate(args):
                     instructions.extend(self.__instructions(dep_id, sub_args))
                 return instructions
 
-            call_args = [ f"\"{a}\"" for a in args]
+            env = []
+            if isinstance(args, dict):
+                call_args = [ f"\"{a}\"" for a in args.get("args", [])]
+                env = [ f"{k}=\"v\"" for k, v in args.get("env", {}).items()]
+            else:
+                call_args = [ f"\"{a}\"" for a in args]
+                env = []
 
         cmd = f"./{dep_id}.sh"
         if len(call_args) > 0:
             cmd = f"{cmd} {' '.join(call_args)}"
+        if len(env) > 0:
+            cmd = f"{' '.join(env)} {cmd}"
+
         return [ cmd ]
 
     def build(self):
