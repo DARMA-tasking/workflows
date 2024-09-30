@@ -65,7 +65,7 @@ setup:
       CXX: mpicxx
       GCOV: llvm-gcov
     deps:
-      packages: [ *apk-packages, clang, clang-dev ]
+      packages: !extend [ *apk-packages, clang, clang-dev ]
       mpich: ['3.3.2', '-j4', '', 'clang', 'clang++']
 
   #vt
@@ -77,8 +77,8 @@ setup:
       GCOV: gcov
     # deps and versions to find in vt
     deps:
-      packages: [ *apt-packages, gcc-9, g++-9]
-      cmake: *cmake-args
+      packages: !extend [*apt-packages, gcc-9, g++-9]
+      cmake: *cmake-args # 3.23.4 in vt but seems to be an error with vtk tiff build because error in Cmake CheckSize.
       openmpi: *openmpi-args
       zoltan: *zoltan-args
       mpich: *mpich-args
@@ -110,7 +110,7 @@ setup:
       CXX: g++-13
       GCOV: gcov
     deps:
-      packages: [ *apt-packages, gcc-13, g++-13 ]
+      packages: !extend [ *apt-packages, gcc-13, g++-13 ]
       mesa: ~
       conda: ~
       conda-python-env: *conda-py3-all
@@ -124,7 +124,7 @@ setup:
       CXX: g++-12
       GCOV: gcov
     deps:
-      packages: [ *apt-packages, gcc-12, g++-12 ]
+      packages: !extend [ *apt-packages, gcc-12, g++-12 ]
       mesa: ~
       conda: ~
       conda-python-env: *conda-py3-all
@@ -138,7 +138,7 @@ setup:
       CXX: g++-11
       GCOV: gcov
     deps:
-      packages: [*apt-packages, gcc-11, g++-11 ]
+      packages: !extend [*apt-packages, gcc-11, g++-11 ]
       mesa: ~
       conda: ~
       conda-python-env: *conda-py3-all
@@ -152,7 +152,7 @@ setup:
       CXX: g++-11
       GCOV: gcov
     deps:
-      packages: [*apt-packages, gcc-11, g++-11 ]
+      packages: !extend [*apt-packages, gcc-11, g++-11 ]
       mesa: ~
       conda: ~
       conda-python-env: *conda-py3-all

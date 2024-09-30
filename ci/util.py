@@ -1,7 +1,33 @@
 """Utility methods
 """
 
+import copy
 from typing import Union
+
+import yaml
+
+
+# < YAML custom tags
+def yaml_list_extend_loader(loader, node):
+    """Loads a YAML sequence node defining a list to extend and the elements to add"""
+    if not isinstance(node, yaml.SequenceNode):
+        raise RuntimeError("!extend only applicable to sequences")
+    params = loader.construct_sequence(node)
+    if not isinstance(params[0], list):
+        raise RuntimeError("!extend first argument must be a list")
+
+    l: list = copy.deepcopy(params[0])
+    if len(params) > 1:
+        for p in params[1:]:
+            if not isinstance(p, list):
+                l.extend([p])
+            else:
+                l.extend(p)
+    return l
+
+# Required for safe_load
+yaml.SafeLoader.add_constructor("!extend", yaml_list_extend_loader)
+# > YAML custom tags
 
 def resolve_conf(config: Union[dict,list]) -> dict:
     """Update configuration to ease its processing:
@@ -28,16 +54,6 @@ def resolve_conf(config: Union[dict,list]) -> dict:
             # single arg
             if not isinstance(args, list):
                 setup["deps"][dep_id] = [ args ]
-
-        # flatten package dependencies
-        if setup["deps"].get("packages") is not None:
-            flattened_args = []
-            for (_, arg) in enumerate(setup["deps"].get("packages")):
-                if isinstance(arg, list):
-                    flattened_args.extend(arg)
-                else:
-                    flattened_args.append(arg)
-            setup["deps"]["packages"] = flattened_args   
 
     # Index Docker images by their full name
     config["images"] = dict((image.get("repository") + ":" + image.get("tag"), image)
