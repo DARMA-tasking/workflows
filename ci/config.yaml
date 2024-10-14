@@ -60,7 +60,7 @@ setup:
       packages: *brew-packages
 
   amd64-alpine-clang-13-clang-13-cpp:
-    label: alpine-3.16, clang-13
+    label: alpine-3.16, clang-13, mpich
     env:
       <<: *env
       CC: mpicc

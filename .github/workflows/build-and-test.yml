@@ -75,7 +75,10 @@ jobs:
             docker run ${{ matrix.runner.image }} $CMD
           fi    
 
-      - name: Build and test vt (example) - WIP
+      - name: Build and test vt (example)
+        if: >-
+          contains('${{ matrix.runner.label }}', 'mpich') ||
+          contains('${{ matrix.runner.label }}', 'openmpi')
         run: |
           CMD='mkdir -p "/opt/vt/src" "/opt/vt/build" ; \
             git clone https://github.com/DARMA-tasking/vt /opt/vt/src ; \

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# alpine-3.16, clang-13 - Installation
+# alpine-3.16, clang-13, mpich - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
