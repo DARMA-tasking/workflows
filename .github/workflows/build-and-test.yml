@@ -76,9 +76,7 @@ jobs:
           fi    
 
       - name: Build and test vt (example)
-        if: >-
-          contains('${{ matrix.runner.label }}', 'mpich') ||
-          contains('${{ matrix.runner.label }}', 'openmpi')
+        if: ${{ contains(matrix.runner.label, 'mpich') || contains(matrix.runner.label, 'openmpi') }}
         run: |
           CMD='mkdir -p "/opt/vt/src" "/opt/vt/build" ; \
             git clone https://github.com/DARMA-tasking/vt /opt/vt/src ; \
@@ -86,14 +84,14 @@ jobs:
             bash ci/build_cpp.sh /opt/vt/src /opt/vt/build ; \
             bash ci/test_cpp.sh /opt/vt/src /opt/vt/build ; \
             rm -rf "/opt/vt/src" "/opt/vt/build"'
+  
           echo "Running ${CMD}"
 
           if [[ "${{ matrix.runner.image }}" == "" ]]; then
             bash -c "$CMD";
           else
-            docker run -e CI="1" ${{ matrix.runner.image }} bash -c "$CMD"
-            EXIT_CODE=$(docker container inspect --format '{{.State.ExitCode}}' ${{ matrix.runner.image }})
-            exit EXIT_CODE
+            docker run --name test-container -e CI="1" ${{ matrix.runner.image }} bash -c "$CMD"
+            exit $(docker container inspect --format '{{.State.ExitCode}}' test-container)
           fi
 
       # - name: Build and test
