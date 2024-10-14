@@ -89,6 +89,8 @@ jobs:
             bash -c "$CMD";
           else
             docker run -e CI="1" ${{ matrix.runner.image }} bash -c "$CMD"
+            EXIT_CODE=$(docker container inspect --format '{{.State.ExitCode}}' ${{ matrix.runner.image }})
+            exit EXIT_CODE
           fi
 
       # - name: Build and test
