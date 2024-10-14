@@ -8,14 +8,15 @@ on:
     branches:
       - 2-implement-common-docker-containers
 
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CI_REPO: DARMA-tasking/workflows
+  CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
+
 jobs:
   get-matrix:
     name: Retrieve Setup matrix
-    runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      CI_REPO: DARMA-tasking/workflows
-      CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
+    runs-on: ubuntu-latest     
     steps:
       - name: Retrieve Setup matrix
         id: get-matrix
@@ -53,8 +54,7 @@ jobs:
             echo "Set setup permissions..."
             sudo mkdir -p /opt
             sudo chown $(whoami) /opt
-
-            wget -O setup.sh https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/setup-${{ matrix.runner.setup }}.sh
+            wget -O setup.sh https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/setup-${{ matrix.runner.setup }}.sh
             chmod +x setup.sh
             export SETUP_ID=${{ matrix.runner.setup }}
             ./setup.sh
@@ -75,7 +75,26 @@ jobs:
             docker run ${{ matrix.runner.image }} $CMD
           fi    
 
-      - name: Build and test vt (example)
+      - name: Extract timestamps for caching
+        run: |
+          mkdir -p /opt/scripts
+          cd /opt/scripts
+          wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/runner/set-variable.sh && chmod +x set-variable.sh
+          wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/runner/set-timestamps.sh && chmod +x set-timestamps.sh
+          
+          printenv
+          ./set-timestamps.sh
+
+          echo "TS=${{ env.TS }}"
+          echo "TS_YEAR=${{ env.TS_YEAR }}"
+          echo "TS_MONTH=${{ env.TS_MONTH }}"
+          echo "TS_DAY=${{ env.TS_DAY }}"
+
+      - name: Setup build cache (vt)
+        run: |
+          echo "TODO"
+
+      - name: Build and test (vt)
         if: ${{ contains(matrix.runner.label, 'mpich') || contains(matrix.runner.label, 'openmpi') }}
         run: |
           CMD='mkdir -p "/opt/vt/src" "/opt/vt/build" ; \

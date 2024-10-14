@@ -8,7 +8,7 @@ import yaml
 
 
 class MatrixBuilder:
-    """A class to generate matrix files for either Github or Azure Pipelines"""
+    """A class to generate matrix files for either Github Workflows or Azure Pipelines"""
 
     def generate(self):
         """Generate a matrix of runners and inner environments to be used by CI pipelines"""
@@ -18,7 +18,7 @@ class MatrixBuilder:
             raw_config = yaml.safe_load(file)
         config = resolve_conf(copy.deepcopy(raw_config))
 
-        for runner_type in ["github", "azure-pipelines"]:
+        for runner_type in ["github", "azure"]:
             runners = [runner for runner in config.get("runners")
                 if runner.get("type") == runner_type]
 

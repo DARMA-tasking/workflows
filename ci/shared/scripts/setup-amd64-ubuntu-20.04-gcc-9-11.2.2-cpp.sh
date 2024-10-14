@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# vt, gcc-9, ubuntu, cuda 11.2.2, mpich - Installation
+# gcc-9, ubuntu, cuda 11.2.2, mpich - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
