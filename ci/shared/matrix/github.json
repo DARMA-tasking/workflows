@@ -2,7 +2,7 @@
   "_comment": "This file has been generated. Please do not edit",
   "matrix": [
     {
-      "label": "macos-14-arm64, clang-14",
+      "label": "macos-14-arm64, clang-14, mpich",
       "runs-on": "macos-14",
       "setup": "macos-14-clang-14"
     },

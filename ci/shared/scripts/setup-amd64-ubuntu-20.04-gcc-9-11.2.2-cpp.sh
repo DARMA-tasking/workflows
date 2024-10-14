@@ -84,7 +84,7 @@ chmod u+x *.sh
 ls -l
 ./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
 ./cmake.sh "3.30.3"
-CC="gcc-9" CXX="g++-9" ./mpich.sh "3.3.2" "-j4"
+CC="gcc-9" CXX="g++-9" ./mpich.sh "4.0.2" "-j4"
 ./nvcc_wrapper.sh "None"
 
 # Remove install scripts

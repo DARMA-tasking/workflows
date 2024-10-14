@@ -31,6 +31,7 @@ defaults:
   # default arguments for dependency installation scripts
   cmake-args: &cmake-args '3.30.3'
   openmpi-args: &openmpi-args ['v5.0', '5.0.4']
+  mpich-args: &mpich-args ['4.0.2', '-j4']
   zoltan-args: &zoltan-args [-j4', '/trilinos-install']
   vtk-args: &vtk-args '9.3.1'
 
@@ -50,14 +51,17 @@ defaults:
 
 setup:
   macos-14-clang-14:
-    label: macos-14-arm64, clang-14
+    label: macos-14-arm64, clang-14, mpich
     env:
       <<: *env
-      CC: clang
-      CXX: clang++
+      CC: mpicc
+      CXX: mpicxx++
       GCOV: llvm-gcov
     deps:
       packages: *brew-packages
+      mpich:
+        env: { CC: clang, CXX: clang++ }
+        args: *mpich-args
 
   amd64-alpine-clang-13-clang-13-cpp:
     label: alpine-3.16, clang-13, mpich
@@ -70,7 +74,7 @@ setup:
       packages: !extend [ *apk-packages, clang, clang-dev ]
       mpich:
         env: { CC: clang, CXX: clang++ }
-        args: ['3.3.2', '-j4']
+        args: *mpich-args
 
   # setup from vt
   amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
@@ -80,7 +84,7 @@ setup:
       cmake: *cmake-args # 3.23.4 in vt but seems to be an error with vtk tiff build because error in Cmake CheckSize.
       mpich:
         env: { CC: gcc-9, CXX: g++-9 }
-        args: ['3.3.2', '-j4']
+        args: *mpich-args
       nvcc_wrapper: ~
     env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
 
