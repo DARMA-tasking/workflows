@@ -23,7 +23,7 @@ defaults:
   apk-packages: &apk-packages [
     alpine-sdk, autoconf, automake, binutils-dev, ccache, cmake, dpkg,
     libdwarf-dev, libunwind-dev, libtool, linux-headers, m4, make, ninja, zlib,
-    zlib-dev
+    zlib-dev, python3
   ]
   brew-packages: &brew-packages [ ccache, coreutils, ninja ]
   pip-packages: &pip-packages "nanobind yaml setuptools"
@@ -225,7 +225,7 @@ images:
     tag: amd64-ubuntu-20.04-icpc-icpc-cpp
     dockerfile: ubuntu-cpp-base.dockerfile
     arch: linux/amd64
-    base: nvidia/cuda:11.2.2-devel-ubuntu20.04
+    base: intel/oneapi:os-tools-ubuntu20.04
     setup: amd64-ubuntu-20.04-icpc-icpc-cpp
 
   # TODO: add the following
