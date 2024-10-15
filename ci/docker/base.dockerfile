@@ -21,6 +21,7 @@ ARG CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH:-""}
 ARG MPICH_CC=${MPICH_CC:-""}
 ARG MPICH_CXX=${MPICH_CXX:-""}
 
+# Add to path optional dependencies path
 ARG PATH=${PATH:-"/usr/lib/ccache\
       :/opt/cmake/bin\
       :/opt/nvcc_wrapper/bin\
@@ -47,9 +48,11 @@ ARG SETUP_ID \
     CC \
     CXX \
     GCOV \
+    \
     CMAKE_BUILD_TYPE \
     CMAKE_CXX_STANDARD \
     CMAKE_PREFIX_PATH \
+    \
     CPATH \
     INFOPATH \
     LIBRARY_PATH \
@@ -70,13 +73,18 @@ ENV DOCKER_RUN=1 \
     CC=$CC \
     CXX=$CXX \
     GCOV=$GCOV \
+    \
     CONDA_INSTALL_DIR=/opt/conda \
     CONDA_AUTO_ACTIVATE_BASE=false \
+    \
     VTK_DIR=/opt/vtk/build \
+    \
     LESSCHARSET=utf-8 \
+    \
     CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
     CMAKE_CXX_STANDARD=$CMAKE_CXX_STANDARD \
     CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
+    \
     CPATH=$CPATH \
     INFOPATH=$INFOPATH \
     LIBRARY_PATH=$LIBRARY_PATH \
@@ -85,7 +93,7 @@ ENV DOCKER_RUN=1 \
     MPICH_CXX=$MPICH_CXX \
     PATH=$PATH
 
-# Specific (Intel)
+# Specific (Intel One API)
 ENV CMPLR_ROOT=$CMPLR_ROOT \
     INTEL_LICENSE_FILE=$INTEL_LICENSE_FILE \
     ONEAPI_ROOT=$ONEAPI_ROOT \

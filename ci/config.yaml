@@ -30,7 +30,7 @@ defaults:
   # default arguments for dependency installation scripts
   cmake-args: &cmake-args '3.30.3'
   openmpi-args: &openmpi-args ['v5.0', '5.0.4']
-  mpich-args: &mpich-args ['4.0.2', '-j4']
+  mpich-args: &mpich-args ['4.2.3', '-j4']
   zoltan-args: &zoltan-args [-j4', '/trilinos-install']
   vtk-args: &vtk-args '9.3.1'
 

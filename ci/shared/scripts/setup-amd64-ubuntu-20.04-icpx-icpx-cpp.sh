@@ -87,7 +87,7 @@ chmod u+x *.sh
 ls -l
 ./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
 ./cmake.sh "3.30.3"
-CC="icx" CXX="icpx" ./mpich.sh "4.0.2" "-j4"
+CC="icx" CXX="icpx" ./mpich.sh "4.2.3" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
