@@ -102,6 +102,7 @@ setup:
       MPICH_CXX: icpx
     deps:
       packages: !extend [ *apt-packages, intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1 ]
+      cmake: *cmake-args
       mpich:
         env: { CC: intel-cc, CXX: icpx }
         args: *mpich-args

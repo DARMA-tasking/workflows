@@ -90,7 +90,7 @@ jobs:
       - name: Build and test (vt)
         if: ${{ contains(matrix.runner.label, 'mpich') || contains(matrix.runner.label, 'openmpi') }}
         run: |
-          CMD='mkdir -p "/opt/vt/src" "/opt/vt/build" ; \
+          CMD='mkdir -p "/opt/vt/src" "/opt/vt/build/vt" ; \
             git clone https://github.com/DARMA-tasking/vt /opt/vt/src ; \
             cd /opt/vt/src ; \
             bash ci/build_cpp.sh /opt/vt/src /opt/vt/build ; \

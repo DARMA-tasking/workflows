@@ -27,7 +27,7 @@ jobs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
 
   build-image:
-    name: Build docker image (${{ matrix.runner.label }})
+    name: Build Docker image (${{ matrix.runner.label }})
     runs-on: ${{ matrix.runner.runs-on }}
     needs: get-matrix
     strategy:
@@ -40,14 +40,14 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pyyaml
-      - name: Build docker image
+      - name: Build Docker image
         run: |
           python ci/build-docker-image.py ${{ matrix.runner.image }}
-      - name: Test Docker Image Use (VT build & test)
+      - name: Test Docker image (VT build & test)
         run: |
           CMD='echo "CC=$CC" ; \
           echo "CXX=$CXX" ; \
-          mkdir -p "/opt/vt/src" "/opt/vt/build" ; \
+          mkdir -p "/opt/vt/src" "/opt/vt/build/vt" ; \
             git clone https://github.com/DARMA-tasking/vt /opt/vt/src ; \
             cd /opt/vt/src ; \
             bash ci/build_cpp.sh /opt/vt/src /opt/vt/build ; \
