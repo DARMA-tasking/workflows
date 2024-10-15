@@ -99,7 +99,7 @@ setup:
       CXX: mpicxx
       GCOV: llvm-gcov
       MPICH_CC: intel-cc
-      MPICH_CXX: icpx
+      MPICH_CXX: icpx      
     deps:
       packages: !extend [ *apt-packages, intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1 ]
       cmake: *cmake-args
