@@ -20,6 +20,11 @@
       "label": "gcc-9, ubuntu, cuda 11.2.2, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-9-11.2.2-cpp"
+    },
+    {
+      "label": "intel icpc, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:amd64-ubuntu-20.04-icpc-icpc-cpp"
     }
   ]
 }

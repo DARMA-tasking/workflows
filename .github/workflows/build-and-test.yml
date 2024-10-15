@@ -81,14 +81,7 @@ jobs:
           cd /opt/scripts
           wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/runner/set-variable.sh && chmod +x set-variable.sh
           wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/runner/set-timestamps.sh && chmod +x set-timestamps.sh
-          
-          printenv
           ./set-timestamps.sh
-
-          echo "TS=${{ env.TS }}"
-          echo "TS_YEAR=${{ env.TS_YEAR }}"
-          echo "TS_MONTH=${{ env.TS_MONTH }}"
-          echo "TS_DAY=${{ env.TS_DAY }}"
 
       - name: Setup build cache (vt)
         run: |
@@ -102,6 +95,7 @@ jobs:
             cd /opt/vt/src ; \
             bash ci/build_cpp.sh /opt/vt/src /opt/vt/build ; \
             bash ci/test_cpp.sh /opt/vt/src /opt/vt/build ; \
+            bash ci/build_vt_sample.sh /opt/vt/src /opt/vt/build ;
             rm -rf "/opt/vt/src" "/opt/vt/build"'
   
           echo "Running ${CMD}"

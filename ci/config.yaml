@@ -76,7 +76,6 @@ setup:
         env: { CC: clang, CXX: clang++ }
         args: *mpich-args
 
-  # setup from vt
   amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
     label: gcc-9, ubuntu, cuda 12.2.0, mpich
     deps:
@@ -91,6 +90,21 @@ setup:
   amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
     <<: *amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
     label: gcc-9, ubuntu, cuda 11.2.2, mpich
+
+  amd64-ubuntu-20.04-icpc-icpc-cpp:
+    label: intel icpc, ubuntu, mpich
+    env:
+      <<: *env
+      CC: mpicc
+      CXX: mpicxx
+      GCOV: llvm-gcov
+      MPICH_CC: intel-cc
+      MPICH_CXX: icpx
+    deps:
+      packages: !extend [ *apt-packages, intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1 ]
+      mpich:
+        env: { CC: intel-cc, CXX: icpx }
+        args: *mpich-args
 
   # TODO: add the following
   # :
@@ -170,7 +184,7 @@ setup:
 
 images:
 
-  # vt > basic
+  # basic
   -
     repository: *docker-repository
     tag: amd64-alpine-clang-13-clang-13-cpp
@@ -179,7 +193,7 @@ images:
     base: alpine:3.16
     setup: amd64-alpine-clang-13-clang-13-cpp
 
-  # vt > nvidia
+  # cuda
   -
     repository: *docker-repository
     tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
@@ -195,11 +209,27 @@ images:
     arch: linux/amd64
     base: nvidia/cuda:11.2.2-devel-ubuntu20.04
     setup: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
+    dockerfile: ubuntu-cpp-base.dockerfile
+    arch: linux/amd64
+    base: nvidia/cuda:11.2.2-devel-ubuntu20.04
+    setup: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
   
+  # intel
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-icpc-icpc-cpp
+    dockerfile: ubuntu-cpp-base.dockerfile
+    arch: linux/amd64
+    base: nvidia/cuda:11.2.2-devel-ubuntu20.04
+    setup: amd64-ubuntu-20.04-icpc-icpc-cpp
 
   # TODO: add the following
   # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
-  # amd64-ubuntu-20.04-icpc-icpc-cpp:
+  # :
   # amd64-ubuntu-24.04-clang-16-clang-16-cpp:
   # develop:
   # amd64-ubuntu-22.04-clang-13-clang-13-cpp
@@ -254,13 +284,13 @@ runners:
     runs-on: macos-14
     setup: macos-14-clang-14
 
-  # vt > basic
+  # basic
   -
     type: github
     runs-on: ubuntu-latest
     image: { repository: *docker-repository, tag: amd64-alpine-clang-13-clang-13-cpp }
 
-  # vt > cuda
+  # cuda
   -
     type: github
     runs-on: ubuntu-20.04
@@ -271,6 +301,11 @@ runners:
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp }
 
+  # intel
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-icpc-icpc-cpp }
 
   # TODO: add the following
   # amd64-ubuntu-20.04-icpc-icpc-cpp:
