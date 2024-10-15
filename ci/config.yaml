@@ -3,10 +3,9 @@
 
 # This configuration defines the build and testing platforms for each C++ or Python projects
 # It defines 
-# - Setup:           describes setup dependencies for each testing platform
+# - Setup:           describes a set of dependencies for a target test environment
 # - Docker images:   describes Docker images and which setup should be used when building the image
-#                    WIP: make it generic as it is not in vt
-# - Runners:         describes CI matrices. Each CI matrix can be associated to a Docker image or not
+# - Runners:         describes CI runners (= Agent). Each runner can be associated either to a a Docker image or directly to a setup.
 #                    If not docker image is used then CI environment should be setup on the runner when a CI workflow is triggered.
 
 # This file is used as input to
@@ -48,6 +47,16 @@ defaults:
     GCOV: gcov
     CMAKE_CXX_STANDARD: 17
     CMAKE_BUILD_TYPE: Release
+    PATH: "/usr/lib/ccache\
+      :/opt/cmake/bin\
+      :/opt/nvcc_wrapper/bin\
+      :/opt/vtk/bin\
+      :/usr/local/sbin\
+      :/usr/local/bin\
+      :/usr/sbin\
+      :/usr/bin\
+      :/sbin\
+      :/bin"
 
 setup:
   macos-14-clang-14:
@@ -81,9 +90,7 @@ setup:
     deps:
       packages: !extend [ *apt-packages, gcc-9, g++-9 ]
       cmake: *cmake-args # 3.23.4 in vt but seems to be an error with vtk tiff build because error in Cmake CheckSize.
-      mpich:
-        env: { CC: gcc-9, CXX: g++-9 }
-        args: *mpich-args
+      mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: *mpich-args }
       nvcc_wrapper: ~
     env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
 
@@ -91,31 +98,63 @@ setup:
     <<: *amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
     label: gcc-9, ubuntu, cuda 11.2.2, mpich
 
-  amd64-ubuntu-20.04-icpc-icpc-cpp:
+  amd64-ubuntu-20.04-icpc-icpc-cpp: &amd64-ubuntu-20_04-icpc-icpc-cpp
     label: intel icpc, ubuntu, mpich
-    env:
+    env: &intel-icpc-env
       <<: *env
       CC: mpicc
       CXX: mpicxx
       GCOV: llvm-gcov
-      MPICH_CC: intel-cc
-      MPICH_CXX: icpx      
-    deps:
+      MPICH_CC: icc
+      MPICH_CXX: icpc
+      PATH: "/usr/lib/ccache\
+        :/opt/cmake/bin\
+        :/opt/nvcc_wrapper/bin\
+        :/opt/vtk/bin\
+        :/opt/intel/oneapi/dev-utilities/latest/bin\
+        :/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/bin\
+        :/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/llvm/aocl-bin\
+        :/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/bin\
+        :/opt/intel/oneapi/compiler/latest/linux/bin/intel64\
+        :/opt/intel/oneapi/compiler/latest/linux/bin\
+        :/usr/local/sbin\
+        :/usr/local/bin\
+        :/usr/sbin\
+        :/usr/bin\
+        :/sbin\
+        :/bin"
+      ONEAPI_ROOT: /opt/intel/oneapi
+      CMPLR_ROOT: /opt/intel/oneapi/compiler/latest
+      CPATH: /opt/intel/oneapi/tbb/latest/env/../include:/opt/intel/oneapi/dev-utilities/latest/include:/opt/intel/oneapi/compiler/latest/linux/include
+      INFOPATH: /opt/intel/oneapi/debugger/10.1.2/gdb/intel64/lib
+      CMAKE_PREFIX_PATH: /opt/intel/oneapi/tbb/latest/env/..
+      LD_LIBRARY_PATH: /opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/debugger/10.1.1/dep/lib:/opt/intel/oneapi/debugger/10.1.1/libipt/intel64/lib:/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/lib:/opt/intel/oneapi/compiler/latest/linux/lib:/opt/intel/oneapi/compiler/latest/linux/lib/x64:/opt/intel/oneapi/compiler/latest/linux/lib/emu:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/host/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/compiler/lib
+      LIBRARY_PATH: /opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/lib
+      INTEL_LICENSE_FILE: /opt/intel/licenses:/root/intel/licenses:/opt/intel/licenses:/root/intel/licenses:/Users/Shared/Library/Application Support/Intel/Licenses'
+    deps: &intel-icpc-deps
       packages: !extend [ *apt-packages, intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1 ]
       cmake: *cmake-args
-      mpich:
-        env: { CC: intel-cc, CXX: icpx }
-        args: *mpich-args
+      mpich: { env: { CC: icc, CXX: icpc }, args: *mpich-args }
+
+  amd64-ubuntu-20.04-icpx-icpx-cpp:
+    <<: *amd64-ubuntu-20_04-icpc-icpc-cpp
+    label: intel icpx, ubuntu, mpich
+    env:
+      <<: *intel-icpc-env
+      MPICH_CC: icx
+      MPICH_CXX: icpx
+    deps:
+      <<: *intel-icpc-deps
+      mpich: { env: { CC: icx, CXX: icpx }, args: *mpich-args }
+        
 
   # TODO: add the following
   # :
-  # amd64-ubuntu-20.04-icpc-icpc-cpp:
   # amd64-ubuntu-24.04-clang-16-clang-16-cpp:
   # develop:
   # amd64-ubuntu-22.04-clang-13-clang-13-cpp
   # amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
   # amd64-ubuntu-20.04-clang-10-clang-10-cpp:
-  # amd64-ubuntu-20.04-icpx-icpx-cpp:
   # amd64-ubuntu-22.04-clang-12-clang-12-cpp:
   # amd64-ubuntu-22.04-gcc-11-gcc-11-cpp:
   # amd64-ubuntu-22.04-clang-14-clang-14-cpp:
@@ -189,7 +228,7 @@ images:
   -
     repository: *docker-repository
     tag: amd64-alpine-clang-13-clang-13-cpp
-    dockerfile: ubuntu-cpp-base.dockerfile
+    dockerfile: base.dockerfile
     arch: linux/amd64
     base: alpine:3.16
     setup: amd64-alpine-clang-13-clang-13-cpp
@@ -198,7 +237,7 @@ images:
   -
     repository: *docker-repository
     tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
-    dockerfile: ubuntu-cpp-base.dockerfile
+    dockerfile: base.dockerfile
     arch: linux/amd64
     base: nvidia/cuda:12.2.0-devel-ubuntu20.04
     setup: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
@@ -206,7 +245,7 @@ images:
   -
     repository: *docker-repository
     tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
-    dockerfile: ubuntu-cpp-base.dockerfile
+    dockerfile: base.dockerfile
     arch: linux/amd64
     base: nvidia/cuda:11.2.2-devel-ubuntu20.04
     setup: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
@@ -214,7 +253,7 @@ images:
   -
     repository: *docker-repository
     tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
-    dockerfile: ubuntu-cpp-base.dockerfile
+    dockerfile: base.dockerfile
     arch: linux/amd64
     base: nvidia/cuda:11.2.2-devel-ubuntu20.04
     setup: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
@@ -223,10 +262,18 @@ images:
   -
     repository: *docker-repository
     tag: amd64-ubuntu-20.04-icpc-icpc-cpp
-    dockerfile: ubuntu-cpp-base.dockerfile
+    dockerfile: base.dockerfile
     arch: linux/amd64
     base: intel/oneapi:os-tools-ubuntu20.04
     setup: amd64-ubuntu-20.04-icpc-icpc-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-icpx-icpx-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: intel/oneapi:os-tools-ubuntu20.04
+    setup: amd64-ubuntu-20.04-icpx-icpx-cpp
 
   # TODO: add the following
   # amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
@@ -236,7 +283,6 @@ images:
   # amd64-ubuntu-22.04-clang-13-clang-13-cpp
   # amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
   # amd64-ubuntu-20.04-clang-10-clang-10-cpp:
-  # amd64-ubuntu-20.04-icpx-icpx-cpp:
   # amd64-ubuntu-22.04-clang-12-clang-12-cpp:
   # amd64-ubuntu-22.04-gcc-11-gcc-11-cpp:
   # amd64-ubuntu-22.04-clang-14-clang-14-cpp:
@@ -251,28 +297,28 @@ images:
   # -
   #   repository: *docker-repository
   #   tag: ubuntu_24.04-gcc_13-vtk_9.3.1-py_3.all
-  #   dockerfile: ubuntu-cpp-base.dockerfile
+  #   dockerfile: base.dockerfile
   #   arch: linux/amd64
   #   base: ubuntu:24.04
   #   setup: ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all
   # -
   #   repository: *docker-repository
   #   tag: ubuntu_22.04-gcc_12-vtk_9.3.0-py_3.all
-  #   dockerfile: ubuntu-cpp-base.dockerfile
+  #   dockerfile: base.dockerfile
   #   arch: linux/amd64
   #   base: ubuntu:22.04
   #   setup: ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all
   # -
   #   repository: *docker-repository
   #   tag: ubuntu_22.04-clang_11-vtk_9.2.2-py_3.all
-  #   dockerfile: ubuntu-cpp-base.dockerfile
+  #   dockerfile: base.dockerfile
   #   arch: linux/amd64
   #   base: ubuntu:22.04
   #   setup: ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all
   # -
   #   repository: *docker-repository
   #   tag: ubuntu_22.04-gcc_11-vtk_9.2.2-py_3.all
-  #   dockerfile: ubuntu-cpp-base.dockerfile
+  #   dockerfile: base.dockerfile
   #   arch: linux/amd64
   #   base: ubuntu:22.04
   #   setup: ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all
@@ -308,14 +354,17 @@ runners:
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-icpc-icpc-cpp }
 
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-icpx-icpx-cpp }
+
   # TODO: add the following
-  # amd64-ubuntu-20.04-icpc-icpc-cpp:
   # amd64-ubuntu-24.04-clang-16-clang-16-cpp:
   # develop:
   # amd64-ubuntu-22.04-clang-13-clang-13-cpp
   # amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
   # amd64-ubuntu-20.04-clang-10-clang-10-cpp:
-  # amd64-ubuntu-20.04-icpx-icpx-cpp:
   # amd64-ubuntu-22.04-clang-12-clang-12-cpp:
   # amd64-ubuntu-22.04-gcc-11-gcc-11-cpp:
   # amd64-ubuntu-22.04-clang-14-clang-14-cpp:

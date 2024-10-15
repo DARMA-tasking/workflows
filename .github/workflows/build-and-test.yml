@@ -103,7 +103,13 @@ jobs:
           if [[ "${{ matrix.runner.image }}" == "" ]]; then
             bash -c "$CMD";
           else
-            docker run --name test-container -e CI="1" ${{ matrix.runner.image }} bash -c "$CMD"
+            docker run \
+              --name test-container \
+              -e CI="1" \
+              -e CMAKE_CXX_STANDARD="17" \
+              -e CMAKE_BUILD_TYPE="Release" \
+              ${{ matrix.runner.image }} \
+              bash -c "$CMD"
             exit $(docker container inspect --format '{{.State.ExitCode}}' test-container)
           fi
 

@@ -33,6 +33,10 @@ fi
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
 echo "DOCKER_RUN=$DOCKER_RUN"
 echo "CI=$CI"
+echo "PATH=$PATH"
+echo "CPATH=$CPATH"
+echo "LIBRARY_PATH=$LIBRARY_PATH"
+echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "----------------------------------"
 
 # Save setup environment to ~/.setuprc (used by packages.sh dep for example)
@@ -118,6 +122,7 @@ echo "  CXX=$CXX"
 echo "  CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"
 echo "  CMAKE_CXX_STANDARD=$CMAKE_CXX_STANDARD"
 echo "  FC=$FC"
+echo "  PATH=$PATH"
 echo "--"
 echo "-------- Ready to test ! ---------"
 echo "--"

@@ -33,6 +33,10 @@ fi
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
 echo "DOCKER_RUN=$DOCKER_RUN"
 echo "CI=$CI"
+echo "PATH=$PATH"
+echo "CPATH=$CPATH"
+echo "LIBRARY_PATH=$LIBRARY_PATH"
+echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "----------------------------------"
 
 # Save setup environment to ~/.setuprc (used by packages.sh dep for example)
@@ -83,7 +87,7 @@ chmod u+x *.sh
 ls -l
 ./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
 ./cmake.sh "3.30.3"
-CC="intel-cc" CXX="icpx" ./mpich.sh "4.0.2" "-j4"
+CC="icc" CXX="icpc" ./mpich.sh "4.0.2" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
@@ -122,6 +126,7 @@ echo "  CXX=$CXX"
 echo "  CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"
 echo "  CMAKE_CXX_STANDARD=$CMAKE_CXX_STANDARD"
 echo "  FC=$FC"
+echo "  PATH=$PATH"
 echo "--"
 echo "-------- Ready to test ! ---------"
 echo "--"

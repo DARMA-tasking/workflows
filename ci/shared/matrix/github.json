@@ -25,6 +25,11 @@
       "label": "intel icpc, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-icpc-icpc-cpp"
+    },
+    {
+      "label": "intel icpx, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:amd64-ubuntu-20.04-icpx-icpx-cpp"
     }
   ]
 }

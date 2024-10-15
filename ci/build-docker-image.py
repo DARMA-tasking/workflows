@@ -54,6 +54,7 @@ class DockerBuilder:
         print("---------------------------")
 
         image_setup = setup.get(image.get('setup'))
+        dockerfile = image.get('dockerfile')
         env = image_setup.get('env')
 
         args = {
@@ -61,22 +62,32 @@ class DockerBuilder:
             "BASE": image.get('base'),
             "SETUP_ID": image.get('setup')
         }
-        # Env args
+        # Env
         supported_env_keys = [
-            "CC", "CXX", "FC", "GCOV", "MPICH_CC", "MPICH_CXX",
-            "CMAKE_BUILD_TYPE", "CMAKE_CXX_STANDARD"]
+            # Common
+            "CC", "CXX", "FC", "GCOV",
+            "CMAKE_BUILD_TYPE", "CMAKE_CXX_STANDARD", "CMAKE_PREFIX_PATH",
+            "CPATH", "INFOPATH", "LIBRARY_PATH", "LD_LIBRARY_PATH",
+            "MPICH_CC", "MPICH_CXX",
+            "PATH",
+            # Intel
+            "CMPLR_ROOT", "INTEL_LICENSE_FILE", "ONEAPI_ROOT", "TBBROOT"
+        ]
         for env_key in supported_env_keys:
             args[env_key] = env.get(env_key, '')
 
         invalid_keys = list(key for key in env if not key in supported_env_keys)
         if len(invalid_keys) > 0:
-            print(f"warning: env keys not supported: {invalid_keys}")
+            raise RuntimeError(f"warning: env keys not supported: {invalid_keys}")
 
         space = ' '
+
+        escaped_args = { k:f'"{v}"' for (k,v) in args.items()}
+
         cmd = ("docker build . "
                 f" --tag {image_tag}"
-                f" --file {os.path.dirname(__file__)}/docker/base.dockerfile"
-                f" {space.join([f'--build-arg {k}={v}' for (k,v) in args.items()])}"
+                f" --file {os.path.dirname(__file__)}/docker/{dockerfile}"
+                f" {space.join([f'--build-arg {k}={v}' for (k,v) in escaped_args.items()])}"
                 " --progress=plain"
                 " --no-cache"
             )

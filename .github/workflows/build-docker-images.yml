@@ -47,6 +47,15 @@ jobs:
         run: |
           CMD='echo "CC=$CC" ; \
           echo "CXX=$CXX" ; \
+          echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" ; \
+          echo "CMPLR_ROOT=$CMPLR_ROOT" ; \
+          echo "CPATH=$CPATH" ; \
+          echo "INFOPATH=$INFOPATH" ; \
+          echo "INTEL_LICENSE_FILE=$INTEL_LICENSE_FILE" ; \
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" ; \
+          echo "ONEAPI_ROOT=$ONEAPI_ROOT" ; \
+          echo "PATH=$PATH" ; \
+          echo "TBBROOT=$TBBROOT" ; \
           mkdir -p "/opt/vt/src" "/opt/vt/build/vt" ; \
             git clone https://github.com/DARMA-tasking/vt /opt/vt/src ; \
             cd /opt/vt/src ; \
@@ -55,5 +64,11 @@ jobs:
             bash ci/build_vt_sample.sh /opt/vt/src /opt/vt/build ;
             rm -rf "/opt/vt/src" "/opt/vt/build"'
           echo "Running ${CMD}"
-          docker run --name test-container -e CI="1" ${{ matrix.runner.image }} bash -c "$CMD"
+          docker run \
+            --name test-container \
+            -e CI="1" \
+            -e CMAKE_CXX_STANDARD="17" \
+            -e CMAKE_BUILD_TYPE="Release" \
+            ${{ matrix.runner.image }} \
+            bash -c "$CMD"
           exit $(docker container inspect --format '{{.State.ExitCode}}' test-container)

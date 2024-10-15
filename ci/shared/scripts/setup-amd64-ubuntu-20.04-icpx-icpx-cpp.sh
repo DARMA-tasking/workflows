@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# gcc-9, ubuntu, cuda 11.2.2, mpich - Installation
+# intel icpx, ubuntu, mpich - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -82,14 +82,12 @@ cd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
 wget $SCRIPTS_DEPS_URL/cmake.sh
 wget $SCRIPTS_DEPS_URL/mpich.sh
-wget $SCRIPTS_DEPS_URL/nvcc_wrapper.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
 ./cmake.sh "3.30.3"
-CC="gcc-9" CXX="g++-9" ./mpich.sh "4.0.2" "-j4"
-./nvcc_wrapper.sh "None"
+CC="icx" CXX="icpx" ./mpich.sh "4.0.2" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
