@@ -79,6 +79,8 @@ ENV DOCKER_RUN=1 \
     \
     VTK_DIR=/opt/vtk/build \
     \
+    ZOLTAN_INSTALL_DIR=/opt/trilinos/bin \
+    \
     LESSCHARSET=utf-8 \
     \
     CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \

@@ -4,7 +4,7 @@ set -exo pipefail
 
 if test $# -lt 1
 then
-    echo "usage: ./$0 <make_flags> <install-dir>"
+    echo "usage: ./$0 <make_flags> <?install-dir>"
     exit 1
 fi
 
@@ -38,5 +38,5 @@ cmake \
 make ${ZOLTAN_MAKE_FLAGS}
 make install
 cd -
-# rm -rf ${ZOLTAN_SRC_DIR}
-# rm -rf ${ZOLTAN_BUILD_DIR}
+rm -rf ${ZOLTAN_SRC_DIR}
+rm -rf ${ZOLTAN_BUILD_DIR}
