@@ -23,6 +23,8 @@
 # - mpich: vt mostly use mpich 4.0.2 but build issue with workflows (undefined reference to `pthread_yield').
 #          Using 4.2.3 seems to be ok.
 
+# TODO: add Zoltan dep to all setup once CI is ok with build
+
 defaults:
   apt-packages: &apt-packages [
     curl, jq, less, libomp5, libunwind-dev make-guile, ninja-build,
@@ -330,7 +332,7 @@ images:
     tag: amd64-ubuntu-20.04-clang-9-clang-9-cpp
     dockerfile: base.dockerfile
     arch: linux/amd64
-    base: ubuntu:22.04
+    base: ubuntu:20.04
     setup: amd64-ubuntu-20.04-clang-9-clang-9-cpp
 
   -
@@ -338,7 +340,7 @@ images:
     tag: amd64-ubuntu-20.04-clang-10-clang-10-cpp
     dockerfile: base.dockerfile
     arch: linux/amd64
-    base: ubuntu:22.04
+    base: ubuntu:20.04
     setup: amd64-ubuntu-20.04-clang-10-clang-10-cpp
 
   -
