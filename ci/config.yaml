@@ -14,6 +14,9 @@
 # - generate matrix files listing all environments to test.
 # Setup scripts & dependencies scripts can be retrieved by any project from this repository
 
+# Setup and docker images names are following the naming convention:
+# ${ARCH}-ubuntu-${UBUNTU}-${HOST_COMPILER}-${COMPILER}-cpp
+
 defaults:
   apt-packages: &apt-packages [
     curl, jq, less, libomp5, libunwind-dev make-guile, ninja-build,
@@ -40,7 +43,6 @@ defaults:
     ["3.8", *pip-packages], ["3.9", *pip-packages], ["3.10", *pip-packages],
     ["3.11", *pip-packages], ["3.12", *pip-packages]
   ]
-
   env: &env
     CC: ~
     CXX: ~
@@ -59,7 +61,8 @@ defaults:
       :/bin"
 
 setup:
-  macos-14-clang-14:
+  # macos
+  arm64-macos-14-clang-14-clang-14-cpp:
     label: macos-14-arm64, clang-14, mpich
     env:
       <<: *env
@@ -72,6 +75,7 @@ setup:
         env: { CC: clang, CXX: clang++ }
         args: ['4.2.3', '-j4']
 
+  # Alpine Linux
   amd64-alpine-clang-13-clang-13-cpp:
     label: alpine-3.16, clang-13, mpich
     env:
@@ -85,8 +89,12 @@ setup:
         env: { CC: clang, CXX: clang++ }
         args: *mpich-args
 
-  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
-    label: gcc-9, ubuntu, cuda 12.2.0, mpich
+  # Ubuntu / gcc
+  amd64-ubuntu-18.04-gcc-8-gcc-8-cpp:
+    label: gcc-8, ubuntu, mpich
+
+  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp:
+    label: nvidia cuda 12.2.0, gcc-9, ubuntu, mpich
     deps:
       packages: !extend [ *apt-packages, gcc-9, g++-9 ]
       cmake: *cmake-args # 3.23.4 in vt but seems to be an error with vtk tiff build because error in Cmake CheckSize.
@@ -94,10 +102,47 @@ setup:
       nvcc_wrapper: ~
     env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
 
-  amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
-    <<: *amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
-    label: gcc-9, ubuntu, cuda 11.2.2, mpich
+  amd64-ubuntu-20.04-gcc-9-gcc-9-cpp:
+    label: gcc-9, ubuntu, mpich
 
+  amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp:
+    label: gcc-10, ubuntu, openmpi
+
+  amd64-ubuntu-22.04-gcc-11-gcc-11-cpp:
+    label: gcc-11, ubuntu, mpich
+  
+  amd64-ubuntu-22.04-gcc-12-gcc-12-cpp: &develop
+    label: gcc-12, ubuntu, mpich
+
+  # (develop) + VTK
+  amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
+    <<: *develop
+    label: gcc-12, ubuntu, vtk
+    
+
+  # Ubuntu / clang
+  amd64-ubuntu-20.04-clang-9-clang-9-cpp:
+    label: clang-9, ubuntu, mpich
+
+  amd64-ubuntu-20.04-clang-10-clang-10-cpp:
+    label: clang-10, ubuntu, mpich
+
+  amd64-ubuntu-22.04-clang-11-clang-11-cpp:
+    label: clang-11, ubuntu, mpich
+
+  amd64-ubuntu-22.04-clang-12-clang-12-cpp:
+    label: clang-12, ubuntu, mpich
+
+  amd64-ubuntu-22.04-clang-13-clang-13-cpp:
+    label: clang-13, ubuntu, mpich
+
+  amd64-ubuntu-22.04-clang-14-clang-14-cpp:
+    label: clang-14, ubuntu, mpich
+
+  amd64-ubuntu-24.04-clang-16-clang-16-cpp:
+    label: clang-16, ubuntu, mpich
+
+  # Intel
   amd64-ubuntu-20.04-icpc-icpc-cpp: &amd64-ubuntu-20_04-icpc-icpc-cpp
     label: intel icpc, ubuntu, mpich
     env: &intel-icpc-env
@@ -146,81 +191,7 @@ setup:
     deps:
       <<: *intel-icpc-deps
       mpich: { env: { CC: icx, CXX: icpx }, args: *mpich-args }
-        
 
-  # TODO: add the following
-  # :
-  # amd64-ubuntu-24.04-clang-16-clang-16-cpp:
-  # develop:
-  # amd64-ubuntu-22.04-clang-13-clang-13-cpp
-  # amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
-  # amd64-ubuntu-20.04-clang-10-clang-10-cpp:
-  # amd64-ubuntu-22.04-clang-12-clang-12-cpp:
-  # amd64-ubuntu-22.04-gcc-11-gcc-11-cpp:
-  # amd64-ubuntu-22.04-clang-14-clang-14-cpp:
-  # amd64-ubuntu-22.04-clang-11-clang-11-cpp:
-  # amd64-ubuntu-20.04-gcc-9-gcc-9-cpp:
-  # amd64-ubuntu-22.04-gcc-12-gcc-12-cpp:
-  # amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp:
-  # amd64-ubuntu-18.04-gcc-8-gcc-8-cpp:
-  # amd64-ubuntu-20.04-clang-9-clang-9-cpp:
-
-  # setup from vt-tv
-  # ubuntu-24.04-gcc-13-vtk-9.3.1-py-3.all:
-  #   label: vt-tv, gcc-13, ubuntu, vtk 9.3.1, py3[8-12]
-  #   env:
-  #     <<: *env
-  #     CC: gcc-13
-  #     CXX: g++-13
-  #   deps:
-  #     packages: !extend [ *apt-packages, gcc-13, g++-13 ]
-  #     mesa: ~
-  #     conda: ~
-  #     conda-python-env: *conda-py3-all
-  #     cmake: *cmake-args
-  #     vtk: *vtk-args
-
-  # ubuntu-22.04-gcc-12-vtk-9.3.0-py-3.all:
-  #   label: vt-tv, gcc-12, ubuntu, vtk 9.3.0, py3[8-12]
-  #   env:
-  #     <<: *env
-  #     CC: gcc-12
-  #     CXX: g++-12
-  #   deps:
-  #     packages: !extend [ *apt-packages, gcc-12, g++-12 ]
-  #     mesa: ~
-  #     conda: ~
-  #     conda-python-env: *conda-py3-all
-  #     cmake: *cmake-args
-  #     vtk: [ '9.3.0' ]
-
-  # ubuntu-22.04-clang-11-vtk-9.2.2-py-3.all:
-  #   label: vt-tv, clang-11, ubuntu, vtk 9.2.2, py3[8-12]
-  #   env:
-  #     <<: *env
-  #     CC: gcc-11
-  #     CXX: g++-11
-  #   deps:
-  #     packages: !extend [*apt-packages, gcc-11, g++-11 ]
-  #     mesa: ~
-  #     conda: ~
-  #     conda-python-env: *conda-py3-all
-  #     cmake: *cmake-args
-  #     vtk: [ '9.2.2' ]
-
-  # ubuntu-22.04-gcc-11-vtk-9.2.2-py-3.all:
-  #   label: vt-tv, gcc-11, ubuntu, vtk 9.2.2, py3[8-12]
-  #   env:
-  #     <<: *env
-  #     CC: gcc-11
-  #     CXX: g++-11
-  #   deps:
-  #     packages: !extend [*apt-packages, gcc-11, g++-11 ]
-  #     mesa: ~
-  #     conda: ~
-  #     conda-python-env: *conda-py3-all
-  #     cmake: *cmake-args
-  #     vtk: [ '9.2.2' ]
 
 images:
 
@@ -329,7 +300,7 @@ runners:
   -
     type: github
     runs-on: macos-14
-    setup: macos-14-clang-14
+    setup: arm64-macos-14-clang-14-clang-14-cpp
 
   # basic
   -
