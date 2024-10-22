@@ -69,7 +69,7 @@ class DockerBuilder:
             "CMAKE_BUILD_TYPE", "CMAKE_CXX_STANDARD", "CMAKE_PREFIX_PATH",
             "CPATH", "INFOPATH", "LIBRARY_PATH", "LD_LIBRARY_PATH",
             "MPICH_CC", "MPICH_CXX",
-            "PATH",
+            "PATH_PREFIX",
             # Intel
             "CMPLR_ROOT", "INTEL_LICENSE_FILE", "ONEAPI_ROOT", "TBBROOT"
         ]

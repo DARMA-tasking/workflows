@@ -87,7 +87,7 @@ wget $SCRIPTS_DEPS_URL/mpich.sh
 chmod u+x *.sh
 ls -l
 ./packages.sh "ccache" "coreutils" "ninja"
-CC="clang" CXX="clang++" ./mpich.sh "4.0.2" "-j4"
+CC="clang" CXX="clang++" ./mpich.sh "4.0.3" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR

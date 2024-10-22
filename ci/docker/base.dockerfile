@@ -22,16 +22,7 @@ ARG MPICH_CC=${MPICH_CC:-""}
 ARG MPICH_CXX=${MPICH_CXX:-""}
 
 # Add to path optional dependencies path
-ARG PATH=${PATH:-"/usr/lib/ccache\
-      :/opt/cmake/bin\
-      :/opt/nvcc_wrapper/bin\
-      :/opt/vtk/bin\
-      :/usr/local/sbin\
-      :/usr/local/bin\
-      :/usr/sbin\
-      :/usr/bin\
-      :/sbin\
-      :/bin"}
+ARG PATH_PREFIX=${PATH_PREFIX:-""}
 
 ## Specific (Intel)
 ARG CMPLR_ROOT \
@@ -59,7 +50,7 @@ ARG SETUP_ID \
     LD_LIBRARY_PATH \
     MPICH_CC \
     MPICH_CXX \
-    PATH
+    PATH_PREFIX
 ## Specific (Intel)
 ARG CMPLR_ROOT \
     INTEL_LICENSE_FILE \
@@ -93,7 +84,7 @@ ENV DOCKER_RUN=1 \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
     MPICH_CC=$MPICH_CC \
     MPICH_CXX=$MPICH_CXX \
-    PATH=$PATH
+    PATH="${PATH_PREFIX}${PATH}"
 
 # Specific (Intel One API)
 ENV CMPLR_ROOT=$CMPLR_ROOT \

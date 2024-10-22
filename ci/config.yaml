@@ -48,16 +48,11 @@ defaults:
     GCOV: gcov
     CMAKE_CXX_STANDARD: 17
     CMAKE_BUILD_TYPE: Release
-    PATH: "/usr/lib/ccache\
+    PATH_PREFIX: "/usr/lib/ccache\
       :/opt/cmake/bin\
       :/opt/nvcc_wrapper/bin\
       :/opt/vtk/bin\
-      :/usr/local/sbin\
-      :/usr/local/bin\
-      :/usr/sbin\
-      :/usr/bin\
-      :/sbin\
-      :/bin"
+      :"
 
 setup:
   # macos
@@ -70,7 +65,7 @@ setup:
       GCOV: llvm-gcov
     deps:
       packages: *brew-packages
-      mpich: { env: { CC: clang, CXX: clang++ }, args: ['4.0.2', '-j4'] }
+      mpich: { env: { CC: clang, CXX: clang++ }, args: ['4.0.3', '-j4'] }
 
   # alpine linux
   amd64-alpine-clang-13-clang-13-cpp:
@@ -217,7 +212,7 @@ setup:
       GCOV: llvm-gcov
       MPICH_CC: icc
       MPICH_CXX: icpc
-      PATH: "/usr/lib/ccache\
+      PATH_PREFIX: "/usr/lib/ccache\
         :/opt/cmake/bin\
         :/opt/nvcc_wrapper/bin\
         :/opt/vtk/bin\
@@ -227,12 +222,7 @@ setup:
         :/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/bin\
         :/opt/intel/oneapi/compiler/latest/linux/bin/intel64\
         :/opt/intel/oneapi/compiler/latest/linux/bin\
-        :/usr/local/sbin\
-        :/usr/local/bin\
-        :/usr/sbin\
-        :/usr/bin\
-        :/sbin\
-        :/bin"
+        :"
       ONEAPI_ROOT: /opt/intel/oneapi
       CMPLR_ROOT: /opt/intel/oneapi/compiler/latest
       CPATH: /opt/intel/oneapi/tbb/latest/env/../include:/opt/intel/oneapi/dev-utilities/latest/include:/opt/intel/oneapi/compiler/latest/linux/include
