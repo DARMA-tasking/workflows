@@ -43,6 +43,7 @@ jobs:
       - name: Build Docker image
         run: |
           python ci/build-docker-image.py ${{ matrix.runner.image }}
+          docker image inspect ${{ matrix.runner.image }}
       - name: Test Docker image (VT build & test)
         run: |
           CMD='echo "CC=$CC" ; \
