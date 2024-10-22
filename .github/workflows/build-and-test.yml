@@ -1,12 +1,19 @@
-name: Build and Test (Template)
+# Template workflow (Github Workflows)
+# Build and test a project in all available setup configurations configured in DARMA-taking/workflows
+# See also: Azure Pipelines version at ci/azure/build-and-test-azure.yml
 
-# Template workflow to build and test a project in all available setup configurations
 # WIP: This is currently a work in progress (#2: Docker image usage)
+# ***: TODO only once this workflow file works and is completed
+
+name: Build and Test (Template)
 
 on:
   push:
     branches:
-      - 2-implement-common-docker-containers
+      - master
+  pull_request:
+    branches:
+      - '*'
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -16,7 +23,7 @@ env:
 jobs:
   get-matrix:
     name: Retrieve Setup matrix
-    runs-on: ubuntu-latest     
+    runs-on: ubuntu-latest
     steps:
       - name: Retrieve Setup matrix
         id: get-matrix
@@ -73,7 +80,7 @@ jobs:
             $CMD
           else
             docker run ${{ matrix.runner.image }} $CMD
-          fi    
+          fi
 
       - name: Extract timestamps for caching
         run: |
@@ -87,7 +94,7 @@ jobs:
         run: |
           echo "TODO"
 
-      - name: Build and test (vt)
+      - name: PR tests (vt)
         if: ${{ contains(matrix.runner.label, 'mpich') || contains(matrix.runner.label, 'openmpi') }}
         run: |
           CMD='mkdir -p "/opt/vt/src" "/opt/vt/build/vt" ; \
@@ -97,7 +104,7 @@ jobs:
             bash ci/test_cpp.sh /opt/vt/src /opt/vt/build ; \
             bash ci/build_vt_sample.sh /opt/vt/src /opt/vt/build ;
             rm -rf "/opt/vt/src" "/opt/vt/build"'
-  
+
           echo "Running ${CMD}"
 
           if [[ "${{ matrix.runner.image }}" == "" ]]; then

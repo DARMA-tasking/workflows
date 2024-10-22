@@ -1,5 +1,7 @@
-# Azure Pipelines Worflow
-# Note: github version of this workflow is at .github/workflows/build-and-test.yml
+# Template workflow (Azure Pipelines)
+# Build and test a project in all available setup configurations configured in DARMA-taking/workflows
+# See also: github version at .github/workflows/build-and-test.yml
+
 # WIP. Workflows pipeline with matrix
 # ***: TODO only once this workflow file works and is completed
 name: Build and test (Template)
@@ -7,7 +9,7 @@ name: Build and test (Template)
 trigger:
   branches:
     include:
-      - 2-implement-common-docker-containers # TODO: set back to master and develop***
+      - master
 
 pr:
   drafts: true # TODO: set to false***
@@ -24,6 +26,7 @@ jobs:
 - job: getMatrix
   pool:
     vmImage: 'ubuntu-latest'
+  displayName: 'Retrieve Setup matrix'
   steps:
   - bash: |
       wget https://raw.githubusercontent.com/${{ variables.CI_REPO }}/refs/heads/${{ variables.CI_BRANCH }}/ci/shared/matrix/azure.json
@@ -32,12 +35,23 @@ jobs:
     displayName: 'Retrieve Setup matrix'
     name: getMatrixStep
 
-- job: setup
+- job: run
   dependsOn: getMatrix
   strategy:
     matrix: $[ dependencies.getMatrix.outputs['getMatrixStep.matrix'] ]
+  displayName: PR tests
   pool:
     vmImage: $(vmImage)
   steps:
-  - bash: echo 'Hello !'      
-    displayName: 'Setup dependencies'
+  - bash: |
+      echo "Environment=$(label)"
+      echo "Runner=$(vmImage)"
+      if [ "$(image)" != "" ]
+      then
+        echo "> With Docker Image=$(image)"
+      else
+        echo "> With Runner Setup=$(setup)"
+      fi
+    displayName: Display configuration
+
+  # TODO: add missing steps as in .github/workflows/build-and-test.yml

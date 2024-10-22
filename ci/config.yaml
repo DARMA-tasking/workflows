@@ -2,7 +2,7 @@
 # that can be used by different projects.
 
 # This configuration defines the build and testing platforms for each C++ or Python projects
-# It defines 
+# It defines
 # - Setup:           describes a set of dependencies for a target test environment
 # - Docker images:   describes Docker images and which setup should be used when building the image
 # - Runners:         describes CI runners (= Agent). Each runner can be associated either to a a Docker image or directly to a setup.
@@ -38,7 +38,7 @@ defaults:
   brew-packages: &brew-packages [ ccache, coreutils, ninja ]
   pip-packages: &pip-packages "nanobind yaml setuptools"
 
-  docker-repository: &docker-repository lifflander1/vt 
+  docker-repository: &docker-repository lifflander1/vt
   conda-py3-all: &conda-py3-all [
     ["3.8", *pip-packages], ["3.9", *pip-packages], ["3.10", *pip-packages],
     ["3.11", *pip-packages], ["3.12", *pip-packages]
@@ -113,7 +113,7 @@ setup:
       packages: !extend [ *apk-packages, gcc-11, g++-11, gfortran-11 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-11, CXX: g++-11 }, args: [ '4.0.2', '-j4' ] }
-  
+
   amd64-ubuntu-22.04-gcc-12-gcc-12-cpp: &develop
     label: gcc-12, ubuntu, mpich
     env: { <<: *env, CC: gcc-12, CXX: g++-12, FC: gfortran-12 }
@@ -301,7 +301,7 @@ images:
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-gcc-12-gcc-12-cpp
 
-  - 
+  -
     repository: *docker-repository
     tag: amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp
     dockerfile: base.dockerfile
@@ -382,7 +382,7 @@ images:
     arch: linux/amd64
     base: ubuntu:24.04
     setup: amd64-ubuntu-24.04-clang-16-clang-16-cpp
-  
+
   # intel
   -
     repository: *docker-repository
@@ -399,7 +399,6 @@ images:
     arch: linux/amd64
     base: intel/oneapi:os-tools-ubuntu20.04
     setup: amd64-ubuntu-20.04-icpx-icpx-cpp
-    
 
 runners:
   # no docker image
@@ -435,7 +434,7 @@ runners:
     type: github
     runs-on: ubuntu-18.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-18.04-gcc-8-gcc-8-cpp }
-  
+
   -
     type: github
     runs-on: ubuntu-20.04
@@ -454,35 +453,35 @@ runners:
   -
     type: github
     runs-on: ubuntu-22.04
-    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-cpp } 
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-cpp }
 
   -
     type: github
     runs-on: ubuntu-22.04
-    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp } 
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp }
 
   # ubuntu / nvidia cuda
   -
     type: github
     runs-on: ubuntu-20.04
-    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp } 
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp }
 
   -
     type: github
     runs-on: ubuntu-20.04
-    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp } 
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp }
 
   # ubuntu / clang
   -
     type: github
     runs-on: ubuntu-20.04
-    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-clang-9-clang-9-cpp } 
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-clang-9-clang-9-cpp }
 
   -
     type: github
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-clang-10-clang-10-cpp }
-  
+
   -
     type: github
     runs-on: ubuntu-22.04
