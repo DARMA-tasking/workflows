@@ -92,7 +92,8 @@ class DockerBuilder:
                 " --no-cache"
             )
         print(cmd)
-        os.system(cmd)
+        status = os.system(cmd)
+        exit(status)
 
         # ENHANCEMENT: option to push to Dockerhub
 
