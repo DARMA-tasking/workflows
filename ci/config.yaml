@@ -15,8 +15,8 @@
 # Setup scripts & dependencies scripts can be retrieved by any project from this repository
 
 # Naming conventions:
-# Setup and docker images names are following the naming convention:
-# ${ARCH}-ubuntu-${UBUNTU}-${HOST_COMPILER}-${COMPILER}-cpp
+# Setup ids and docker images names are following the following naming convention:
+# ${ARCH}-${OS_NAME}-${OS_VERSION}-${HOST_COMPILER}-${COMPILER}-cpp
 
 # Dependencies:
 # The dependencies are the scripts to be run during a setup process. It is located under the `deps` directory
@@ -91,7 +91,7 @@ setup:
     deps:
       packages: !extend [ *apk-packages, gcc-8, g++-8, gfortran-8 ]
       cmake: ['3.23.4']
-      mpich: { env: { CC: gcc-8, CXX: g++-8 }, args: [ '3.3.2' ] }
+      mpich: { env: { CC: gcc-8, CXX: g++-8 }, args: [ '3.3.2', '-j4' ] }
 
   amd64-ubuntu-20.04-gcc-9-gcc-9-cpp:
     label: gcc-9, ubuntu, mpich
@@ -99,7 +99,7 @@ setup:
     deps:
       packages: !extend [ *apk-packages, gcc-9, g++-9, gfortran-9 ]
       cmake: ['3.23.4']
-      mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: [ '4.0.2' ] }
+      mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: [ '4.0.2', '-j4' ] }
 
   amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp:
     label: gcc-10, ubuntu, openmpi
@@ -115,7 +115,7 @@ setup:
     deps:
       packages: !extend [ *apk-packages, gcc-11, g++-11, gfortran-11 ]
       cmake: ['3.23.4']
-      mpich: { env: { CC: gcc-11, CXX: g++-11 }, args: [ '4.0.2' ] }
+      mpich: { env: { CC: gcc-11, CXX: g++-11 }, args: [ '4.0.2', '-j4' ] }
   
   amd64-ubuntu-22.04-gcc-12-gcc-12-cpp: &develop
     label: gcc-12, ubuntu, mpich
@@ -123,7 +123,7 @@ setup:
     deps:
       packages: !extend [ *apk-packages, gcc-12, g++-12, gfortran-12 ]
       cmake: ['3.23.4']
-      mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2' ] }
+      mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2', '-j4' ] }
 
   amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
     <<: *develop

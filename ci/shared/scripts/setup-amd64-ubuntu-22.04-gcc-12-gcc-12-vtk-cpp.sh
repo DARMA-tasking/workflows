@@ -87,7 +87,7 @@ chmod u+x *.sh
 ls -l
 ./packages.sh "alpine-sdk" "autoconf" "automake" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "zlib" "zlib-dev" "python3" "gcc-12" "g++-12" "gfortran-12"
 ./cmake.sh "3.23.4"
-CC="gcc-12" CXX="g++-12" ./mpich.sh "4.0.2"
+CC="gcc-12" CXX="g++-12" ./mpich.sh "4.0.2" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
