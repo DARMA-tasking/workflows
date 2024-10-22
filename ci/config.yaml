@@ -266,7 +266,7 @@ images:
     tag: amd64-ubuntu-18.04-gcc-8-gcc-8-cpp
     dockerfile: base.dockerfile
     arch: linux/amd64
-    base: ubuntu:22.04
+    base: ubuntu:18.04
     setup: amd64-ubuntu-18.04-gcc-8-gcc-8-cpp
 
   -
@@ -274,7 +274,7 @@ images:
     tag: amd64-ubuntu-20.04-gcc-9-gcc-9-cpp
     dockerfile: base.dockerfile
     arch: linux/amd64
-    base: ubuntu:22.04
+    base: ubuntu:20.04
     setup: amd64-ubuntu-20.04-gcc-9-gcc-9-cpp
 
   -
@@ -282,7 +282,7 @@ images:
     tag: amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp
     dockerfile: base.dockerfile
     arch: linux/amd64
-    base: ubuntu:22.04
+    base: ubuntu:20.04
     setup: amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp
 
   -
