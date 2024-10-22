@@ -2,7 +2,7 @@
 
 set -exo pipefail
 
-if test $# -lt 2
+if test $# -lt 1
 then
     echo "usage: ./$0 <make_flags> <install-dir>"
     exit 1
@@ -11,7 +11,7 @@ fi
 ZOLTAN_SRC_DIR="/opt/trilinos/src"
 ZOLTAN_BUILD_DIR="/opt/trilinos/build"
 ZOLTAN_MAKE_FLAGS=${1:-""}
-ZOLTAN_INSTALL_DIR=${2:-"/trilinos_install"}
+ZOLTAN_INSTALL_DIR=${2:-ZOLTAN_INSTALL_DIR:-"/opt/trilinos/bin"}
 
 if test -d Trilinos
 then
@@ -38,5 +38,5 @@ cmake \
 make ${ZOLTAN_MAKE_FLAGS}
 make install
 cd -
-rm -rf ${ZOLTAN_SRC_DIR}
-rm -rf ${ZOLTAN_BUILD_DIR}
+# rm -rf ${ZOLTAN_SRC_DIR}
+# rm -rf ${ZOLTAN_BUILD_DIR}

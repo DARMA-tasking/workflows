@@ -85,7 +85,7 @@ wget $SCRIPTS_DEPS_URL/mpich.sh
 chmod u+x *.sh
 ls -l
 ./packages.sh "alpine-sdk" "autoconf" "automake" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "zlib" "zlib-dev" "python3" "clang" "clang-dev"
-CC="clang" CXX="clang++" ./mpich.sh "4.2.3" "-j4"
+CC="clang" CXX="clang++" ./mpich.sh "3.3.2" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# intel icpc, ubuntu, mpich - Installation
+# gcc-11, ubuntu, mpich - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -85,9 +85,9 @@ wget $SCRIPTS_DEPS_URL/mpich.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
+./packages.sh "alpine-sdk" "autoconf" "automake" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "zlib" "zlib-dev" "python3" "gcc-11" "g++-11" "gfortran-11"
 ./cmake.sh "3.23.4"
-CC="icc" CXX="icpc" ./mpich.sh "4.0.2" "-j4"
+CC="gcc-11" CXX="g++-11" ./mpich.sh "4.0.2"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR

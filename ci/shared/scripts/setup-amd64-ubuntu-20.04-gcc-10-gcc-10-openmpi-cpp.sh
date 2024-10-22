@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# intel icpc, ubuntu, mpich - Installation
+# gcc-10, ubuntu, openmpi - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -81,13 +81,13 @@ mkdir -p $SCRIPTS_INSTALL_DIR/deps
 cd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
 wget $SCRIPTS_DEPS_URL/cmake.sh
-wget $SCRIPTS_DEPS_URL/mpich.sh
+wget $SCRIPTS_DEPS_URL/openmpi.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
+./packages.sh "alpine-sdk" "autoconf" "automake" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "zlib" "zlib-dev" "python3" "gcc-9" "g++-9" "gfortran-9"
 ./cmake.sh "3.23.4"
-CC="icc" CXX="icpc" ./mpich.sh "4.0.2" "-j4"
+CC="gcc-9" CXX="g++-9" ./openmpi.sh "v4.0" "4.0.4" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR

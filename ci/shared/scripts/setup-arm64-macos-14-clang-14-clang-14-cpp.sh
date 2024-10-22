@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# intel icpc, ubuntu, mpich - Installation
+# macos-14-arm64, clang-14, mpich - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -80,14 +80,12 @@ mkdir -p $SCRIPTS_INSTALL_DIR/deps
 # 1. Download dependency installation script
 cd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
-wget $SCRIPTS_DEPS_URL/cmake.sh
 wget $SCRIPTS_DEPS_URL/mpich.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
-./cmake.sh "3.23.4"
-CC="icc" CXX="icpc" ./mpich.sh "4.0.2" "-j4"
+./packages.sh "ccache" "coreutils" "ninja"
+CC="clang" CXX="clang++" ./mpich.sh "4.0.2" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR

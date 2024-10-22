@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# gcc-9, ubuntu, cuda 11.2.2, mpich - Installation
+# nvidia cuda 11.2.0, gcc-9, ubuntu, mpich - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -87,8 +87,8 @@ wget $SCRIPTS_DEPS_URL/nvcc_wrapper.sh
 chmod u+x *.sh
 ls -l
 ./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
-./cmake.sh "3.30.3"
-CC="gcc-9" CXX="g++-9" ./mpich.sh "4.2.3" "-j4"
+./cmake.sh "3.23.4"
+CC="gcc-9" CXX="g++-9" ./mpich.sh "4.0.2" "-j4"
 ./nvcc_wrapper.sh "None"
 
 # Remove install scripts
