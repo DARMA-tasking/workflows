@@ -2,7 +2,9 @@
 import copy
 import os
 import json
+import re
 
+from typing import Union
 from util import resolve_conf
 import yaml
 
@@ -22,11 +24,11 @@ class MatrixBuilder:
             runners = [runner for runner in config.get("runners")
                 if runner.get("type") == runner_type]
 
-            matrix = []
+            matrix: Union[dict,list] = []
             for runner in runners:
                 matrix_item = {
                     "label": runner.get("label"),
-                    "runs-on": runner.get("runs-on")
+                    ("runs-on" if runner_type == "github" else "vmImage"): runner.get("runs-on")
                 }
 
                 # xor
@@ -38,6 +40,7 @@ class MatrixBuilder:
                     if setup is None:
                         raise RuntimeError(f"Setup not found {runner.get('setup')}")
                     matrix_item["setup"] = runner.get("setup")
+                    matrix_item["name"] = runner.get("setup")
 
                 elif runner.get("image") is not None:
                     image_name = (runner.get("image", {}).get("repository", "") + ":"
@@ -56,10 +59,15 @@ class MatrixBuilder:
                     if matrix_item["label"] is None:
                         matrix_item["label"] = image.get("label")
 
+                    matrix_item["name"] = image.get("tag").replace('-', '_')
+
                 if matrix_item["label"] is None:
                     matrix_item["label"] = setup.get("label")
 
                 matrix.append(matrix_item)
+
+            if runner_type == "azure":
+                matrix = { re.sub('[^0-9a-zA-Z]+', '-', v.get("name")):v for v in matrix }
 
             data = json.dumps({
                 "_comment": "This file has been generated. Please do not edit",

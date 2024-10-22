@@ -402,7 +402,6 @@ images:
     
 
 runners:
-
   # no docker image
   -
     type: github
@@ -412,6 +411,11 @@ runners:
   # alpine linux
   -
     type: github
+    runs-on: ubuntu-latest
+    image: { repository: *docker-repository, tag: amd64-alpine-clang-13-clang-13-cpp }
+
+  -
+    type: azure
     runs-on: ubuntu-latest
     image: { repository: *docker-repository, tag: amd64-alpine-clang-13-clang-13-cpp }
 

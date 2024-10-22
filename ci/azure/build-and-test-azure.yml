@@ -1,32 +1,43 @@
+# Azure Pipelines Worflow
+# Note: github version of this workflow is at .github/workflows/build-and-test.yml
 # WIP. Workflows pipeline with matrix
+# ***: TODO only once this workflow file works and is completed
+name: Build and test (Template)
 
 trigger:
   branches:
     include:
-      - 2-implement-common-docker-containers
+      - 2-implement-common-docker-containers # TODO: set back to master and develop***
+
+pr:
+  drafts: true # TODO: set to false***
+  autoCancel: true
+  branches:
+    include:
+      - '*'
 
 variables:
-  # GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CI_REPO: DARMA-tasking/workflows
-  CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
+  CI_BRANCH: 2-implement-common-docker-containers # TODO: set back to master***
 
 jobs:
-- job: myJob
-  timeoutInMinutes: 10
+- job: getMatrix
   pool:
     vmImage: 'ubuntu-latest'
   steps:
   - bash: |
-      wget https://raw.githubusercontent.com/${{ variables.CI_REPO }}/refs/heads/${{ variables.CI_BRANCH }}/ci/shared/matrix/github.json
-      matrix=$(cat github.json | jq '.matrix')
-      echo "##vso[task.setvariable variable=runner]$matrix"
+      wget https://raw.githubusercontent.com/${{ variables.CI_REPO }}/refs/heads/${{ variables.CI_BRANCH }}/ci/shared/matrix/azure.json
+      matrix=$(cat azure.json | jq -c '.matrix')
+      echo "##vso[task.setvariable variable=matrix;isOutput=true]$matrix"
     displayName: 'Retrieve Setup matrix'
+    name: getMatrixStep
 
-- job: b
+- job: setup
+  dependsOn: getMatrix
   strategy:
-    matrix: ${{ variables.runner }}
+    matrix: $[ dependencies.getMatrix.outputs['getMatrixStep.matrix'] ]
   pool:
-    vmImage: $(runs-on)
+    vmImage: $(vmImage)
   steps:
   - bash: echo 'Hello !'      
-    displayName: 'Matrix environment'
+    displayName: 'Setup dependencies'
