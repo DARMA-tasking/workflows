@@ -1,0 +1,23 @@
+# WIP. Workflows pipeline with matrix
+
+trigger:
+  branches:
+    include:
+      - 2-implement-common-docker-containers
+
+variables:
+  # GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CI_REPO: DARMA-tasking/workflows
+  CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
+
+jobs:
+- job: myJob
+  timeoutInMinutes: 10
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - bash: |
+      wget https://raw.githubusercontent.com/${{ variables.CI_REPO }}/refs/heads/${{ variables.CI_BRANCH }}/ci/shared/matrix/github.json
+      matrix=$(cat github.json | jq '.matrix')
+      echo "##vso[task.setvariable variable=runner]$matrix"
+    displayName: 'Retrieve Setup matrix'
