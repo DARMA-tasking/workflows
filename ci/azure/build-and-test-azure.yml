@@ -21,3 +21,12 @@ jobs:
       matrix=$(cat github.json | jq '.matrix')
       echo "##vso[task.setvariable variable=runner]$matrix"
     displayName: 'Retrieve Setup matrix'
+
+- job: b
+  strategy:
+    matrix: ${{ variables.runner }}
+  pool:
+    vmImage: $(runs-on)
+  steps:
+  - bash: echo 'Hello !'      
+    displayName: 'Matrix environment'
