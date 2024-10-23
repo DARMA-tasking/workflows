@@ -87,7 +87,7 @@ wget $SCRIPTS_DEPS_URL/mpich.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "alpine-sdk" "autoconf" "automake" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "zlib" "zlib-dev" "python3" "gcc-8" "g++-8" "gfortran-8"
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-8" "g++-8" "gfortran-8"
 ./cmake.sh "3.23.4"
 CC="gcc-8" CXX="g++-8" ./mpich.sh "3.3.2" "-j4"
 

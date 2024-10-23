@@ -87,7 +87,7 @@ wget $SCRIPTS_DEPS_URL/openmpi.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "alpine-sdk" "autoconf" "automake" "binutils-dev" "ccache" "cmake" "dpkg" "libdwarf-dev" "libunwind-dev" "libtool" "linux-headers" "m4" "make" "ninja" "zlib" "zlib-dev" "python3" "gcc-9" "g++-9" "gfortran-9"
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9" "gfortran-9"
 ./cmake.sh "3.23.4"
 CC="gcc-9" CXX="g++-9" ./openmpi.sh "v4.0" "4.0.4" "-j4"
 
