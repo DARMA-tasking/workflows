@@ -6,10 +6,6 @@
 # ***: TODO only once this workflow file works and is completed
 name: PR tests (Template)
 
-parameters:
-  - name: label
-    type: string
-
 trigger:
   branches:
     include:
@@ -43,7 +39,7 @@ jobs:
   dependsOn: getMatrix
   strategy:
     matrix: $[ dependencies.getMatrix.outputs['getMatrixStep.matrix'] ]
-  displayName: $(label) # contrary to github cannot get a way to inject label from matrix. azure just appends the item key automatically
+  displayName: PR tests / # contrary to github cannot get a way to inject label from matrix. azure just appends the item key automatically
   pool:
     vmImage: $(vmImage)
   steps:
