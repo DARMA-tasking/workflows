@@ -27,7 +27,7 @@
     },
     {
       "label": "gcc-8, ubuntu, mpich",
-      "runs-on": "ubuntu-18.04",
+      "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-18.04-gcc-8-gcc-8-cpp",
       "name": "amd64_ubuntu_18.04_gcc_8_gcc_8_cpp"
     },

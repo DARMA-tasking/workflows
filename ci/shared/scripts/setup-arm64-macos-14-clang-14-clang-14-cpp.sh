@@ -82,12 +82,10 @@ mkdir -p $SCRIPTS_INSTALL_DIR/deps
 # 1. Download dependency installation script
 cd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
-wget $SCRIPTS_DEPS_URL/mpich.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "ccache" "coreutils" "ninja"
-CC="clang" CXX="clang++" ./mpich.sh "4.0.3" "-j4"
+./packages.sh "ccache" "coreutils" "ninja" "mpich"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR

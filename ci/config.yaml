@@ -66,8 +66,7 @@ setup:
       CXX: mpicxx++
       GCOV: llvm-gcov
     deps:
-      packages: *brew-packages
-      mpich: { env: { CC: clang, CXX: clang++ }, args: ['4.0.3', '-j4'] }
+      packages: !extend [ *brew-packages, mpich ]
 
   # alpine linux
   amd64-alpine-clang-13-clang-13-cpp:
@@ -432,7 +431,7 @@ runners:
   # ubuntu / gcc
   -
     type: github
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-18.04-gcc-8-gcc-8-cpp }
 
   -
