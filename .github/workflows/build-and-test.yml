@@ -35,7 +35,7 @@ jobs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
 
   run:
-    name: Run (${{ matrix.runner.label }})
+    name: PR tests > ${{ matrix.runner.label }}
     runs-on: ${{ matrix.runner.runs-on }}
     needs: get-matrix
     strategy:

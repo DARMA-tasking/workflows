@@ -39,7 +39,7 @@ jobs:
   dependsOn: getMatrix
   strategy:
     matrix: $[ dependencies.getMatrix.outputs['getMatrixStep.matrix'] ]
-  displayName: PR tests
+  displayName: PR tests >
   pool:
     vmImage: $(vmImage)
   steps:
