@@ -35,7 +35,7 @@ jobs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
 
   run:
-    name: matrix.${{ matrix.runner.name }}
+    name: Run ${{ matrix.runner.name }}
     runs-on: ${{ matrix.runner.runs-on }}
     needs: get-matrix
     strategy:

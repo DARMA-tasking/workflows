@@ -27,7 +27,7 @@ jobs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
 
   build-image:
-    name: matrix.${{ matrix.runner.name }}
+    name: Build ${{ matrix.runner.name }}
     runs-on: ${{ matrix.runner.runs-on }}
     needs: get-matrix
     strategy:

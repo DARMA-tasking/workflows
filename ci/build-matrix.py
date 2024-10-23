@@ -59,7 +59,7 @@ class MatrixBuilder:
                     if matrix_item["label"] is None:
                         matrix_item["label"] = image.get("label")
 
-                    matrix_item["name"] = image.get("tag").replace('-', '_')
+                    matrix_item["name"] = image.get("tag")
 
                 if matrix_item["label"] is None:
                     matrix_item["label"] = setup.get("label")

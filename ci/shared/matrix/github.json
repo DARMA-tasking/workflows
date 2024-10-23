@@ -11,109 +11,109 @@
       "label": "alpine-3.16, clang-13, mpich",
       "runs-on": "ubuntu-latest",
       "image": "lifflander1/vt:amd64-alpine-clang-13-clang-13-cpp",
-      "name": "amd64_alpine_clang_13_clang_13_cpp"
+      "name": "amd64-alpine-clang-13-clang-13-cpp"
     },
     {
       "label": "intel icpc, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-icpc-icpc-cpp",
-      "name": "amd64_ubuntu_20.04_icpc_icpc_cpp"
+      "name": "amd64-ubuntu-20.04-icpc-icpc-cpp"
     },
     {
       "label": "intel icpx, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-icpx-icpx-cpp",
-      "name": "amd64_ubuntu_20.04_icpx_icpx_cpp"
+      "name": "amd64-ubuntu-20.04-icpx-icpx-cpp"
     },
     {
       "label": "gcc-8, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-18.04-gcc-8-gcc-8-cpp",
-      "name": "amd64_ubuntu_18.04_gcc_8_gcc_8_cpp"
+      "name": "amd64-ubuntu-18.04-gcc-8-gcc-8-cpp"
     },
     {
       "label": "gcc-9, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-9-gcc-9-cpp",
-      "name": "amd64_ubuntu_20.04_gcc_9_gcc_9_cpp"
+      "name": "amd64-ubuntu-20.04-gcc-9-gcc-9-cpp"
     },
     {
       "label": "gcc-10, ubuntu, openmpi",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp",
-      "name": "amd64_ubuntu_20.04_gcc_10_gcc_10_openmpi_cpp"
+      "name": "amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp"
     },
     {
       "label": "gcc-11, ubuntu, mpich",
       "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:amd64-ubuntu-22.04-gcc-11-gcc-11-cpp",
-      "name": "amd64_ubuntu_22.04_gcc_11_gcc_11_cpp"
+      "name": "amd64-ubuntu-22.04-gcc-11-gcc-11-cpp"
     },
     {
       "label": "gcc-12, ubuntu, mpich",
       "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:amd64-ubuntu-22.04-gcc-12-gcc-12-cpp",
-      "name": "amd64_ubuntu_22.04_gcc_12_gcc_12_cpp"
+      "name": "amd64-ubuntu-22.04-gcc-12-gcc-12-cpp"
     },
     {
       "label": "gcc-12, ubuntu, mpich, vtk",
       "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp",
-      "name": "amd64_ubuntu_22.04_gcc_12_gcc_12_vtk_cpp"
+      "name": "amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp"
     },
     {
       "label": "nvidia cuda 12.2.0, gcc-9, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-9-12.2.0-cpp",
-      "name": "amd64_ubuntu_20.04_gcc_9_12.2.0_cpp"
+      "name": "amd64-ubuntu-20.04-gcc-9-12.2.0-cpp"
     },
     {
       "label": "nvidia cuda 11.2.0, gcc-9, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-gcc-9-11.2.2-cpp",
-      "name": "amd64_ubuntu_20.04_gcc_9_11.2.2_cpp"
+      "name": "amd64-ubuntu-20.04-gcc-9-11.2.2-cpp"
     },
     {
       "label": "clang-9, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-clang-9-clang-9-cpp",
-      "name": "amd64_ubuntu_20.04_clang_9_clang_9_cpp"
+      "name": "amd64-ubuntu-20.04-clang-9-clang-9-cpp"
     },
     {
       "label": "clang-10, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:amd64-ubuntu-20.04-clang-10-clang-10-cpp",
-      "name": "amd64_ubuntu_20.04_clang_10_clang_10_cpp"
+      "name": "amd64-ubuntu-20.04-clang-10-clang-10-cpp"
     },
     {
       "label": "clang-11, ubuntu, mpich",
       "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:amd64-ubuntu-22.04-clang-11-clang-11-cpp",
-      "name": "amd64_ubuntu_22.04_clang_11_clang_11_cpp"
+      "name": "amd64-ubuntu-22.04-clang-11-clang-11-cpp"
     },
     {
       "label": "clang-12, ubuntu, mpich",
       "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:amd64-ubuntu-22.04-clang-12-clang-12-cpp",
-      "name": "amd64_ubuntu_22.04_clang_12_clang_12_cpp"
+      "name": "amd64-ubuntu-22.04-clang-12-clang-12-cpp"
     },
     {
       "label": "clang-13, ubuntu, mpich",
       "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:amd64-ubuntu-22.04-clang-13-clang-13-cpp",
-      "name": "amd64_ubuntu_22.04_clang_13_clang_13_cpp"
+      "name": "amd64-ubuntu-22.04-clang-13-clang-13-cpp"
     },
     {
       "label": "clang-14, ubuntu, mpich",
       "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:amd64-ubuntu-22.04-clang-14-clang-14-cpp",
-      "name": "amd64_ubuntu_22.04_clang_14_clang_14_cpp"
+      "name": "amd64-ubuntu-22.04-clang-14-clang-14-cpp"
     },
     {
       "label": "clang-16, ubuntu, mpich",
       "runs-on": "ubuntu-22.04",
       "image": "lifflander1/vt:amd64-ubuntu-24.04-clang-16-clang-16-cpp",
-      "name": "amd64_ubuntu_24.04_clang_16_clang_16_cpp"
+      "name": "amd64-ubuntu-24.04-clang-16-clang-16-cpp"
     }
   ]
 }
