@@ -1,4 +1,4 @@
-name: Build docker images
+name: Build docker image
 
 # Template workflow to build and test a project in all available setup configurations
 # WIP: This is currently a work in progress (#2: Docker image usage)
@@ -10,14 +10,14 @@ on:
 
 jobs:
   get-matrix:
-    name: Retrieve Setup matrix
+    name: Get matrix
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CI_REPO: DARMA-tasking/workflows
       CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
     steps:
-      - name: Retrieve Setup matrix
+      - name: Get matrix
         id: get-matrix
         run: |
           wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/matrix/github.json
@@ -27,7 +27,7 @@ jobs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
 
   build-image:
-    name: Build Docker image (${{ matrix.runner.label }})
+    name: matrix.${{ matrix.runner.name }}
     runs-on: ${{ matrix.runner.runs-on }}
     needs: get-matrix
     strategy:

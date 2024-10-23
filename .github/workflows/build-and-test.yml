@@ -5,7 +5,7 @@
 # WIP: This is currently a work in progress (#2: Docker image usage)
 # ***: TODO only once this workflow file works and is completed
 
-name: PR tests (Template)
+name: PR tests
 
 on:
   push:
@@ -22,10 +22,10 @@ env:
 
 jobs:
   get-matrix:
-    name: Retrieve Setup matrix
+    name: Get matrix
     runs-on: ubuntu-latest
     steps:
-      - name: Retrieve Setup matrix
+      - name: Get matrix
         id: get-matrix
         run: |
           wget https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/matrix/github.json
@@ -35,7 +35,7 @@ jobs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
 
   run:
-    name: PR tests / ${{ matrix.runner.label }}
+    name: matrix.${{ matrix.runner.name }}
     runs-on: ${{ matrix.runner.runs-on }}
     needs: get-matrix
     strategy:
@@ -45,7 +45,7 @@ jobs:
     steps:
       - name: Display configuration
         run: |
-          echo "Environment=${{ matrix.runner.label }}"
+          echo "Environment=${{ matrix.runner.name }}"
           echo "Runner=${{ matrix.runner.runs-on }}"
           if [ "${{ matrix.runner.image }}" != "" ]
           then
