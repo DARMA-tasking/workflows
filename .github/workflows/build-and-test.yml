@@ -5,7 +5,7 @@
 # WIP: This is currently a work in progress (#2: Docker image usage)
 # ***: TODO only once this workflow file works and is completed
 
-name: Build and Test (Template)
+name: PR tests (Template)
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
       matrix: ${{ steps.get-matrix.outputs.runner }}
 
   run:
-    name: PR tests > ${{ matrix.runner.label }}
+    name: PR tests / ${{ matrix.runner.label }}
     runs-on: ${{ matrix.runner.runs-on }}
     needs: get-matrix
     strategy:

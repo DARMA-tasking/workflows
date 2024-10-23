@@ -4,7 +4,7 @@
 
 # WIP. Workflows pipeline with matrix
 # ***: TODO only once this workflow file works and is completed
-name: Build and test (Template)
+name: PR tests (Template)
 
 trigger:
   branches:
@@ -39,7 +39,7 @@ jobs:
   dependsOn: getMatrix
   strategy:
     matrix: $[ dependencies.getMatrix.outputs['getMatrixStep.matrix'] ]
-  displayName: PR tests >
+  displayName: PR tests / # contrary to github cannot inject label here. azure injects the matrix item key automatically
   pool:
     vmImage: $(vmImage)
   steps:
