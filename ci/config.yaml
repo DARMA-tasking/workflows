@@ -1,0 +1,507 @@
+# CI Configuration describing in a centralized place all the DARMA test configurations
+# that can be used by different projects.
+
+# This configuration defines the build and testing platforms for each C++ or Python projects
+# It defines
+# - Setup:           describes a set of dependencies for a target test environment
+# - Docker images:   describes Docker images and which setup should be used when building the image
+# - Runners:         describes CI runners (= Agent). Each runner can be associated either to a a Docker image or directly to a setup.
+#                    If not docker image is used then CI environment should be setup on the runner when a CI workflow is triggered.
+
+# This file is used as input to
+# - generate docker images
+# - generate setup scripts for each CI environment
+# - generate matrix files listing all environments to test.
+# Setup scripts & dependencies scripts can be retrieved by any project from this repository
+
+# Naming conventions:
+# Setup ids and docker images names are following the following naming convention:
+# ${ARCH}-${OS_NAME}-${OS_VERSION}-${HOST_COMPILER}-${COMPILER}-cpp
+
+# Dependencies:
+# The dependencies are the scripts to be run during a setup process. It is located under the `deps` directory
+# - mpich: vt mostly use mpich 4.0.2 but build issue with workflows (undefined reference to `pthread_yield').
+#          Using 4.2.3 seems to be ok.
+
+# TODO: add Zoltan dep to all setup once CI is ok with build
+
+defaults:
+  apt-packages: &apt-packages [
+    curl, jq, less, libomp5, libunwind-dev make-guile, ninja-build,
+    valgrind, zlib1g, zlib1g-dev, ccache, python3
+  ]
+  apk-packages: &apk-packages [
+    alpine-sdk, autoconf, automake, binutils-dev, ccache, cmake, dpkg,
+    libdwarf-dev, libunwind-dev, libtool, linux-headers, m4, make, ninja, zlib,
+    zlib-dev, python3
+  ]
+  brew-packages: &brew-packages [ ccache, coreutils, ninja ]
+  pip-packages: &pip-packages "nanobind yaml setuptools"
+
+  docker-repository: &docker-repository lifflander1/vt
+  conda-py3-all: &conda-py3-all [
+    ["3.8", *pip-packages], ["3.9", *pip-packages], ["3.10", *pip-packages],
+    ["3.11", *pip-packages], ["3.12", *pip-packages]
+  ]
+
+  env: &env
+    CC: ~
+    CXX: ~
+    GCOV: gcov
+    CMAKE_CXX_STANDARD: 17
+    CMAKE_BUILD_TYPE: Release
+    PATH_PREFIX: "/usr/lib/ccache\
+      :/opt/cmake/bin\
+      :/opt/nvcc_wrapper/bin\
+      :/opt/vtk/bin\
+      :"
+
+setup:
+  # macos
+  arm64-macos-14-clang-14-clang-14-cpp:
+    label: macos-14-arm64, clang-14, mpich
+    env:
+      <<: *env
+      CC: mpicc
+      CXX: mpicxx++
+      GCOV: llvm-gcov
+    deps:
+      packages: !extend [ *brew-packages, mpich ]
+
+  # alpine linux
+  amd64-alpine-clang-13-clang-13-cpp:
+    label: alpine-3.16, clang-13, mpich
+    env:
+      <<: *env
+      CC: mpicc
+      CXX: mpicxx
+      GCOV: llvm-gcov
+    deps:
+      packages: !extend [ *apk-packages, clang, clang-dev ]
+      mpich: { env: { CC: clang, CXX: clang++ }, args: ['3.3.2', '-j4'] }
+
+  # ubuntu / gcc
+  amd64-ubuntu-18.04-gcc-8-gcc-8-cpp:
+    label: gcc-8, ubuntu, mpich
+    env: { <<: *env, CC: gcc-8, CXX: g++-8, FC: gfortran-8 }
+    deps:
+      packages: !extend [ *apt-packages, gcc-8, g++-8, gfortran-8 ]
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-8, CXX: g++-8 }, args: [ '3.3.2', '-j4' ] }
+
+  amd64-ubuntu-20.04-gcc-9-gcc-9-cpp:
+    label: gcc-9, ubuntu, mpich
+    env: { <<: *env, CC: gcc-9, CXX: g++-9, FC: gfortran-9 }
+    deps:
+      packages: !extend [ *apt-packages, gcc-9, g++-9, gfortran-9 ]
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: [ '4.0.2', '-j4' ] }
+
+  amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp:
+    label: gcc-10, ubuntu, openmpi
+    env: { <<: *env, CC: gcc-9, CXX: g++-9, FC: gfortran-9 }
+    deps:
+      packages: !extend [ *apt-packages, gcc-9, g++-9, gfortran-9 ]
+      cmake: ['3.23.4']
+      openmpi: { env: { CC: gcc-9, CXX: g++-9 }, args: [ 'v4.0', '4.0.4', '-j4' ] }
+
+  amd64-ubuntu-22.04-gcc-11-gcc-11-cpp:
+    label: gcc-11, ubuntu, mpich
+    env: { <<: *env, CC: gcc-11, CXX: g++-11, FC: gfortran-11 }
+    deps:
+      packages: !extend [ *apt-packages, gcc-11, g++-11, gfortran-11 ]
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-11, CXX: g++-11 }, args: [ '4.0.2', '-j4' ] }
+
+  amd64-ubuntu-22.04-gcc-12-gcc-12-cpp: &develop
+    label: gcc-12, ubuntu, mpich
+    env: { <<: *env, CC: gcc-12, CXX: g++-12, FC: gfortran-12 }
+    deps:
+      packages: !extend [ *apt-packages, gcc-12, g++-12, gfortran-12 ]
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2', '-j4' ] }
+
+  amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
+    <<: *develop
+    label: gcc-12, ubuntu, mpich, vtk
+
+  # ubuntu / nvidia cuda
+  amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
+    label: nvidia cuda 12.2.0, gcc-9, ubuntu, mpich
+    env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
+    deps:
+      packages: !extend [ *apt-packages, gcc-9, g++-9 ]
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: ['4.0.2', '-j4'] }
+      nvcc_wrapper: ~
+
+  amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
+    <<: *amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
+    label: nvidia cuda 11.2.0, gcc-9, ubuntu, mpich
+
+  # ubuntu / clang
+  amd64-ubuntu-20.04-clang-9-clang-9-cpp:
+    label: clang-9, ubuntu, mpich
+    env: { <<: *env, CC: clang-9, CXX: clang++-9 }
+    deps:
+      packages: !extend [ *apt-packages, clang-9, llvm-9 ]
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-20.04-clang-10-clang-10-cpp:
+    label: clang-10, ubuntu, mpich
+    env: { <<: *env, CC: clang-10, CXX: clang++-10 }
+    deps:
+      packages: !extend [ *apt-packages, clang-10, llvm-10 ]
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-22.04-clang-11-clang-11-cpp:
+    label: clang-11, ubuntu, mpich
+    env: { <<: *env, CC: clang-11, CXX: clang++-11 }
+    deps:
+      packages: !extend [ *apt-packages, clang-11, llvm-11 ]
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-22.04-clang-12-clang-12-cpp:
+    label: clang-12, ubuntu, mpich
+    env: { <<: *env, CC: clang-12, CXX: clang++-12 }
+    deps:
+      packages: !extend [ *apt-packages, clang-12, llvm-12 ]
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-22.04-clang-13-clang-13-cpp:
+    label: clang-13, ubuntu, mpich
+    env: { <<: *env, CC: clang-13, CXX: clang++-13 }
+    deps:
+      packages: !extend [ *apt-packages, clang-13, llvm-13 ]
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-22.04-clang-14-clang-14-cpp:
+    label: clang-14, ubuntu, mpich
+    env: { <<: *env, CC: clang-14, CXX: clang++-14 }
+    deps:
+      packages: !extend [ *apt-packages, clang-14, llvm-14 ]
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-24.04-clang-16-clang-16-cpp:
+    label: clang-16, ubuntu, mpich
+    env: { <<: *env, CC: clang-16, CXX: clang++-16 }
+    deps:
+      packages: !extend [ *apt-packages, clang-16, llvm-16 ]
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  # intel
+  amd64-ubuntu-20.04-icpc-icpc-cpp: &amd64-ubuntu-20_04-icpc-icpc-cpp
+    label: intel icpc, ubuntu, mpich
+    env: &intel-icpc-env
+      <<: *env
+      CC: mpicc
+      CXX: mpicxx
+      GCOV: llvm-gcov
+      MPICH_CC: icc
+      MPICH_CXX: icpc
+      PATH_PREFIX: "/usr/lib/ccache\
+        :/opt/cmake/bin\
+        :/opt/nvcc_wrapper/bin\
+        :/opt/vtk/bin\
+        :/opt/intel/oneapi/dev-utilities/latest/bin\
+        :/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/bin\
+        :/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/llvm/aocl-bin\
+        :/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/bin\
+        :/opt/intel/oneapi/compiler/latest/linux/bin/intel64\
+        :/opt/intel/oneapi/compiler/latest/linux/bin\
+        :"
+      ONEAPI_ROOT: /opt/intel/oneapi
+      CMPLR_ROOT: /opt/intel/oneapi/compiler/latest
+      CPATH: /opt/intel/oneapi/tbb/latest/env/../include:/opt/intel/oneapi/dev-utilities/latest/include:/opt/intel/oneapi/compiler/latest/linux/include
+      INFOPATH: /opt/intel/oneapi/debugger/10.1.2/gdb/intel64/lib
+      CMAKE_PREFIX_PATH: /opt/intel/oneapi/tbb/latest/env/..
+      LD_LIBRARY_PATH: /opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/debugger/10.1.1/dep/lib:/opt/intel/oneapi/debugger/10.1.1/libipt/intel64/lib:/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/lib:/opt/intel/oneapi/compiler/latest/linux/lib:/opt/intel/oneapi/compiler/latest/linux/lib/x64:/opt/intel/oneapi/compiler/latest/linux/lib/emu:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/host/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/compiler/lib
+      LIBRARY_PATH: /opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/lib
+      INTEL_LICENSE_FILE: /opt/intel/licenses:/root/intel/licenses:/opt/intel/licenses:/root/intel/licenses:/Users/Shared/Library/Application Support/Intel/Licenses'
+    deps: &intel-icpc-deps
+      packages: !extend [ *apt-packages, intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1 ]
+      cmake: ['3.23.4']
+      mpich: { env: { CC: icc, CXX: icpc }, args: ['4.0.2', '-j4'] }
+
+  amd64-ubuntu-20.04-icpx-icpx-cpp:
+    <<: *amd64-ubuntu-20_04-icpc-icpc-cpp
+    label: intel icpx, ubuntu, mpich
+    env:
+      <<: *intel-icpc-env
+      MPICH_CC: icx
+      MPICH_CXX: icpx
+    deps:
+      <<: *intel-icpc-deps
+      mpich: { env: { CC: icx, CXX: icpx }, args: ['4.0.2', '-j4'] }
+
+
+images:
+  # alpine Linux
+  -
+    repository: *docker-repository
+    tag: amd64-alpine-clang-13-clang-13-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: alpine:3.16
+    setup: amd64-alpine-clang-13-clang-13-cpp
+
+  # ubuntu / gcc
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-18.04-gcc-8-gcc-8-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:18.04
+    setup: amd64-ubuntu-18.04-gcc-8-gcc-8-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-gcc-9-gcc-9-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:20.04
+    setup: amd64-ubuntu-20.04-gcc-9-gcc-9-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:20.04
+    setup: amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-22.04-gcc-11-gcc-11-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-gcc-11-gcc-11-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-22.04-gcc-12-gcc-12-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-gcc-12-gcc-12-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp
+
+  # ubuntu / nvidia cuda
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: nvidia/cuda:12.2.0-devel-ubuntu20.04
+    setup: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: nvidia/cuda:12.2.0-devel-ubuntu20.04
+    setup: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp
+
+  # ubuntu / clang
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-clang-9-clang-9-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:20.04
+    setup: amd64-ubuntu-20.04-clang-9-clang-9-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-clang-10-clang-10-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:20.04
+    setup: amd64-ubuntu-20.04-clang-10-clang-10-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-22.04-clang-11-clang-11-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-clang-11-clang-11-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-22.04-clang-12-clang-12-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-clang-12-clang-12-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-22.04-clang-13-clang-13-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-clang-13-clang-13-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-22.04-clang-14-clang-14-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-clang-14-clang-14-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-24.04-clang-16-clang-16-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-clang-16-clang-16-cpp
+
+  # intel
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-icpc-icpc-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: intel/oneapi:os-tools-ubuntu20.04
+    setup: amd64-ubuntu-20.04-icpc-icpc-cpp
+
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-20.04-icpx-icpx-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: intel/oneapi:os-tools-ubuntu20.04
+    setup: amd64-ubuntu-20.04-icpx-icpx-cpp
+
+runners:
+  # no docker image
+  -
+    type: github
+    runs-on: macos-14
+    setup: arm64-macos-14-clang-14-clang-14-cpp
+
+  # alpine linux
+  -
+    type: github
+    runs-on: ubuntu-latest
+    image: { repository: *docker-repository, tag: amd64-alpine-clang-13-clang-13-cpp }
+
+  -
+    type: azure
+    runs-on: ubuntu-latest
+    image: { repository: *docker-repository, tag: amd64-alpine-clang-13-clang-13-cpp }
+
+  # intel
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-icpc-icpc-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-icpx-icpx-cpp }
+
+  # ubuntu / gcc
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-18.04-gcc-8-gcc-8-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-gcc-9-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-11-gcc-11-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp }
+
+  # ubuntu / nvidia cuda
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp }
+
+  # ubuntu / clang
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-clang-9-clang-9-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-clang-10-clang-10-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-clang-11-clang-11-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-clang-12-clang-12-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-clang-13-clang-13-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-clang-14-clang-14-cpp }
+
+  -
+    type: github
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-24.04-clang-16-clang-16-cpp }
