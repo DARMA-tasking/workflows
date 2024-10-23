@@ -160,7 +160,7 @@ setup:
 
   amd64-ubuntu-22.04-clang-11-clang-11-cpp:
     label: clang-11, ubuntu, mpich
-    env: { <<: *env, CC: clang-9, CXX: clang++-9 }
+    env: { <<: *env, CC: clang-11, CXX: clang++-11 }
     deps:
       packages: !extend [ *apt-packages, clang-11, llvm-11 ]
       cmake: ['3.23.4']
