@@ -39,7 +39,7 @@ jobs:
   dependsOn: getMatrix
   strategy:
     matrix: $[ dependencies.getMatrix.outputs['getMatrixStep.matrix'] ]
-  displayName: PR tests / # contrary to github cannot inject label here. azure injects the matrix item key automatically
+  displayName: PR tests / # contrary to github cannot get a way to inject label from matrix. azure just appends the item key automatically
   pool:
     vmImage: $(vmImage)
   steps:
