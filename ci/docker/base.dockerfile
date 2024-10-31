@@ -9,6 +9,8 @@ ARG CC=${CC:-""}
 ARG CXX=${CXX:-""}
 ARG FC=${FC:-""}
 
+ARG PROXY=${http_proxy:-""}
+
 ARG CPATH=${CPATH:-""}
 ARG INFOPATH=${INFOPATH:-""}
 ARG LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
@@ -64,6 +66,9 @@ ENV DOCKER_RUN=1 \
     CC=$CC \
     CXX=$CXX \
     GCOV=$GCOV \
+    \
+    https_proxy=${PROXY} \
+    http_proxy=${PROXY} \
     \
     CONDA_INSTALL_DIR=/opt/conda \
     CONDA_AUTO_ACTIVATE_BASE=false \

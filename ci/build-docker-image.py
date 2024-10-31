@@ -66,6 +66,7 @@ class DockerBuilder:
         supported_env_keys = [
             # Common
             "CC", "CXX", "FC", "GCOV",
+            "PROXY",
             "CMAKE_BUILD_TYPE", "CMAKE_CXX_STANDARD", "CMAKE_PREFIX_PATH",
             "CPATH", "INFOPATH", "LIBRARY_PATH", "LD_LIBRARY_PATH",
             "MPICH_CC", "MPICH_CXX",
