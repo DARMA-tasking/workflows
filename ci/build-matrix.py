@@ -21,9 +21,13 @@ class MatrixBuilder:
         config = resolve_conf(copy.deepcopy(raw_config))
 
         for runner_type in ["github", "azure"]:
+            # Configured runner type could be an array if the 2 platforms are targetted.
+            # Useful for testing on both github and Azure.
             runners = [runner for runner in config.get("runners")
-                if runner.get("type") == runner_type]
-
+                if (
+                    (runner.get("type") is str and runner.get("type") == runner_type) or
+                    (runner_type in runner.get("type")) # list
+                )]
             matrix: Union[dict,list] = []
             for runner in runners:
                 matrix_item = {
