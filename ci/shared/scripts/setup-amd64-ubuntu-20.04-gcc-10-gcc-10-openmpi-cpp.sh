@@ -87,7 +87,7 @@ wget $SCRIPTS_DEPS_URL/openmpi.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9" "gfortran-9"
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
 ./cmake.sh "3.23.4"
 CC="gcc-9" CXX="g++-9" ./openmpi.sh "v4.0" "4.0.4" "-j4"
 
@@ -125,9 +125,9 @@ echo "--"
 echo "Environment:"
 echo "  CC=$CC"
 echo "  CXX=$CXX"
+echo "  FC=$FC"
 echo "  CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"
 echo "  CMAKE_CXX_STANDARD=$CMAKE_CXX_STANDARD"
-echo "  FC=$FC"
 echo "  PATH=$PATH"
 echo "--"
 echo "-------- Ready to test ! ---------"

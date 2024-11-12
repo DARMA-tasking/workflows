@@ -48,6 +48,7 @@ jobs:
         run: |
           CMD='echo "CC=$CC" ; \
           echo "CXX=$CXX" ; \
+          echo "FC=$FC" ; \
           echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" ; \
           echo "CMPLR_ROOT=$CMPLR_ROOT" ; \
           echo "CPATH=$CPATH" ; \

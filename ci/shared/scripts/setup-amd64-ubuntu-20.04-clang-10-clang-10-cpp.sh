@@ -88,7 +88,7 @@ wget $SCRIPTS_DEPS_URL/mpich.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-10" "llvm-10"
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-10"
 ./cmake.sh "3.23.4"
 ./libunwind.sh "1.6.2"
 ./mpich.sh "4.0.2" "-j4"
@@ -127,9 +127,9 @@ echo "--"
 echo "Environment:"
 echo "  CC=$CC"
 echo "  CXX=$CXX"
+echo "  FC=$FC"
 echo "  CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"
 echo "  CMAKE_CXX_STANDARD=$CMAKE_CXX_STANDARD"
-echo "  FC=$FC"
 echo "  PATH=$PATH"
 echo "--"
 echo "-------- Ready to test ! ---------"

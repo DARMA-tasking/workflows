@@ -84,14 +84,12 @@ cd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
 wget $SCRIPTS_DEPS_URL/cmake.sh
 wget $SCRIPTS_DEPS_URL/mpich.sh
-wget $SCRIPTS_DEPS_URL/zoltan.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
 ./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-12" "g++-12" "gfortran-12"
 ./cmake.sh "3.23.4"
 CC="gcc-12" CXX="g++-12" ./mpich.sh "4.0.2" "-j4"
-./zoltan.sh "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
@@ -127,9 +125,9 @@ echo "--"
 echo "Environment:"
 echo "  CC=$CC"
 echo "  CXX=$CXX"
+echo "  FC=$FC"
 echo "  CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"
 echo "  CMAKE_CXX_STANDARD=$CMAKE_CXX_STANDARD"
-echo "  FC=$FC"
 echo "  PATH=$PATH"
 echo "--"
 echo "-------- Ready to test ! ---------"
