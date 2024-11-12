@@ -23,7 +23,15 @@
 # - mpich: vt mostly use mpich 4.0.2 but build issue with workflows (undefined reference to `pthread_yield').
 #          Using 4.2.3 seems to be ok.
 
-# TODO: add Zoltan dep to all setup once CI is ok with build
+# TODO: Add Volumes support: (mapping is defined in vt as 
+# volumes:
+#  .:/vt:delegated
+#   ${BUILD_ROOT}ubuntu-cpp:/build:delegated)
+#   
+# ubuntu-cpp:
+#   name="${ARCH}-ubuntu-${UBUNTU}-${HOST_COMPILER}-${COMPILER}-cache" (/build = build target for tested project)
+# alpine-cpp:
+#   name: "${ARCH}-alpine-${HOST_COMPILER}-${COMPILER}-cache" (/build = build target for tested project)
 
 # List of defaults and/or re-usable configuration nodes
 defaults:
@@ -142,17 +150,24 @@ setup:
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-11, CXX: g++-11 }, args: [ '4.0.2', '-j4' ] }
 
-  amd64-ubuntu-22.04-gcc-12-gcc-12-cpp: &develop
+  amd64-ubuntu-22.04-gcc-12-gcc-12-cpp: &develop-gcc
     label: gcc-12, ubuntu, mpich
     env: { <<: *env, CC: gcc-12, CXX: g++-12, FC: gfortran-12 }
-    deps:
+    deps: &develop-gcc-deps
       packages: !extend [ *apt-packages, gcc-12, g++-12, gfortran-12 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2', '-j4' ] }
 
   amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp:
-    <<: *develop
+    <<: *develop-gcc
     label: gcc-12, ubuntu, mpich, vtk
+
+  amd64-ubuntu-22.04-gcc-12-gcc-12-zoltan-cpp:
+    <<: *develop-gcc
+    label: gcc-12, ubuntu, mpich, zoltan
+    deps:
+      <<: *develop-gcc-deps
+      zoltan: [ -j4 ]
 
   # ubuntu / nvidia cuda
   amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
@@ -223,14 +238,21 @@ setup:
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
-  amd64-ubuntu-24.04-clang-16-clang-16-cpp:
+  amd64-ubuntu-24.04-clang-16-clang-16-cpp: &develop-clang
     label: clang-16, ubuntu, mpich
     env: { <<: *env, CC: clang-16, CXX: clang++-16 }
-    deps:
+    deps: &develop-clang-deps
       packages: !extend [ *apt-packages, clang-16, llvm-16 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp:
+    <<: *develop-clang
+    label: clang-16, ubuntu, mpich, zoltan
+    deps:
+      <<: *develop-clang-deps
+      zoltan: [ -j4 ]
 
   # intel
   amd64-ubuntu-20.04-icpc-icpc-cpp: &amd64-ubuntu-20_04-icpc-icpc-cpp
@@ -337,6 +359,14 @@ images:
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp
 
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-22.04-gcc-12-gcc-12-zoltan-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-gcc-12-gcc-12-zoltan-cpp
+
   # ubuntu / nvidia cuda
   -
     repository: *docker-repository
@@ -411,6 +441,14 @@ images:
     base: ubuntu:24.04
     setup: amd64-ubuntu-24.04-clang-16-clang-16-cpp
 
+  -
+    repository: *docker-repository
+    tag: amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp
+
   # intel
   -
     repository: *docker-repository
@@ -484,6 +522,11 @@ runners:
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp }
 
+  -
+    type: [github, azure]
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-zoltan-cpp }
+
   # ubuntu / nvidia cuda
   -
     type: github
@@ -528,5 +571,10 @@ runners:
 
   -
     type: [github, azure]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-24.04-clang-16-clang-16-cpp }
+
+  -
+    type: [github, azure]
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp }

@@ -61,6 +61,12 @@
       "image": "lifflander1/vt:amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp",
       "name": "amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp"
     },
+    "amd64-ubuntu-22-04-gcc-12-gcc-12-zoltan-cpp": {
+      "label": "gcc-12, ubuntu, mpich, zoltan",
+      "vmImage": "ubuntu-22.04",
+      "image": "lifflander1/vt:amd64-ubuntu-22.04-gcc-12-gcc-12-zoltan-cpp",
+      "name": "amd64-ubuntu-22.04-gcc-12-gcc-12-zoltan-cpp"
+    },
     "amd64-ubuntu-20-04-gcc-9-11-2-2-cpp": {
       "label": "nvidia cuda 11.2.0, gcc-9, ubuntu, mpich",
       "vmImage": "ubuntu-20.04",
@@ -105,9 +111,15 @@
     },
     "amd64-ubuntu-24-04-clang-16-clang-16-cpp": {
       "label": "clang-16, ubuntu, mpich",
-      "vmImage": "ubuntu-22.04",
+      "vmImage": "ubuntu-24.04",
       "image": "lifflander1/vt:amd64-ubuntu-24.04-clang-16-clang-16-cpp",
       "name": "amd64-ubuntu-24.04-clang-16-clang-16-cpp"
+    },
+    "amd64-ubuntu-24-04-clang-16-clang-16-zoltan-cpp": {
+      "label": "clang-16, ubuntu, mpich, zoltan",
+      "vmImage": "ubuntu-24.04",
+      "image": "lifflander1/vt:amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp",
+      "name": "amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp"
     }
   }
 }

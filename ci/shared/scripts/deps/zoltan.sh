@@ -11,7 +11,7 @@ fi
 ZOLTAN_SRC_DIR="/opt/trilinos/src"
 ZOLTAN_BUILD_DIR="/opt/trilinos/build"
 ZOLTAN_MAKE_FLAGS=${1:-""}
-ZOLTAN_INSTALL_DIR=${2:-ZOLTAN_INSTALL_DIR:-"/opt/trilinos/bin"}
+ZOLTAN_INSTALL_DIR=${2:-ZOLTAN_INSTALL_DIR:-"/opt/trilinos/install"}
 
 if test -d Trilinos
 then
@@ -24,7 +24,7 @@ mkdir -p ${ZOLTAN_SRC_DIR}
 mkdir -p ${ZOLTAN_BUILD_DIR}
 mkdir -p ${ZOLTAN_INSTALL_DIR}
 
-cd ${ZOLTAN_BUILD_DIR}
+pushd ${ZOLTAN_BUILD_DIR}
 
 cmake \
   -DCMAKE_INSTALL_PREFIX:FILEPATH=${ZOLTAN_INSTALL_DIR} \
@@ -37,6 +37,8 @@ cmake \
   $ZOLTAN_SRC_DIR
 make ${ZOLTAN_MAKE_FLAGS}
 make install
-cd -
+
 rm -rf ${ZOLTAN_SRC_DIR}
 rm -rf ${ZOLTAN_BUILD_DIR}
+
+popd
