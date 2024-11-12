@@ -5,7 +5,7 @@
 # WIP: This is currently a work in progress (#2: Docker image usage)
 # ***: TODO only once this workflow file works and is completed
 
-name: PR tests
+name: PR tests (project test example)
 
 on:
   push:
