@@ -8,6 +8,7 @@ ARG CI=${CI:-""}
 ARG CC=${CC:-""}
 ARG CXX=${CXX:-""}
 ARG FC=${FC:-""}
+ARG GCOV=${GCOV:-""}
 
 ARG PROXY=${http_proxy:-""}
 
@@ -46,8 +47,10 @@ FROM --platform=${ARCH} ${BASE} as base
 ## Common
 ARG SETUP_ID \
     CI \
+    \
     CC \
     CXX \
+    FC \
     GCOV \
     \
     CMAKE_BUILD_TYPE \
@@ -78,8 +81,10 @@ ARG CMPLR_ROOT \
 ## Common
 ENV DOCKER_RUN=1 \
     CI=$CI \
+    \
     CC=$CC \
     CXX=$CXX \
+    FC=$FC \
     GCOV=$GCOV \
     \
     https_proxy=${PROXY} \
