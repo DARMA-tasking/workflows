@@ -23,11 +23,11 @@
 # - mpich: vt mostly use mpich 4.0.2 but build issue with workflows (undefined reference to `pthread_yield').
 #          Using 4.2.3 seems to be ok.
 
-# TODO: Add Volumes support: (mapping is defined in vt as 
+# TODO: Add Volumes support: (mapping is defined in vt as
 # volumes:
 #  .:/vt:delegated
 #   ${BUILD_ROOT}ubuntu-cpp:/build:delegated)
-#   
+#
 # ubuntu-cpp:
 #   name="${ARCH}-ubuntu-${UBUNTU}-${HOST_COMPILER}-${COMPILER}-cache" (/build = build target for tested project)
 # alpine-cpp:
@@ -186,7 +186,7 @@ setup:
   # ubuntu / clang
   amd64-ubuntu-20.04-clang-9-clang-9-cpp:
     label: clang-9, ubuntu, mpich
-    env: { <<: *env, CC: clang-9, CXX: clang++-9, FC: llvm-9 }
+    env: { <<: *env, CC: clang-9, CXX: clang++-9, FC: flang-9 }
     deps:
       packages: !extend [ *apt-packages, clang-9, llvm-9 ]
       cmake: ['3.23.4']
@@ -195,7 +195,7 @@ setup:
 
   amd64-ubuntu-20.04-clang-10-clang-10-cpp:
     label: clang-10, ubuntu, mpich
-    env: { <<: *env, CC: clang-10, CXX: clang++-10 , FC: llvm-10 }
+    env: { <<: *env, CC: clang-10, CXX: clang++-10, FC: flang-10 }
     deps:
       packages: !extend [ *apt-packages, clang-10, llvm-10 ]
       cmake: ['3.23.4']
@@ -204,7 +204,7 @@ setup:
 
   amd64-ubuntu-22.04-clang-11-clang-11-cpp:
     label: clang-11, ubuntu, mpich
-    env: { <<: *env, CC: clang-11, CXX: clang++-11, FC: llvm-11 }
+    env: { <<: *env, CC: clang-11, CXX: clang++-11, FC: flang-11 }
     deps:
       packages: !extend [ *apt-packages, clang-11, llvm-11 ]
       cmake: ['3.23.4']
@@ -213,7 +213,7 @@ setup:
 
   amd64-ubuntu-22.04-clang-12-clang-12-cpp:
     label: clang-12, ubuntu, mpich
-    env: { <<: *env, CC: clang-12, CXX: clang++-12, FC: llvm-12 }
+    env: { <<: *env, CC: clang-12, CXX: clang++-12, FC: flang-12 }
     deps:
       packages: !extend [ *apt-packages, clang-12, llvm-12 ]
       cmake: ['3.23.4']
@@ -222,7 +222,7 @@ setup:
 
   amd64-ubuntu-22.04-clang-13-clang-13-cpp:
     label: clang-13, ubuntu, mpich
-    env: { <<: *env, CC: clang-13, CXX: clang++-13, FC: llvm-13 }
+    env: { <<: *env, CC: clang-13, CXX: clang++-13, FC: flang-13 }
     deps:
       packages: !extend [ *apt-packages, clang-13, llvm-13 ]
       cmake: ['3.23.4']
@@ -231,7 +231,7 @@ setup:
 
   amd64-ubuntu-22.04-clang-14-clang-14-cpp:
     label: clang-14, ubuntu, mpich
-    env: { <<: *env, CC: clang-14, CXX: clang++-14, FC: llvm-14 }
+    env: { <<: *env, CC: clang-14, CXX: clang++-14, FC: flang-14 }
     deps:
       packages: !extend [ *apt-packages, clang-14, llvm-14 ]
       cmake: ['3.23.4']
@@ -240,7 +240,7 @@ setup:
 
   amd64-ubuntu-24.04-clang-16-clang-16-cpp: &develop-clang
     label: clang-16, ubuntu, mpich
-    env: { <<: *env, CC: clang-16, CXX: clang++-16, FC: llvm-16 }
+    env: { <<: *env, CC: clang-16, CXX: clang++-16, FC: flang-16 }
     deps: &develop-clang-deps
       packages: !extend [ *apt-packages, clang-16, llvm-16 ]
       cmake: ['3.23.4']
