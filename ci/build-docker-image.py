@@ -64,15 +64,19 @@ class DockerBuilder:
         }
         # Env
         supported_env_keys = [
-            # Common
+            # Compiler
             "CC", "CXX", "FC", "GCOV",
+            # CCache
+            "CCACHE_COMPILERCHECK", "CCACHE_COMPRESS", "CCACHE_COMPRESSLEVEL",
+            "CCACHE_MAXSIZE", "CCACHE_DIR",
+            # Intel
+            "CMPLR_ROOT", "INTEL_LICENSE_FILE", "ONEAPI_ROOT", "TBBROOT"
+            # Other
             "PROXY",
             "CMAKE_BUILD_TYPE", "CMAKE_CXX_STANDARD", "CMAKE_PREFIX_PATH",
             "CPATH", "INFOPATH", "LIBRARY_PATH", "LD_LIBRARY_PATH",
             "MPICH_CC", "MPICH_CXX",
-            "PATH_PREFIX",
-            # Intel
-            "CMPLR_ROOT", "INTEL_LICENSE_FILE", "ONEAPI_ROOT", "TBBROOT"
+            "PATH_PREFIX"
         ]
         for env_key in supported_env_keys:
             args[env_key] = env.get(env_key, '')
@@ -89,8 +93,9 @@ class DockerBuilder:
                 f" --tag {image_tag}"
                 f" --file {os.path.dirname(__file__)}/docker/{dockerfile}"
                 f" {space.join([f'--build-arg {k}={v}' for (k,v) in escaped_args.items()])}"
+                f"--cache-from={image_tag}" # use previously built image as a cache layer.
+                # " --no-cache"
                 " --progress=plain"
-                " --no-cache"
             )
         print(cmd)
         status = os.system(cmd)

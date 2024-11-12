@@ -25,37 +25,66 @@
 
 # TODO: add Zoltan dep to all setup once CI is ok with build
 
+# List of defaults and/or re-usable configuration nodes
 defaults:
+  # Define basic apt packages (Ubuntu Linux).
   apt-packages: &apt-packages [
     curl, jq, less, libomp5, libunwind-dev make-guile, ninja-build,
     valgrind, zlib1g, zlib1g-dev, ccache, python3
   ]
+  # Define basic apk packages (Alpine Linux).
   apk-packages: &apk-packages [
     alpine-sdk, autoconf, automake, binutils-dev, ccache, cmake, dpkg,
     libdwarf-dev, libunwind-dev, libtool, linux-headers, m4, make, ninja, zlib,
     zlib-dev, python3
   ]
+  # Define basic brew packages (MacOSX Darwin).
   brew-packages: &brew-packages [ ccache, coreutils, ninja ]
+
+  # Define basic Python packages.
   pip-packages: &pip-packages "nanobind yaml setuptools"
 
+  # Define default docker repository
   docker-repository: &docker-repository lifflander1/vt
+
+  # Define default Conda environments for the `conda` dependency.
   conda-py3-all: &conda-py3-all [
-    ["3.8", *pip-packages], ["3.9", *pip-packages], ["3.10", *pip-packages],
-    ["3.11", *pip-packages], ["3.12", *pip-packages]
+    ["3.8", *pip-packages],
+    ["3.9", *pip-packages],
+    ["3.10", *pip-packages],
+    ["3.11", *pip-packages],
+    ["3.12", *pip-packages]
   ]
 
-  env: &env
+  # Define basic rules for compiler.
+  cenv: &cenv
     CC: ~
     CXX: ~
     GCOV: gcov
     CMAKE_CXX_STANDARD: 17
     CMAKE_BUILD_TYPE: Release
+
+  # Define basic rules for ccache used across multiple services. The beauty of
+  # docker compose with cached volumes is that similarly configured builds will
+  # reuse a ccache volume making build speeds much faster than a fresh build each
+  # time.
+  ccacheenv: &ccacheenv
+    CCACHE_COMPILERCHECK: content
+    CCACHE_COMPRESS: 1
+    CCACHE_COMPRESSLEVEL: 5
+    CCACHE_MAXSIZE: 700M
+    CCACHE_DIR: /build/ccache
+
+  env: &env
+    <<: [ *ccacheenv, *cenv ]
+    # PATH_PREFIX: prepend to PATH
     PATH_PREFIX: "/usr/lib/ccache\
       :/opt/cmake/bin\
       :/opt/nvcc_wrapper/bin\
       :/opt/vtk/bin\
       :"
 
+# List of all available test configurations
 setup:
   # macos
   arm64-macos-14-clang-14-clang-14-cpp:
@@ -248,7 +277,7 @@ setup:
       <<: *intel-icpc-deps
       mpich: { env: { CC: icx, CXX: icpx }, args: ['4.0.2', '-j4'] }
 
-
+# List of docker images
 images:
   # alpine Linux
   -
@@ -399,6 +428,7 @@ images:
     base: intel/oneapi:os-tools-ubuntu20.04
     setup: amd64-ubuntu-20.04-icpx-icpx-cpp
 
+# List of test configurations available to the CI runners/agents
 runners:
   # no docker image
   -
