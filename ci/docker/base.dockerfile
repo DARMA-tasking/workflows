@@ -43,6 +43,8 @@ ARG CMPLR_ROOT \
 
 FROM --platform=${ARCH} ${BASE} as base
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # ARGS
 ## Common
 ARG SETUP_ID \
