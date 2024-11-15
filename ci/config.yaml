@@ -163,15 +163,15 @@ setup:
     label: gcc-12, ubuntu, mpich, vtk
     deps:
       <<: *develop-gcc-deps
-      vtk: '9.2.2'
+      vtk: '9.3.1'
 
   amd64-ubuntu-22.04-gcc-12-gcc-12-zoltan-cpp:
     label: gcc-12, ubuntu, mpich, zoltan
     env: { <<: *develop-gcc-env, FC: gfortran-12 }
     deps:
+      <<: *develop-gcc-deps
       packages: !extend [ *apt-packages, gcc-12, g++-12, gfortran-12 ]
-      cmake: ['3.23.4']
-      mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2', '-j4' ] }
+      zoltan: [ -j4 ]
 
   # ubuntu / nvidia cuda
   amd64-ubuntu-20.04-gcc-9-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
@@ -245,11 +245,18 @@ setup:
   amd64-ubuntu-24.04-clang-16-clang-16-cpp: &develop-clang
     label: clang-16, ubuntu, mpich
     env: &develop-clang-env { <<: *env, CC: clang-16, CXX: clang++-16 }
-    deps:
+    deps: &develop-clang-deps
       packages: !extend [ *apt-packages, clang-16, llvm-16 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-24.04-clang-16-clang-16-vtk-cpp:
+    <<: *develop-clang
+    label: gcc-12, ubuntu, mpich, vtk
+    deps:
+      <<: *develop-clang-deps
+      vtk: '9.3.1'
 
   amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp:
     <<: *develop-clang
@@ -257,9 +264,7 @@ setup:
     label: clang-16, ubuntu, mpich, zoltan
     deps:
       packages: !extend [ *apt-packages, clang-16, llvm-16, flang-16 ]
-      cmake: ['3.23.4']
-      libunwind: '1.6.2'
-      mpich: ['4.0.2', '-j4']
+      <<: *develop-clang-deps
       zoltan: [ -j4 ]
 
   # intel
@@ -451,6 +456,14 @@ images:
 
   -
     repository: *docker-repository
+    tag: amd64-ubuntu-24.04-clang-16-clang-16-vtk-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-clang-16-clang-16-vtk-cpp
+
+  -
+    repository: *docker-repository
     tag: amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp
     dockerfile: base.dockerfile
     arch: linux/amd64
@@ -581,6 +594,11 @@ runners:
     type: [github, azure]
     runs-on: ubuntu-24.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-24.04-clang-16-clang-16-cpp }
+
+  -
+    type: [github, azure]
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: amd64-ubuntu-24.04-clang-16-clang-16-vtk-cpp }
 
   -
     type: [github, azure]

@@ -91,7 +91,7 @@ ls -l
 ./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-12" "g++-12"
 ./cmake.sh "3.23.4"
 CC="gcc-12" CXX="g++-12" ./mpich.sh "4.0.2" "-j4"
-./vtk.sh "9.2.2"
+./vtk.sh "9.3.1"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR

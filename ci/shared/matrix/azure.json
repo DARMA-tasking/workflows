@@ -115,6 +115,12 @@
       "image": "lifflander1/vt:amd64-ubuntu-24.04-clang-16-clang-16-cpp",
       "name": "amd64-ubuntu-24.04-clang-16-clang-16-cpp"
     },
+    "amd64-ubuntu-24-04-clang-16-clang-16-vtk-cpp": {
+      "label": "gcc-12, ubuntu, mpich, vtk",
+      "vmImage": "ubuntu-24.04",
+      "image": "lifflander1/vt:amd64-ubuntu-24.04-clang-16-clang-16-vtk-cpp",
+      "name": "amd64-ubuntu-24.04-clang-16-clang-16-vtk-cpp"
+    },
     "amd64-ubuntu-24-04-clang-16-clang-16-zoltan-cpp": {
       "label": "clang-16, ubuntu, mpich, zoltan",
       "vmImage": "ubuntu-24.04",

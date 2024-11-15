@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# gcc-12, ubuntu, mpich, zoltan - Installation
+# gcc-12, ubuntu, mpich, vtk - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -83,15 +83,17 @@ mkdir -p $SCRIPTS_INSTALL_DIR/deps
 cd $SCRIPTS_INSTALL_DIR/deps
 wget $SCRIPTS_DEPS_URL/packages.sh
 wget $SCRIPTS_DEPS_URL/cmake.sh
+wget $SCRIPTS_DEPS_URL/libunwind.sh
 wget $SCRIPTS_DEPS_URL/mpich.sh
-wget $SCRIPTS_DEPS_URL/zoltan.sh
+wget $SCRIPTS_DEPS_URL/vtk.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-12" "g++-12" "gfortran-12"
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-16" "llvm-16"
 ./cmake.sh "3.23.4"
-CC="gcc-12" CXX="g++-12" ./mpich.sh "4.0.2" "-j4"
-./zoltan.sh "-j4"
+./libunwind.sh "1.6.2"
+./mpich.sh "4.0.2" "-j4"
+./vtk.sh "9.3.1"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
