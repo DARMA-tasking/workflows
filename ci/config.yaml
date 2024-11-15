@@ -92,6 +92,8 @@ defaults:
       :/opt/vtk/bin\
       :"
 
+  runner-types: &runner-types [ github ] # , azure
+
 # List of all available test configurations
 setup:
   # macos
@@ -492,116 +494,116 @@ images:
 runners:
   # no docker image
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: macos-14
     setup: arm64-macos-14-clang-14-clang-14-cpp
 
   # alpine linux
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-latest
     image: { repository: *docker-repository, tag: amd64-alpine-clang-13-clang-13-cpp }
 
   # intel
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-icpc-icpc-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-icpx-icpx-cpp }
 
   # ubuntu / gcc
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-18.04-gcc-8-gcc-8-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-gcc-9-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-11-gcc-11-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-vtk-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-gcc-12-gcc-12-zoltan-cpp }
 
   # ubuntu / nvidia cuda
   -
-    type: github
+    type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-12.2.0-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-gcc-9-11.2.2-cpp }
 
   # ubuntu / clang
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-clang-9-clang-9-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-20.04-clang-10-clang-10-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-clang-11-clang-11-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-clang-12-clang-12-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-clang-13-clang-13-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-22.04-clang-14-clang-14-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-24.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-24.04-clang-16-clang-16-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-24.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-24.04-clang-16-clang-16-vtk-cpp }
 
   -
-    type: [github, azure]
+    type: *runner-types
     runs-on: ubuntu-24.04
     image: { repository: *docker-repository, tag: amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp }
