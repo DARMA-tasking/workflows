@@ -88,7 +88,7 @@ defaults:
     # PATH_PREFIX: prepend to PATH
     PATH_PREFIX: "/usr/lib/ccache\
       :/opt/cmake/bin\
-      :/opt/nvcc_wrapper/bin\
+      :/opt/nvcc_wrapper/build\
       :/opt/vtk/bin\
       :"
 
@@ -182,6 +182,7 @@ setup:
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: ['4.0.2', '-j4'] }
       nvcc_wrapper: ~
+      # fmt: ['7.1.3', '-j4'] external fmt
 
   amd64-ubuntu-20.04-gcc-9-11.2.2-cpp:
     <<: *amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
@@ -260,7 +261,7 @@ setup:
 
   amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp:
     <<: *develop-clang
-    env: { <<: *develop-clang-env, FC: flang-16 }
+    env: { <<: *develop-clang-env, FC: flang-new-16 }
     label: clang-16, ubuntu, mpich, zoltan
     deps:
       packages: !extend [ *apt-packages, clang-16, llvm-16, flang-16 ]
@@ -279,7 +280,7 @@ setup:
       MPICH_CXX: icpc
       PATH_PREFIX: "/usr/lib/ccache\
         :/opt/cmake/bin\
-        :/opt/nvcc_wrapper/bin\
+        :/opt/nvcc_wrapper/build\
         :/opt/vtk/bin\
         :/opt/intel/oneapi/dev-utilities/latest/bin\
         :/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/bin\
