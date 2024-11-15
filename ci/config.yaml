@@ -253,7 +253,7 @@ setup:
 
   amd64-ubuntu-24.04-clang-16-clang-16-vtk-cpp:
     <<: *develop-clang
-    label: gcc-12, ubuntu, mpich, vtk
+    label: clang-16, ubuntu, mpich, vtk
     deps:
       <<: *develop-clang-deps
       vtk: '9.3.1'

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# gcc-12, ubuntu, mpich, vtk - Installation
+# clang-16, ubuntu, mpich, vtk - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
