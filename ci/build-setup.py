@@ -18,6 +18,8 @@ class SetupBuilder:
             return [ f"{' '.join(args)}" ]
 
         call_args = []
+        env = []
+
         # repeat instructions if args is an array of array
         if args is not None and len(args) > 0:
             if isinstance(args, list) and isinstance(args[0], list):

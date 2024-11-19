@@ -85,6 +85,7 @@ wget $SCRIPTS_DEPS_URL/packages.sh
 wget $SCRIPTS_DEPS_URL/cmake.sh
 wget $SCRIPTS_DEPS_URL/libunwind.sh
 wget $SCRIPTS_DEPS_URL/mpich.sh
+wget $SCRIPTS_DEPS_URL/mesa.sh
 wget $SCRIPTS_DEPS_URL/vtk.sh
 # 2. Install dependency
 chmod u+x *.sh
@@ -93,6 +94,7 @@ ls -l
 ./cmake.sh "3.23.4"
 ./libunwind.sh "1.6.2"
 ./mpich.sh "4.0.2" "-j4"
+./mesa.sh
 ./vtk.sh "9.3.1"
 
 # Remove install scripts

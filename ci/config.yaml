@@ -165,6 +165,7 @@ setup:
     label: gcc-12, ubuntu, mpich, vtk
     deps:
       <<: *develop-gcc-deps
+      mesa: ~
       vtk: '9.3.1'
 
   amd64-ubuntu-22.04-gcc-12-gcc-12-zoltan-cpp:
@@ -259,6 +260,7 @@ setup:
     label: clang-16, ubuntu, mpich, vtk
     deps:
       <<: *develop-clang-deps
+      mesa: ~
       vtk: '9.3.1'
 
   amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp:

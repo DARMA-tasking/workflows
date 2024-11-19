@@ -52,7 +52,7 @@ def resolve_conf(config: Union[dict,list]) -> dict:
             if args is None:
                 setup["deps"][dep_id] = []
             # single arg
-            if not isinstance(args, list) and not isinstance(args, dict):
+            elif not isinstance(args, list) and not isinstance(args, dict):
                 setup["deps"][dep_id] = [ args ]
 
     # Index Docker images by their full name
