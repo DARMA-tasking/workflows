@@ -5,6 +5,8 @@
 DEPS_DIR="$(cd "$(dirname "$0")" && pwd)"
 PACKAGES=$@
 
+set -exo pipefail
+
 . ~/.setuprc
 
 echo "Install system packages..."
