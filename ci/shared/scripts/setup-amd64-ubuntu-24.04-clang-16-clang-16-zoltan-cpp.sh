@@ -93,7 +93,7 @@ ls -l
 ./cmake.sh "3.23.4"
 ./libunwind.sh "1.6.2"
 ./mpich.sh "4.0.2" "-j4"
-alias flang="flang-new-16 -flang-experimental-exec"
+echo "flang-new-16 -flang-experimental-exec" >> /usr/bin/flang-16 && chmod +x /usr/bin/flang-16
 ./zoltan.sh "-j4"
 
 # Remove install scripts
