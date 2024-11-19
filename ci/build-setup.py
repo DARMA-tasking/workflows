@@ -12,10 +12,14 @@ class SetupBuilder:
     def __instructions(self, dep_id, args: Union[list, dict]) -> List[str]:
         """ Generate shell instructions to setup a dependency"""
 
+        # basic command to run in setup script (bash)
+        if dep_id == "cmd":
+            assert isinstance(args, list)
+            return [ f"{' '.join(args)}" ]
+
         call_args = []
         # repeat instructions if args is an array of array
         if args is not None and len(args) > 0:
-
             if isinstance(args, list) and isinstance(args[0], list):
                 instructions = []
                 for (_, sub_args) in enumerate(args):
@@ -52,7 +56,8 @@ class SetupBuilder:
             instructions = []
             downloads = []
             for (dep_id, args) in setup_config.get("deps").items():
-                downloads.append(f"wget $SCRIPTS_DEPS_URL/{dep_id}.sh")
+                if dep_id != 'cmd':
+                    downloads.append(f"wget $SCRIPTS_DEPS_URL/{dep_id}.sh")
                 instructions.extend(self.__instructions(dep_id, args))
 
             setup_script = ""
