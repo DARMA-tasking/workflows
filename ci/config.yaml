@@ -265,11 +265,10 @@ setup:
 
   amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp:
     <<: *develop-clang
-    env: { <<: *develop-clang-env, FC: flang-16 }
+    env: { <<: *develop-clang-env, FC: gfortran-13 }
     label: clang-16, ubuntu, mpich, zoltan
     deps:
-      packages: !extend [ *apt-packages, clang-16, llvm-16, flang-16 ]
-      cmd: echo "flang-new-16 -flang-experimental-exec" >> /usr/bin/flang-16 && chmod +x /usr/bin/flang-16
+      packages: !extend [ *apt-packages, clang-16, llvm-16, gfortran-13 ]
       <<: *develop-clang-deps
       zoltan: [ -j4 ]
 

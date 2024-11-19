@@ -89,11 +89,10 @@ wget $SCRIPTS_DEPS_URL/zoltan.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-16" "llvm-16" "flang-16"
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-16" "llvm-16" "gfortran-13"
 ./cmake.sh "3.23.4"
 ./libunwind.sh "1.6.2"
 ./mpich.sh "4.0.2" "-j4"
-echo "flang-new-16 -flang-experimental-exec" >> /usr/bin/flang-16 && chmod +x /usr/bin/flang-16
 ./zoltan.sh "-j4"
 
 # Remove install scripts
