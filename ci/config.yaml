@@ -19,9 +19,9 @@
 # ${ARCH}-${OS_NAME}-${OS_VERSION}-${HOST_COMPILER}-${COMPILER}-cpp
 
 # Dependencies:
-# The dependencies are the scripts to be run during a setup process. It is located under the `deps` directory
-# - mpich: vt mostly use mpich 4.0.2 but build issue with workflows (undefined reference to `pthread_yield').
-#          Using 4.2.3 seems to be ok.
+# The dependencies are command or scripts to run during a setup process
+# - dependencies scripts: located under the `deps` directory. Use script same (no prefix) as key
+# - simple commands: use `cmd` as key. It will be added as is in the setup script.
 
 # TODO: Add Volumes support: (mapping is defined in vt as
 # volumes:
@@ -263,9 +263,10 @@ setup:
 
   amd64-ubuntu-24.04-clang-16-clang-16-zoltan-cpp:
     <<: *develop-clang
-    env: { <<: *develop-clang-env, FC: flang-new-16 }
+    env: { <<: *develop-clang-env, FC: flang }
     label: clang-16, ubuntu, mpich, zoltan
     deps:
+      cmd: alias flang="flang-new-16 -flang-experimental-exec"
       packages: !extend [ *apt-packages, clang-16, llvm-16, flang-16 ]
       <<: *develop-clang-deps
       zoltan: [ -j4 ]
