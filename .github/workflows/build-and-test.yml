@@ -1,6 +1,7 @@
-# Template workflow (Github Workflows)
-# Build and test a project in all available setup configurations configured in DARMA-taking/workflows
-# See also: Azure Pipelines version at ci/azure/build-and-test-azure.yml
+# Template workflow (Github Workflows). VT example.
+
+# Build and test a project in all available setup configurations provided by DARMA-taking/workflows.
+# See also: Azure Pipelines version at ./azure/pipelines/build-and-test.yml
 
 name: PR tests (project test example)
 
@@ -15,7 +16,7 @@ on:
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CI_REPO: DARMA-tasking/workflows
-  CI_BRANCH: 2-implement-common-docker-containers # should be master in the future
+  CI_BRANCH: master
 
 jobs:
   get-matrix:
