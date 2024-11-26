@@ -78,7 +78,7 @@ jobs:
             ${{ matrix.runner.image }} \
             bash -c "$CMD"
           exit $(docker container inspect --format '{{.State.ExitCode}}' test-container)
-        
+
       - name: Push Docker image to DockerHub Container Registry
         # if: ${{ success() && github.ref == 'refs/heads/develop' }}
         run: |
