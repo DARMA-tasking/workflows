@@ -156,7 +156,7 @@ setup:
       zoltan: [ -j4 ]
 
   # ubuntu / nvidia cuda
-  amd64-ubuntu-20.04-gcc-9-cuda-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
+  amd64-ubuntu-20.04-gcc-9-cuda-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-cuda-12_2_0-cpp
     label: nvidia cuda 12.2.0, gcc-9, ubuntu, mpich
     env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
     deps:
@@ -167,8 +167,8 @@ setup:
       # fmt: ['7.1.3', '-j4'] external fmt
 
   amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp:
-    <<: *amd64-ubuntu-20_04-gcc-9-12_2_0-cpp
-    label: nvidia cuda 11.2.0, gcc-9, ubuntu, mpich
+    <<: *amd64-ubuntu-20_04-gcc-9-cuda-12_2_0-cpp
+    label: nvidia cuda 11.2.2, gcc-9, ubuntu, mpich
 
   # ubuntu / clang
   amd64-ubuntu-20.04-clang-9-cpp:
@@ -378,7 +378,7 @@ images:
     tag: wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp
     dockerfile: base.dockerfile
     arch: linux/amd64
-    base: nvidia/cuda:11.2.0-devel-ubuntu20.04
+    base: nvidia/cuda:11.2.2-devel-ubuntu20.04
     setup: amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp
 
   # ubuntu / clang

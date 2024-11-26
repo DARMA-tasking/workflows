@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# nvidia cuda 11.2.0, gcc-9, ubuntu, mpich - Installation
+# nvidia cuda 11.2.2, gcc-9, ubuntu, mpich - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root

@@ -74,7 +74,7 @@
       "name": "wf-amd64-ubuntu-20.04-gcc-9-cuda-12.2.0-cpp"
     },
     {
-      "label": "nvidia cuda 11.2.0, gcc-9, ubuntu, mpich",
+      "label": "nvidia cuda 11.2.2, gcc-9, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp",
       "name": "wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp"
