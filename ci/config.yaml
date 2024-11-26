@@ -71,7 +71,7 @@ defaults:
       :/opt/vtk/bin\
       :"
 
-  runner-types: &runner-types [ github ] # , azure
+  runner-types: &runner-types [ github, azure ]
 
 # List of all available test configurations
 setup:

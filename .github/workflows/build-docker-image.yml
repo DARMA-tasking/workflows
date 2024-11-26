@@ -1,12 +1,9 @@
 name: Build docker image
 
-# Template workflow to build and test a project in all available setup configurations
-# WIP: This is currently a work in progress (#2: Docker image usage)
-
 on:
   push:
     branches:
-      - 2-implement-common-docker-containers
+      - develop
 
 jobs:
   get-matrix:
@@ -80,7 +77,6 @@ jobs:
           exit $(docker container inspect --format '{{.State.ExitCode}}' test-container)
 
       - name: Push Docker image to DockerHub Container Registry
-        # if: ${{ success() && github.ref == 'refs/heads/develop' }}
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
           docker push ${{ matrix.runner.image }}

@@ -41,7 +41,7 @@ ARG CMPLR_ROOT \
     ONEAPI_ROOT \
     TBBROOT
 
-FROM --platform=${ARCH} ${BASE} as base
+FROM --platform=${ARCH} ${BASE} AS base
 
 ENV DEBIAN_FRONTEND=noninteractive
 

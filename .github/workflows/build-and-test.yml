@@ -2,9 +2,6 @@
 # Build and test a project in all available setup configurations configured in DARMA-taking/workflows
 # See also: Azure Pipelines version at ci/azure/build-and-test-azure.yml
 
-# WIP: This is currently a work in progress (#2: Docker image usage)
-# ***: TODO only once this workflow file works and is completed
-
 name: PR tests (project test example)
 
 on:
