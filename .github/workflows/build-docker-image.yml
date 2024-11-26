@@ -36,22 +36,18 @@ jobs:
         runner: ${{ fromJson(needs.get-matrix.outputs.matrix ) }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pyyaml
 
-      # - name: Cache built dependencies
-      #   id: cache-built-dependencies
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: /opt
-      #     key: ${{ matrix.runner.setup }}-opt
+      - run: pip install pyyaml
 
       - name: Build Docker image
         run: |
           python ci/build-docker-image.py ${{ matrix.runner.image }}
           docker image inspect ${{ matrix.runner.image }}
+
       - name: Test Docker image (VT build & test)
         run: |
           CMD='echo "CC=$CC" ; \
@@ -82,3 +78,9 @@ jobs:
             ${{ matrix.runner.image }} \
             bash -c "$CMD"
           exit $(docker container inspect --format '{{.State.ExitCode}}' test-container)
+        
+      - name: Push Docker image to DockerHub Container Registry
+        # if: ${{ success() && github.ref == 'refs/heads/develop' }}
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push ${{ matrix.runner.image }}
