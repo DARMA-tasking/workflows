@@ -92,9 +92,6 @@ ENV DOCKER_RUN=1 \
     https_proxy=${PROXY} \
     http_proxy=${PROXY} \
     \
-    CONDA_INSTALL_DIR=/opt/conda \
-    CONDA_AUTO_ACTIVATE_BASE=false \
-    \
     VTK_DIR=/opt/vtk/build \
     \
     ZOLTAN_INSTALL_DIR=$ZOLTAN_INSTALL_DIR \

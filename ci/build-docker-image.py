@@ -34,11 +34,11 @@ class DockerBuilder:
             print("Choose image: ")
             for i in choices:
                 image = images.get(choices[i])
-                setup_id = image.get('setup')
+                setup_id = image.get("setup")
                 current_setup = setup.get(setup_id)
                 if current_setup is None:
                     raise RuntimeError(f"Invalid setup {setup_id}")
-                lbl = current_setup.get('label', image.get('setup'))
+                lbl = current_setup.get("label", image.get("setup"))
                 print(
                     f"\033[1m[{i}] {choices[i]}\033[0m\n"
                     f"    \033[3;34m{lbl}\033[0m"
@@ -53,14 +53,14 @@ class DockerBuilder:
         print(yaml.dump(image, default_flow_style=True))
         print("---------------------------")
 
-        image_setup = setup.get(image.get('setup'))
-        dockerfile = image.get('dockerfile')
-        env = image_setup.get('env')
+        image_setup = setup.get(image.get("setup"))
+        dockerfile = image.get("dockerfile")
+        env = image_setup.get("env")
 
         args = {
-            "ARCH": image.get('arch'),
-            "BASE": image.get('base'),
-            "SETUP_ID": image.get('setup')
+            "ARCH": image.get("arch"),
+            "BASE": image.get("base"),
+            "SETUP_ID": image.get("setup")
         }
         # Env
         supported_env_keys = [

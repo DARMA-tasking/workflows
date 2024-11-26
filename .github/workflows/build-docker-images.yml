@@ -40,6 +40,14 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pyyaml
+
+      # - name: Cache built dependencies
+      #   id: cache-built-dependencies
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: /opt
+      #     key: ${{ matrix.runner.setup }}-opt
+
       - name: Build Docker image
         run: |
           python ci/build-docker-image.py ${{ matrix.runner.image }}
