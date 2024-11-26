@@ -16,7 +16,7 @@ class MatrixBuilder:
         """Generate a matrix of runners and inner environments to be used by CI pipelines"""
 
         raw_config: dict = {}
-        with open(os.path.dirname(__file__) + '/config.yaml', 'r', encoding="utf-8") as file:
+        with open(os.path.dirname(__file__) + "/config.yaml", 'r', encoding="utf-8") as file:
             raw_config = yaml.safe_load(file)
         config = resolve_conf(copy.deepcopy(raw_config))
 
@@ -71,14 +71,14 @@ class MatrixBuilder:
                 matrix.append(matrix_item)
 
             if runner_type == "azure":
-                matrix = { re.sub('[^0-9a-zA-Z]+', '-', v.get("name")):v for v in matrix }
+                matrix = { re.sub("[^0-9a-zA-Z]+", '-', v.get("name")):v for v in matrix }
 
             data = json.dumps({
                 "_comment": "This file has been generated. Please do not edit",
                 "matrix": matrix}, indent=2)
             with open(
                 os.path.dirname(__file__) + f"/shared/matrix/{runner_type}.json",
-                'w+',
+                "w+",
                 encoding="utf-8"
             ) as file:
                 file.write(data)

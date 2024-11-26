@@ -89,7 +89,7 @@ jobs:
 
       - name: Setup build cache (vt)
         run: |
-          echo "TODO"
+          echo "TODO: implement cache usage if required by your project"
 
       - name: PR tests (vt)
         if: ${{ contains(matrix.runner.label, 'mpich') || contains(matrix.runner.label, 'openmpi') }}

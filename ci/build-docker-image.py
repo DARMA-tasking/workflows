@@ -13,7 +13,7 @@ class DockerBuilder:
         """Build an image using a given docker configuration fro the config file"""
 
         raw_config: dict = {}
-        with open(os.path.dirname(__file__) + '/config.yaml', 'r', encoding="utf-8") as file:
+        with open(os.path.dirname(__file__) + "/config.yaml", 'r', encoding="utf-8") as file:
             raw_config = yaml.safe_load(file)
 
         config = resolve_conf(copy.deepcopy(raw_config))
