@@ -93,7 +93,7 @@ class DockerBuilder:
                 f" --tag {image_tag}"
                 f" --file {os.path.dirname(__file__)}/docker/{dockerfile}"
                 f" {space.join([f'--build-arg {k}={v}' for (k,v) in escaped_args.items()])}"
-                f"--cache-from={image_tag}" # use previously built image as a cache layer.
+                f" --cache-from={image_tag}" # use previously built image as a cache layer.
                 # " --no-cache"
                 " --progress=plain"
             )
