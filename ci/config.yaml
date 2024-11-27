@@ -43,28 +43,11 @@ defaults:
   # Define default docker repository
   docker-repository: &docker-repository lifflander1/vt
 
-  # Define basic rules for compiler.
-  cenv: &cenv
+  # Define default environment variables
+  env: &env
     CC: ~
     CXX: ~
     GCOV: gcov
-    CMAKE_CXX_STANDARD: 17
-    CMAKE_BUILD_TYPE: Release
-
-  # Define basic rules for ccache used across multiple services. The beauty of
-  # docker compose with cached volumes is that similarly configured builds will
-  # reuse a ccache volume making build speeds much faster than a fresh build each
-  # time.
-  ccacheenv: &ccacheenv
-    CCACHE_COMPILERCHECK: content
-    CCACHE_COMPRESS: 1
-    CCACHE_COMPRESSLEVEL: 5
-    CCACHE_MAXSIZE: 700M
-    CCACHE_DIR: /build/ccache
-
-  env: &env
-    <<: [ *ccacheenv, *cenv ]
-    # PATH_PREFIX: prepend to PATH
     PATH_PREFIX: "/usr/lib/ccache\
       :/opt/cmake/bin\
       :/opt/nvcc_wrapper/build\
