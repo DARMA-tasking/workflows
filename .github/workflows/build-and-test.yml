@@ -61,7 +61,7 @@ jobs:
             sudo chown $(whoami) /opt
             wget -O setup.sh https://raw.githubusercontent.com/${{ env.CI_REPO }}/refs/heads/${{ env.CI_BRANCH }}/ci/shared/scripts/setup-${{ matrix.runner.setup }}.sh
             chmod +x setup.sh
-            export SETUP_ID=${{ matrix.runner.setup }}
+            export WF_SETUP_ID=${{ matrix.runner.setup }}
             ./setup.sh
             echo "::endgroup::"
           elif [[ "${{ matrix.runner.image }}" != "" ]]; then

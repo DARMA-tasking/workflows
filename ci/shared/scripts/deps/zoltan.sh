@@ -11,7 +11,7 @@ fi
 ZOLTAN_SRC_DIR="/opt/trilinos/src"
 ZOLTAN_BUILD_DIR="/opt/trilinos/build"
 ZOLTAN_MAKE_FLAGS=${1:-""}
-ZOLTAN_INSTALL_DIR=${2:-ZOLTAN_INSTALL_DIR:-"/opt/trilinos/install"}
+ZOLTAN_INSTALL_DIR=${2:-ZOLTAN_INSTALL_DIR:-"/opt/trilinos/bin"}
 
 if test -d Trilinos
 then

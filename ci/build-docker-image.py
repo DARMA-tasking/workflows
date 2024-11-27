@@ -66,16 +66,12 @@ class DockerBuilder:
         supported_env_keys = [
             # Compiler
             "CC", "CXX", "FC", "GCOV",
-            # CCache
-            "CCACHE_COMPILERCHECK", "CCACHE_COMPRESS", "CCACHE_COMPRESSLEVEL",
-            "CCACHE_MAXSIZE", "CCACHE_DIR",
-            # Intel
-            "CMPLR_ROOT", "INTEL_LICENSE_FILE", "ONEAPI_ROOT", "TBBROOT"
-            # Other
-            "PROXY",
-            "CMAKE_BUILD_TYPE", "CMAKE_CXX_STANDARD", "CMAKE_PREFIX_PATH",
-            "CPATH", "INFOPATH", "LIBRARY_PATH", "LD_LIBRARY_PATH",
+            # MPI
             "MPICH_CC", "MPICH_CXX",
+            # Intel
+            "CMPLR_ROOT", "INTEL_LICENSE_FILE", "ONEAPI_ROOT", "TBBROOT",
+            "CMAKE_PREFIX_PATH", "CPATH", "INFOPATH", "LIBRARY_PATH", "LD_LIBRARY_PATH", 
+            # Path
             "PATH_PREFIX"
         ]
         for env_key in supported_env_keys:

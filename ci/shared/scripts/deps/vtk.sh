@@ -10,8 +10,6 @@ then
     exit 1
 fi
 
-
-
 VTK_VERSION=$1
 VTK_SRC_DIR=${2:-"/opt/vtk/src"}
 VTK_BUILD_DIR=${3:-${VTK_DIR:-"/opt/vtk/build"}}

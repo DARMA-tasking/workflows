@@ -19,7 +19,7 @@ echo "------------- Setup --------------"
 OS=
 OS_VERSION=
 UNAME=$(uname)
-DOCKER_RUN=${DOCKER_RUN:-"0"}
+WF_DOCKER=${WF_DOCKER:-"0"}
 if [ "$UNAME" = "Darwin" ]
 then
     OS_NAME=$(sw_vers -productName)
@@ -31,8 +31,7 @@ then
 fi
 
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
-echo "DOCKER_RUN=$DOCKER_RUN"
-echo "CI=$CI"
+echo "WF_DOCKER=$WF_DOCKER"
 echo "PATH=$PATH"
 echo "CPATH=$CPATH"
 echo "LIBRARY_PATH=$LIBRARY_PATH"
@@ -40,12 +39,11 @@ echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "----------------------------------"
 
 # Save setup environment to ~/.setuprc (used by packages.sh dep for example)
-echo "-- Set up variables (SETUP_ID, OS_NAME, OS_VERSION, DOCKER_RUN) > ~/.setuprc"
-echo "export SETUP_ID=\"$SETUP_ID\"" >> ~/.setuprc
-echo "export DOCKER_RUN=\"$DOCKER_RUN\"" >> ~/.setuprc
+echo "-- Set up variables (WF_SETUP_ID, WF_DOCKER, OS_NAME, OS_VERSION) > ~/.setuprc"
+echo "export WF_SETUP_ID=\"$WF_SETUP_ID\"" >> ~/.setuprc
+echo "export WF_DOCKER=\"$WF_DOCKER\"" >> ~/.setuprc
 echo "export OS_NAME=\"$OS_NAME\"" >> ~/.setuprc
 echo "export OS_VERSION=\"$OS_VERSION\"" >> ~/.setuprc
-echo "export CI=\"$CI\"" >> ~/.setuprc
 
 ### UPDATE PACKAGE LIST AND INSTALL START-UP PACKAGES: git, wget, bash.
 echo "-- Installing Core packages ($OS_NAME)..."
@@ -91,7 +89,7 @@ CC="clang" CXX="clang++" ./mpich.sh "3.3.2" "-j4"
 
 # Remove install scripts
 rm -rf $SCRIPTS_INSTALL_DIR
-if [ "$DOCKER_RUN" = "1" ]; then
+if [ "$WF_DOCKER" = "1" ]; then
     rm -rf /var/lib/apt/lists/*
 fi
 
@@ -116,16 +114,14 @@ fi
 echo "---------- Setup OK ! ------------"
 echo "--"
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
-echo "CI: $CI / DOCKER_RUN: $DOCKER_RUN"
 echo "--"
-echo "Setup id: $SETUP_ID"
+echo "Setup id: $WF_SETUP_ID"
+echo "Docker: $WF_DOCKER"
 echo "--"
 echo "Environment:"
 echo "  CC=$CC"
 echo "  CXX=$CXX"
 echo "  FC=$FC"
-echo "  CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"
-echo "  CMAKE_CXX_STANDARD=$CMAKE_CXX_STANDARD"
 echo "  PATH=$PATH"
 echo "--"
 echo "-------- Ready to test ! ---------"

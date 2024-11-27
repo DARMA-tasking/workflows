@@ -50,12 +50,13 @@ jobs:
           CMD='echo "CC=$CC" ; \
           echo "CXX=$CXX" ; \
           echo "FC=$FC" ; \
-          echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" ; \
           echo "CMPLR_ROOT=$CMPLR_ROOT" ; \
+          echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" ; \
           echo "CPATH=$CPATH" ; \
           echo "INFOPATH=$INFOPATH" ; \
           echo "INTEL_LICENSE_FILE=$INTEL_LICENSE_FILE" ; \
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" ; \
+          echo "LIBRARY_PATH=$LIBRARY_PATH" ; \
           echo "ONEAPI_ROOT=$ONEAPI_ROOT" ; \
           echo "PATH=$PATH" ; \
           echo "TBBROOT=$TBBROOT" ; \
