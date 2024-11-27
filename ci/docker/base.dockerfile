@@ -4,18 +4,20 @@ ARG ARCH=amd64
 ARG BASE=ubuntu:22.04
 ARG SETUP_ID=${SETUP_ID:-"ubuntu-develop"}
 
+# Compiler
 ARG CC=${CC:-""}
 ARG CXX=${CXX:-""}
 ARG FC=${FC:-""}
 ARG GCOV=${GCOV:-""}
 
-ARG PATH_PREFIX=${PATH_PREFIX:-""}
-
 # MPI
 ARG MPICH_CC=${MPICH_CC:-""}
 ARG MPICH_CXX=${MPICH_CXX:-""}
 
-# Specific (Intel One API) 
+# PATH
+ARG PATH_PREFIX=${PATH_PREFIX:-""}
+
+# Specific (Intel One API)
 ARG CMPLR_ROOT \
     INTEL_LICENSE_FILE \
     ONEAPI_ROOT \
@@ -45,7 +47,6 @@ ENV CC=$CC \
     \
     MPICH_CC=$MPICH_CC \
     MPICH_CXX=$MPICH_CXX \
-    PATH="${PATH_PREFIX}${PATH}" \
     \
     PATH="${PATH_PREFIX}${PATH}"
 
@@ -60,7 +61,7 @@ ENV CCACHE_COMPILERCHECK=content \
     VTK_DIR=/opt/vtk/build \
     ZOLTAN_DIR=/opt/trilinos/bin
 
-# Specific (Intel One API) 
+# Specific (Intel One API)
 ENV CMPLR_ROOT=$CMPLR_ROOT \
     INTEL_LICENSE_FILE=$INTEL_LICENSE_FILE \
     ONEAPI_ROOT=$ONEAPI_ROOT \
@@ -70,7 +71,7 @@ ENV CMPLR_ROOT=$CMPLR_ROOT \
     INFOPATH=$INFOPATH \
     LIBRARY_PATH=$LIBRARY_PATH \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-    
+
 COPY ci/shared/scripts/setup-${SETUP_ID}.sh setup.sh
 
 RUN chmod +x setup.sh && . ./setup.sh
