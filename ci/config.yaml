@@ -35,7 +35,7 @@ defaults:
   apk-packages: &apk-packages [
     alpine-sdk, autoconf, automake, binutils-dev, ccache, cmake, dpkg,
     libdwarf-dev, libunwind-dev, libtool, linux-headers, m4, make, ninja, zlib,
-    zlib-dev, python3
+    zlib-dev, python3, gcovr
   ]
   # Define basic brew packages (MacOSX Darwin).
   brew-packages: &brew-packages [ ccache, coreutils, ninja ]
@@ -76,7 +76,6 @@ setup:
       <<: *env
       CC: mpicc
       CXX: mpicxx
-      GCOV: llvm-gcov
     deps:
       packages: !extend [ *apk-packages, clang, clang-dev ]
       mpich: { env: { CC: clang, CXX: clang++ }, args: ['3.3.2', '-j4'] }
