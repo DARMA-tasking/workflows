@@ -29,7 +29,7 @@ defaults:
   # Define basic apt packages (Ubuntu Linux).
   apt-packages: &apt-packages [
     curl, jq, less, libomp5, libunwind-dev, make-guile, ninja-build,
-    valgrind, zlib1g, zlib1g-dev, ccache, python3
+    valgrind, zlib1g, zlib1g-dev, ccache, python3, gcovr
   ]
   # Define basic apk packages (Alpine Linux).
   apk-packages: &apk-packages [
@@ -38,7 +38,7 @@ defaults:
     zlib-dev, python3, gcovr
   ]
   # Define basic brew packages (MacOSX Darwin).
-  brew-packages: &brew-packages [ ccache, coreutils, ninja ]
+  brew-packages: &brew-packages [ ccache, coreutils, ninja, gcovr ]
 
   # Define default docker repository
   docker-repository: &docker-repository lifflander1/vt
