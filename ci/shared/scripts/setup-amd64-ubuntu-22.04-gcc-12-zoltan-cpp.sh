@@ -86,7 +86,7 @@ wget $SCRIPTS_DEPS_URL/zoltan.sh
 # 2. Install dependency
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcovr" "gcc-12" "g++-12" "gfortran-12"
+./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-12" "g++-12" "gfortran-12"
 ./cmake.sh "3.23.4"
 CC="gcc-12" CXX="g++-12" ./mpich.sh "4.0.2" "-j4"
 ./zoltan.sh "-j4"
