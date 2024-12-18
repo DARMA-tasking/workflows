@@ -76,6 +76,8 @@ echo "-- Installing dependencies..."
 echo "--"
 
 if [ $WF_DOCKER == "1" ]; then
+    cd $WF_TMP_DIR/deps
+else
     WF_DEPS_URL="https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/deps"
     # if this is run directly from a runner from an external project
     # trigger deps download from the workflows repo.
@@ -88,8 +90,6 @@ if [ $WF_DOCKER == "1" ]; then
     wget $WF_DEPS_URL/mpich.sh
     wget $WF_DEPS_URL/mesa.sh
     wget $WF_DEPS_URL/vtk.sh
-else
-    cd $WF_TMP_DIR/deps
 fi
 
 chmod u+x *.sh
