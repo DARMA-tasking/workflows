@@ -12,9 +12,7 @@ libunwind_version=$1
 libunwind_name="libunwind-${libunwind_version}"
 libunwind_tar_name=${libunwind_name}.tar.gz
 
-echo "${libunwind_version}"
-echo "${libunwind_name}"
-echo "${libunwind_tar_name}"
+echo "Downloading ${libunwind_tar_name}"
 
 wget https://github.com/libunwind/libunwind/releases/download/v${libunwind_version}/${libunwind_tar_name}
 
