@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - 2-implement-common-docker-containers
 
 jobs:
   get-matrix:
@@ -12,7 +13,7 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CI_REPO: DARMA-tasking/workflows
-      CI_BRANCH: master
+      CI_BRANCH: 2-implement-common-docker-containers # master
     steps:
       - name: Get matrix
         id: get-matrix
