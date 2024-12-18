@@ -29,14 +29,14 @@ ARG CMPLR_ROOT \
 
 FROM --platform=${ARCH} ${BASE} AS base
 
-ENV WF_TMP_DIR=/opt/workflows/tmp
-
-# Copy dependency scripts
-ADD ci/shared/scripts/deps ${WF_TMP_DIR}/deps
-
 ARG SETUP_ID CC CXX FC MPICH_CC MPICH_CXX PATH_PREFIX
 # Specific (Intel One API)
 ARG CMPLR_ROOT INTEL_LICENSE_FILE ONEAPI_ROOT TBBROOT CPATH INFOPATH LIBRARY_PATH LD_LIBRARY_PATH
+
+
+# Copy dependency scripts
+ENV WF_TMP_DIR=/opt/workflows
+ADD ci/shared/scripts/deps ${WF_TMP_DIR}/deps
 
 # Setup environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -80,5 +80,5 @@ ENV CMPLR_ROOT=$CMPLR_ROOT \
 COPY ci/shared/scripts/setup-${SETUP_ID}.sh ${WF_TMP_DIR}/setup.sh
 RUN chmod +x ${WF_TMP_DIR}/setup.sh && . ${WF_TMP_DIR}/setup.sh
 
-# clean: remove installation scripts
+# Clean
 RUN rm -rf $WF_TMP_DIR
