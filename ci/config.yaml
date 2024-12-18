@@ -116,7 +116,7 @@ setup:
     label: gcc-12, ubuntu, mpich
     env: &develop-gcc-env { <<: *env, CC: gcc-12, CXX: g++-12 }
     deps: &develop-gcc-deps
-      packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov ] 
+      packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2', '-j4' ] }
 
