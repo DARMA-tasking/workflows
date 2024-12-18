@@ -76,7 +76,7 @@ jobs:
           exit $(docker container inspect --format '{{.State.ExitCode}}' test-container)
 
       - name: Push Docker image to DockerHub Container Registry
-        if: github.ref == 'refs/heads/master'
+        if: ${{ success() && github.ref == 'refs/heads/master' }}
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
           docker push ${{ matrix.runner.image }}
