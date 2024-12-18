@@ -11,8 +11,7 @@
 #
 
 SCRIPTS_INSTALL_DIR=/opt/scripts/ci
-# TODO: change 2-implement-common-docker-containers to master once scripts when PR is ready
-SCRIPTS_DEPS_URL="https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/deps"
+SCRIPTS_DEPS_URL="https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/master/ci/shared/scripts/deps"
 
 echo "------------- Setup --------------"
 
