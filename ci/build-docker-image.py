@@ -65,7 +65,7 @@ class DockerBuilder:
         # Env
         supported_env_keys = [
             # Compiler
-            "CC", "CXX", "FC", "GCOV",
+            "CC", "CXX", "FC",
             # MPI
             "MPICH_CC", "MPICH_CXX",
             # Intel

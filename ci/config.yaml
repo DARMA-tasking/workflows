@@ -47,7 +47,6 @@ defaults:
   env: &env
     CC: ~
     CXX: ~
-    GCOV: gcov
     PATH_PREFIX: "/usr/lib/ccache\
       :/opt/cmake/bin\
       :/opt/nvcc_wrapper/build\
@@ -65,7 +64,6 @@ setup:
       <<: *env
       CC: mpicc
       CXX: mpicxx++
-      GCOV: llvm-gcov
     deps:
       packages: !extend [ *brew-packages, mpich ]
 
@@ -83,7 +81,7 @@ setup:
   # ubuntu / gcc
   amd64-ubuntu-18.04-gcc-8-gcc-8-cpp:
     label: gcc-8, ubuntu, mpich
-    env: { <<: *env, CC: gcc-8, CXX: g++-8, GCOV: gcov-8 }
+    env: { <<: *env, CC: gcc-8, CXX: g++-8 }
     deps:
       packages: !extend [ *apt-packages, gcc-8, g++-8 ]
       cmake: ['3.23.4']
@@ -91,7 +89,7 @@ setup:
 
   amd64-ubuntu-20.04-gcc-9-cpp:
     label: gcc-9, ubuntu, mpich
-    env: { <<: *env, CC: gcc-9, CXX: g++-9, GCOV: gcov-9 }
+    env: { <<: *env, CC: gcc-9, CXX: g++-9 }
     deps:
       packages: !extend [ *apt-packages, gcc-9, g++-9 ]
       cmake: ['3.23.4']
@@ -99,7 +97,7 @@ setup:
 
   amd64-ubuntu-20.04-gcc-10-openmpi-cpp:
     label: gcc-10, ubuntu, openmpi
-    env: { <<: *env, CC: gcc-9, CXX: g++-9, GCOV: gcov-9 }
+    env: { <<: *env, CC: gcc-9, CXX: g++-9 }
     deps:
       packages: !extend [ *apt-packages, gcc-9, g++-9 ]
       cmake: ['3.23.4']
@@ -107,17 +105,18 @@ setup:
 
   amd64-ubuntu-22.04-gcc-11-cpp:
     label: gcc-11, ubuntu, mpich
-    env: { <<: *env, CC: gcc-11, CXX: g++-11, GCOV: gcov-11 }
+    env: { <<: *env, CC: gcc-11, CXX: g++-11 }
     deps:
       packages: !extend [ *apt-packages, gcc-11, g++-11 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-11, CXX: g++-11 }, args: [ '4.0.2', '-j4' ] }
 
+  # The `develop` configuration. Includes also gcovr and lcov report generators.
   amd64-ubuntu-22.04-gcc-12-cpp: &develop-gcc
     label: gcc-12, ubuntu, mpich
-    env: &develop-gcc-env { <<: *env, CC: gcc-12, CXX: g++-12, GCOV: gcov-12 }
+    env: &develop-gcc-env { <<: *env, CC: gcc-12, CXX: g++-12 }
     deps: &develop-gcc-deps
-      packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov ]
+      packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov ] 
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2', '-j4' ] }
 
@@ -240,7 +239,6 @@ setup:
       <<: *env
       CC: mpicc
       CXX: mpicxx
-      GCOV: llvm-gcov
       MPICH_CC: icc
       MPICH_CXX: icpc
       PATH_PREFIX: "/usr/lib/ccache\

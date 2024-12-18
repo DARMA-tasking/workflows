@@ -56,8 +56,8 @@ jobs:
           echo "CPATH=$CPATH" ; \
           echo "INFOPATH=$INFOPATH" ; \
           echo "INTEL_LICENSE_FILE=$INTEL_LICENSE_FILE" ; \
-          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" ; \
           echo "LIBRARY_PATH=$LIBRARY_PATH" ; \
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" ; \
           echo "ONEAPI_ROOT=$ONEAPI_ROOT" ; \
           echo "PATH=$PATH" ; \
           echo "TBBROOT=$TBBROOT" ; \
