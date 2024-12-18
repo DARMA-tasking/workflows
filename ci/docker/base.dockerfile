@@ -2,7 +2,10 @@
 
 ARG ARCH=amd64
 ARG BASE=ubuntu:22.04
-ARG SETUP_ID=${SETUP_ID:-"ubuntu-develop"}
+
+FROM --platform=${ARCH} ${BASE} AS base
+
+ARG SETUP_ID=${SETUP_ID:-"amd64-ubuntu-22.04-gcc-12-cpp"}
 
 # Compiler
 ARG CC=${CC:-""}
@@ -26,13 +29,6 @@ ARG CMPLR_ROOT \
     INFOPATH=${INFOPATH:-""} \
     LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""} \
     LIBRARY_PATH=${LIBRARY_PATH:-""}
-
-FROM --platform=${ARCH} ${BASE} AS base
-
-ARG SETUP_ID CC CXX FC MPICH_CC MPICH_CXX PATH_PREFIX
-# Specific (Intel One API)
-ARG CMPLR_ROOT INTEL_LICENSE_FILE ONEAPI_ROOT TBBROOT CPATH INFOPATH LIBRARY_PATH LD_LIBRARY_PATH
-
 
 # Copy dependency scripts
 ENV WF_TMP_DIR=/opt/workflows
