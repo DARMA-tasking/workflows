@@ -80,7 +80,7 @@ if [ $WF_DOCKER == "1" ]; then
     # If a docker image is being built then deps are already available.
     cd $WF_TMP_DIR/deps
 else
-    # if setup is ru directly (for example by a CI runner) then fetch dependencies    
+    # if setup is ru directly (for example by a CI runner) then fetch dependencies
     # trigger deps download from the workflows repo.
     mkdir -p $WF_TMP_DIR
     mkdir -p $WF_TMP_DIR/deps
