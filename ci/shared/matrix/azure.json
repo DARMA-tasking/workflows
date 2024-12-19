@@ -25,12 +25,6 @@
       "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-icpx-cpp",
       "name": "wf-amd64-ubuntu-20.04-icpx-cpp"
     },
-    "wf-amd64-ubuntu-18-04-gcc-8-cpp": {
-      "label": "gcc-8, ubuntu, mpich",
-      "vmImage": "ubuntu-20.04",
-      "image": "lifflander1/vt:wf-amd64-ubuntu-18.04-gcc-8-cpp",
-      "name": "wf-amd64-ubuntu-18.04-gcc-8-cpp"
-    },
     "wf-amd64-ubuntu-20-04-gcc-9-cpp": {
       "label": "gcc-9, ubuntu, mpich",
       "vmImage": "ubuntu-20.04",
