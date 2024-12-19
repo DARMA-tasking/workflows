@@ -76,7 +76,7 @@ echo "--"
 echo "-- Installing dependencies..."
 echo "--"
 
-if [ $WF_DOCKER == "1" ]; then
+if [ "$WF_DOCKER" = "1" ]; then
     # If a docker image is being built then deps are already available.
     cd $WF_TMP_DIR/deps
 else
