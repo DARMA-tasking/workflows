@@ -11,6 +11,7 @@
 #
 
 WF_TMP_DIR=${WF_TMP_DIR:-"/opt/workflows"}
+WF_DEPS_URL=${WF_DEPS_URL:-"https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/master/ci/shared/scripts/deps"}
 
 echo "------------- Setup --------------"
 
@@ -76,10 +77,10 @@ echo "-- Installing dependencies..."
 echo "--"
 
 if [ $WF_DOCKER == "1" ]; then
+    # If a docker image is being built then deps are already available.
     cd $WF_TMP_DIR/deps
 else
-    WF_DEPS_URL="https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/2-implement-common-docker-containers/ci/shared/scripts/deps"
-    # if this is run directly from a runner from an external project
+    # if setup is ru directly (for example by a CI runner) then fetch dependencies    
     # trigger deps download from the workflows repo.
     mkdir -p $WF_TMP_DIR
     mkdir -p $WF_TMP_DIR/deps
