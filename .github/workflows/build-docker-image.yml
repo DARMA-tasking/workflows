@@ -1,0 +1,82 @@
+name: Build & Push docker image
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: "*"
+
+jobs:
+  get-matrix:
+    runs-on: ubuntu-latest
+    name: Get matrix
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get matrix
+        id: get-matrix
+        run: |
+          matrix=$(cat ci/shared/matrix/github.json | jq '.matrix' | jq -c '[ .[] | select( .image != null) ]')
+          echo "runner=$(echo $matrix)" >> $GITHUB_OUTPUT
+    outputs:
+      matrix: ${{ steps.get-matrix.outputs.runner }}
+
+  build-image:
+    name: Build ${{ matrix.runner.name }}
+    runs-on: ${{ matrix.runner.runs-on }}
+    needs: get-matrix
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ${{ fromJson(needs.get-matrix.outputs.matrix ) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml
+
+      - name: Build Docker image
+        run: |
+          python ci/build-docker-image.py ${{ matrix.runner.image }}
+          docker image inspect ${{ matrix.runner.image }}
+
+      - name: Test Docker image (VT build & test)
+        run: |
+          CMD='echo "CC=$CC" ; \
+          echo "CXX=$CXX" ; \
+          echo "FC=$FC" ; \
+          echo "CMPLR_ROOT=$CMPLR_ROOT" ; \
+          echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" ; \
+          echo "CPATH=$CPATH" ; \
+          echo "INFOPATH=$INFOPATH" ; \
+          echo "INTEL_LICENSE_FILE=$INTEL_LICENSE_FILE" ; \
+          echo "LIBRARY_PATH=$LIBRARY_PATH" ; \
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" ; \
+          echo "ONEAPI_ROOT=$ONEAPI_ROOT" ; \
+          echo "PATH=$PATH" ; \
+          echo "TBBROOT=$TBBROOT" ; \
+          mkdir -p "/opt/vt/src" "/opt/vt/build/vt" ; \
+            git clone https://github.com/DARMA-tasking/vt /opt/vt/src ; \
+            cd /opt/vt/src ; \
+            bash ci/build_cpp.sh /opt/vt/src /opt/vt/build ; \
+            bash ci/test_cpp.sh /opt/vt/src /opt/vt/build ; \
+            bash ci/build_vt_sample.sh /opt/vt/src /opt/vt/build ;
+            rm -rf "/opt/vt/src" "/opt/vt/build"'
+          echo "Running ${CMD}"
+          docker run \
+            --name test-container \
+            -e CI="1" \
+            -e CMAKE_CXX_STANDARD="17" \
+            -e CMAKE_BUILD_TYPE="Release" \
+            ${{ matrix.runner.image }} \
+            bash -c "$CMD"
+          exit $(docker container inspect --format '{{.State.ExitCode}}' test-container)
+
+      - name: Push Docker image to DockerHub Container Registry
+        if: ${{ success() && github.ref == 'refs/heads/master' }}
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push ${{ matrix.runner.image }}

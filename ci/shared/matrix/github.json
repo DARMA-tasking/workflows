@@ -1,0 +1,131 @@
+{
+  "_comment": "This file has been generated. Please do not edit",
+  "matrix": [
+    {
+      "label": "macos-14-arm64, clang-14, mpich",
+      "runs-on": "macos-14",
+      "setup": "arm64-macos-14-clang-14-cpp",
+      "name": "arm64-macos-14-clang-14-cpp"
+    },
+    {
+      "label": "alpine-3.16, clang-13, mpich",
+      "runs-on": "ubuntu-latest",
+      "image": "lifflander1/vt:wf-amd64-alpine-clang-13-cpp",
+      "name": "wf-amd64-alpine-clang-13-cpp"
+    },
+    {
+      "label": "intel icpc, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-icpc-cpp",
+      "name": "wf-amd64-ubuntu-20.04-icpc-cpp"
+    },
+    {
+      "label": "intel icpx, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-icpx-cpp",
+      "name": "wf-amd64-ubuntu-20.04-icpx-cpp"
+    },
+    {
+      "label": "gcc-9, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-9-cpp",
+      "name": "wf-amd64-ubuntu-20.04-gcc-9-cpp"
+    },
+    {
+      "label": "gcc-10, ubuntu, openmpi",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp",
+      "name": "wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp"
+    },
+    {
+      "label": "gcc-11, ubuntu, mpich",
+      "runs-on": "ubuntu-22.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-22.04-gcc-11-cpp",
+      "name": "wf-amd64-ubuntu-22.04-gcc-11-cpp"
+    },
+    {
+      "label": "gcc-12, ubuntu, mpich",
+      "runs-on": "ubuntu-22.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-22.04-gcc-12-cpp",
+      "name": "wf-amd64-ubuntu-22.04-gcc-12-cpp"
+    },
+    {
+      "label": "gcc-12, ubuntu, mpich, vtk",
+      "runs-on": "ubuntu-22.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-22.04-gcc-12-vtk-cpp",
+      "name": "wf-amd64-ubuntu-22.04-gcc-12-vtk-cpp"
+    },
+    {
+      "label": "gcc-12, ubuntu, mpich, zoltan",
+      "runs-on": "ubuntu-22.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-22.04-gcc-12-zoltan-cpp",
+      "name": "wf-amd64-ubuntu-22.04-gcc-12-zoltan-cpp"
+    },
+    {
+      "label": "nvidia cuda 12.2.0, gcc-9, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-9-cuda-12.2.0-cpp",
+      "name": "wf-amd64-ubuntu-20.04-gcc-9-cuda-12.2.0-cpp"
+    },
+    {
+      "label": "nvidia cuda 11.2.2, gcc-9, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp",
+      "name": "wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp"
+    },
+    {
+      "label": "clang-9, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-clang-9-cpp",
+      "name": "wf-amd64-ubuntu-20.04-clang-9-cpp"
+    },
+    {
+      "label": "clang-10, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-clang-10-cpp",
+      "name": "wf-amd64-ubuntu-20.04-clang-10-cpp"
+    },
+    {
+      "label": "clang-11, ubuntu, mpich",
+      "runs-on": "ubuntu-22.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-22.04-clang-11-cpp",
+      "name": "wf-amd64-ubuntu-22.04-clang-11-cpp"
+    },
+    {
+      "label": "clang-12, ubuntu, mpich",
+      "runs-on": "ubuntu-22.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-22.04-clang-12-cpp",
+      "name": "wf-amd64-ubuntu-22.04-clang-12-cpp"
+    },
+    {
+      "label": "clang-13, ubuntu, mpich",
+      "runs-on": "ubuntu-22.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-22.04-clang-13-cpp",
+      "name": "wf-amd64-ubuntu-22.04-clang-13-cpp"
+    },
+    {
+      "label": "clang-14, ubuntu, mpich",
+      "runs-on": "ubuntu-22.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-22.04-clang-14-cpp",
+      "name": "wf-amd64-ubuntu-22.04-clang-14-cpp"
+    },
+    {
+      "label": "clang-16, ubuntu, mpich",
+      "runs-on": "ubuntu-24.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-24.04-clang-16-cpp",
+      "name": "wf-amd64-ubuntu-24.04-clang-16-cpp"
+    },
+    {
+      "label": "clang-16, ubuntu, mpich, vtk",
+      "runs-on": "ubuntu-24.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-24.04-clang-16-vtk-cpp",
+      "name": "wf-amd64-ubuntu-24.04-clang-16-vtk-cpp"
+    },
+    {
+      "label": "clang-16, ubuntu, mpich, zoltan",
+      "runs-on": "ubuntu-24.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-24.04-clang-16-zoltan-cpp",
+      "name": "wf-amd64-ubuntu-24.04-clang-16-zoltan-cpp"
+    }
+  ]
+}
