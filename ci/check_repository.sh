@@ -35,7 +35,7 @@ do
         ((N_ERRORS++))
     else
         # Check that the correct workflow is used
-        if [ ! grep -q "uses: DARMA-tasking/$w" "$WORKFLOW_FILE" ]; then
+        if ! grep -q "uses: DARMA-tasking/$w" "$WORKFLOW_FILE"; then
             echo "[error] Workflow file '$w.yml' does not contain 'uses: DARMA-tasking/$w'"
             ((N_ERRORS++))
         else
