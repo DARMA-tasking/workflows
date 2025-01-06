@@ -1,11 +1,9 @@
 name: DARMA repositories check
 
+# Run on the first day of the month
 on:
-  # schedule:
-  #   - cron: '*/30 * * * *'
-  push:
-    branches:
-    - 1-validate-required-workflows-usage-across-repositories
+  schedule:
+    - cron: '0 0 1 * *'
 
 concurrency:
   group: ${{ github.event.repository.name }}-${{ github.ref }}-${{ github.workflow }}
