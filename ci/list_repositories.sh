@@ -9,7 +9,8 @@ EXCLUDE='[
     "find-unsigned-commits",
     "check-commit-format",
     "find-trailing-whitespace",
-    "check-pr-fixes-issue","workflows"
+    "check-pr-fixes-issue",
+    "workflows"
 ]'
-JQ="$EXCLUDE as \$blacklist | .[] | select( .name as \$in | \$blacklist | index(\$in) | not)"
-gh repo list $ORG --json name,defaultBranchRef --jq "$JQ" | jq -s 'sort_by(.name)'
+JQ="$EXCLUDE as \$blacklist | .[] | select(.isFork | not) | select(.name as \$in | \$blacklist | index(\$in) | not)"
+gh repo list $ORG --json name,defaultBranchRef,isFork --jq "$JQ" | jq -s 'sort_by(.name)'
