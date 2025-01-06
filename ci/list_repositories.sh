@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# List the repositories in the DARMA-tasking organization - in JSON format - 
+# List the repositories in the DARMA-tasking organization - in JSON format -
 # that need to be checked
 
 ORG=DARMA-tasking

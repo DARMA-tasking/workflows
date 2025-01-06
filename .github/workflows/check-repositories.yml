@@ -1,11 +1,15 @@
 name: DARMA repositories check
 
 on:
-  # schedule: 
+  # schedule:
   #   - cron: '*/30 * * * *'
   push:
     branches:
     - 1-validate-required-workflows-usage-across-repositories
+
+concurrency:
+  group: ${{ github.event.repository.name }}-${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: True
 
 jobs:
   list_repositories:
@@ -15,7 +19,7 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-  
+
       - name: List repositories
         id: list-repositories
         run: |
@@ -36,9 +40,6 @@ jobs:
         repository: ${{ fromJson(needs.list_repositories.outputs.repositories ) }}
     steps:
       - uses: actions/checkout@v4
-
       - name: Check repositories
         run: |
           bash ./ci/check_repository.sh ${{ matrix.repository.name }}
-
-          

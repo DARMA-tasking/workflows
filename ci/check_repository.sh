@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Check that a repository is compliant:
-# - required workflows exist
+# - required file exists
+# - file uses the correct workflow
 
 CURRENT_DIR="$(dirname -- "$(realpath -- "$0")")" # Current directory
 PARENT_DIR="$(dirname "$CURRENT_DIR")"
@@ -26,16 +27,20 @@ TSSTART=$(date +%s)
 echo "$ORG/$REPOSITORY > Cloning repository...";
 git clone https://github.com/$ORG/$REPOSITORY $WORKING_DIR/$REPOSITORY >/dev/null 2>&1
 
-# Ckeck workflows (files exist as expected)
+# Ckeck workflows (files exist as expected and contain correct workflow)
 for w in "${EXPECTED_WORKFLOWS[@]}"
 do
     if [ ! -f "$WORKING_DIR/$REPOSITORY/.github/workflows/$w.yml" ]; then
         echo "[error] Missing workflow file '$w.yml' at $WORKING_DIR/$REPOSITORY/.github/workflows/$w.yml"
         ((N_ERRORS++))
     else
-        echo "[ok] workflow file '$w.yml' OK"
-        # ENHANCEMENT: check that file is calling the appropriate workflow 
-        # (read yaml file and find the use statement)
+        # Check that the correct workflow is used
+        if [ ! grep -q "uses: DARMA-tasking/$w" "$WORKFLOW_FILE" ]; then
+            echo "[error] Workflow file '$w.yml' does not contain 'uses: DARMA-tasking/$w'"
+            ((N_ERRORS++))
+        else
+            echo "[ok] workflow file '$w.yml is correct"
+        fi
     fi
 done
 
