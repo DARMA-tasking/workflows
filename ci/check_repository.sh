@@ -41,11 +41,12 @@ for file in "$WORKFLOWS_DIR"/*.yml; do
     if [ ! -f "$file" ]; then
         continue
     fi
+    relative_file="${file#$WORKING_DIR/}"
     for w in "${EXPECTED_WORKFLOWS[@]}"; do
-        if grep -q "uses: DARMA-tasking/$w" "$file"; then
+        if grep -qE "uses: .*/$w" "$file"; then
             if [[ ! " ${FOUND_WORKFLOWS[@]} " =~ " $w " ]]; then
                 FOUND_WORKFLOWS+=("$w")
-                echo "[ok] Found workflow '$w' in file '$file'"
+                echo "[ok] Found workflow '$w' in file '$relative_file'"
             fi
         fi
     done
