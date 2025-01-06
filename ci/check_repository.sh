@@ -30,8 +30,9 @@ git clone https://github.com/$ORG/$REPOSITORY $WORKING_DIR/$REPOSITORY >/dev/nul
 # Ckeck workflows (files exist as expected and contain correct workflow)
 for w in "${EXPECTED_WORKFLOWS[@]}"
 do
-    if [ ! -f "$WORKING_DIR/$REPOSITORY/.github/workflows/$w.yml" ]; then
-        echo "[error] Missing workflow file '$w.yml' at $WORKING_DIR/$REPOSITORY/.github/workflows/$w.yml"
+    WORKFLOW_FILE="$WORKING_DIR/$REPOSITORY/.github/workflows/$w.yml"
+    if [ ! -f "$WORKFLOW_FILE" ]; then
+        echo "[error] Missing workflow file '$w.yml' at $WORKFLOW_FILE"
         ((N_ERRORS++))
     else
         # Check that the correct workflow is used
