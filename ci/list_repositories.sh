@@ -10,6 +10,9 @@ EXCLUDE='[
     "check-commit-format",
     "find-trailing-whitespace",
     "check-pr-fixes-issue",
+    "vt-sample-project",
+    "parallel-for-transformer",
+    "detector",
     "workflows"
 ]'
 JQ="$EXCLUDE as \$blacklist | .[] | select(.isFork | not) | select(.name as \$in | \$blacklist | index(\$in) | not)"
