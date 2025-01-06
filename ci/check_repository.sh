@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Check that a repository is compliant:
-# - required file exists
-# - file uses the correct workflow
+# - all expected workflows are present
 
 CURRENT_DIR="$(dirname -- "$(realpath -- "$0")")" # Current directory
 PARENT_DIR="$(dirname "$CURRENT_DIR")"
@@ -41,18 +40,19 @@ for file in "$WORKFLOWS_DIR"/*.yml; do
     if [ ! -f "$file" ]; then
         continue
     fi
-    relative_file="${file#$WORKING_DIR/}"
+
+    # Check each file for the current workflow
     for w in "${EXPECTED_WORKFLOWS[@]}"; do
         if grep -qE "uses: .*/$w" "$file"; then
             if [[ ! " ${FOUND_WORKFLOWS[@]} " =~ " $w " ]]; then
                 FOUND_WORKFLOWS+=("$w")
-                echo "[ok] Found workflow '$w' in file '$relative_file'"
+                echo "[ok] Found workflow '$w' in file '${file#$WORKING_DIR/}'"
             fi
         fi
     done
+
     # Exit if all workflows are found
     if [ ${#FOUND_WORKFLOWS[@]} -eq ${#EXPECTED_WORKFLOWS[@]} ]; then
-        echo "[ok] All expected workflows found."
         break
     fi
 done
@@ -69,25 +69,6 @@ if [ ${#FOUND_WORKFLOWS[@]} -ne ${#EXPECTED_WORKFLOWS[@]} ]; then
 else
     echo "[ok] All expected workflows are present."
 fi
-
-
-# Check workflows (files exist as expected and contain correct workflow)
-# for w in "${EXPECTED_WORKFLOWS[@]}"
-# do
-    # WORKFLOW_FILE="$WORKING_DIR/$REPOSITORY/.github/workflows/$w.yml"
-    # if [ ! -f "$WORKFLOW_FILE" ]; then
-    #     echo "[error] Missing workflow file '$w.yml' at $WORKFLOW_FILE"
-    #     ((N_ERRORS++))
-    # else
-    #     # Check that the correct workflow is used
-    #     if ! grep -q "uses: DARMA-tasking/$w" "$WORKFLOW_FILE"; then
-    #         echo "[error] Workflow file '$w.yml' does not contain 'uses: DARMA-tasking/$w'"
-    #         ((N_ERRORS++))
-    #     else
-    #         echo "[ok] workflow file '$w.yml' is correct"
-    #     fi
-    # fi
-# done
 
 # Finalize
 TSEND=$(date +%s)
