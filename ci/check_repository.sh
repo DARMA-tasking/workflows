@@ -57,12 +57,14 @@ for file in "$WORKFLOWS_DIR"/*.yml; do
     fi
 done
 
-# Ensure all workflows were found
+# Find any missing workflows
+MISSING_WORKFLOWS=()
 if [ ${#FOUND_WORKFLOWS[@]} -ne ${#EXPECTED_WORKFLOWS[@]} ]; then
     echo "[error] Missing workflows:"
     for w in "${EXPECTED_WORKFLOWS[@]}"; do
         if [[ ! " ${FOUND_WORKFLOWS[@]} " =~ " $w " ]]; then
             echo "  - $w"
+            MISSING_WORKFLOWS+=("$w")
             ((N_ERRORS++))
         fi
     done
@@ -73,16 +75,27 @@ fi
 # Finalize
 TSEND=$(date +%s)
 TSDURATION=$(( $TSEND - $TSSTART ))
-if [[ $N_ERRORS -gt 0 ]]
-then
-    echo "$WORKING_DIR/$REPOSITORY has $N_ERRORS errors."
+if [[ $N_ERRORS -gt 0 ]]; then
+    echo "Creating an issue in $REPOSITORY to add missing workflows..."
+
+    if [ ${#MISSING_WORKFLOWS[@]} -gt 0 ]; then
+        ISSUE_TITLE="[workflows] Missing Actions"
+        ISSUE_BODY="The following actions are missing from the repository:"
+        for w in "${MISSING_WORKFLOWS[@]}"; do
+            ISSUE_BODY+=$'\n- '"$w"
+        done
+
+        gh issue create \
+            --repo "$ORG/$REPOSITORY" \
+            --title "$ISSUE_TITLE" \
+            --body "$ISSUE_BODY"
+    fi
 else
     echo "[success] repository checks OK."
 fi
 echo "$WORKING_DIR/$REPOSITORY has been processed in $TSDURATION seconds."
 echo "--------------------------------------------------";
 
-if [[ $N_ERRORS -gt 0 ]]
-then
+if [[ $N_ERRORS -gt 0 ]]; then
     exit 1
 fi

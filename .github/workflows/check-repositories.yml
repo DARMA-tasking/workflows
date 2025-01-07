@@ -2,8 +2,11 @@ name: DARMA repositories check
 
 # Runs at 00:00 UTC on day 1 of every month
 on:
-  schedule:
-    - cron: '0 0 1 * *'
+  # schedule:
+  #   - cron: '0 0 1 * *'
+  push:
+    branches:
+      - 1-validate-required-workflows-usage-across-repositories
 
 concurrency:
   group: ${{ github.event.repository.name }}-${{ github.ref }}-${{ github.workflow }}
@@ -31,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: list_repositories
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.github_pat2}}
     strategy:
       fail-fast: false
       matrix:
