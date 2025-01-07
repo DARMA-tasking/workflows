@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# clang-16, ubuntu, mpich, vtk - Installation
+# macos-14-arm64, clang-14, mpich, vtk - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -88,18 +88,14 @@ else
     cd $WF_TMP_DIR/deps
     wget $WF_DEPS_URL/packages.sh
     wget $WF_DEPS_URL/cmake.sh
-    wget $WF_DEPS_URL/libunwind.sh
-    wget $WF_DEPS_URL/mpich.sh
     wget $WF_DEPS_URL/mesa.sh
     wget $WF_DEPS_URL/vtk.sh
 fi
 
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-16" "llvm-16" "xvfb"
+./packages.sh "ccache" "coreutils" "ninja" "mpich"
 ./cmake.sh "3.23.4"
-./libunwind.sh "1.6.2"
-./mpich.sh "4.0.2" "-j4"
 ./mesa.sh
 ./vtk.sh "9.3.1"
 
