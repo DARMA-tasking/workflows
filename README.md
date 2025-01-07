@@ -5,6 +5,8 @@ This repository unifies all CI/CD workflows and containers across the [DARMA-tas
 Jump to:
 - [Standard Workflows](standard-workflows)
 - [Standard Containers](standard-containers)
+    - [Creating Containers](creating-containers)
+    - [Using Containers](using-containers)
 
 ## Standard Workflows
 
@@ -39,8 +41,8 @@ All test environments are defined in `ci/config.yaml`, which also includes comme
 
 Some tools are provided as Python scripts:
 
-- `ci/build-matrix.py`: Constructs the list of available test environments as a JSON matrix file
 - `ci/build-setup.py`: Generates setup shell scripts (one shell script for each test environment)
+- `ci/build-matrix.py`: Constructs the list of available test environments as a JSON matrix file
 - `ci/build-docker-image.py`: Build a Docker image from the list of available images described in the configuration file
     - This script includes interactive support for local builds as well as a non-interactive mode for CI
 
@@ -50,11 +52,11 @@ To create a new container, you only need to edit the `ci/config.yaml` file and r
 
 1. **Setup**: Add a new configuration to the `setup` section of `ci/config.yaml`.
 
-2. **Image**: Add a new Docker image to the `images` section of `ci/config.yaml`, referencing the setup that you just created.
+2. **Image**: Add a new Docker image to the `images` section of `ci/config.yaml`, referencing the setup that you just defined.
 
-3. **Runner**: Add a new runner to the `runners` section of `ci/config.yaml`, referencing the docker image tag you just created.
+3. **Runner**: Add a new runner to the `runners` section of `ci/config.yaml`, referencing the docker image tag you just defined.
 
-4. **Generate**: Build the setup and matrix files with these commands:
+4. **Generate**: Build the setup script and matrix file with:
 
 ```sh
 python ci/build-setup.py
@@ -81,6 +83,6 @@ The following steps explain how to use the standardized Docker containers in the
 
 3. Optional: You may also want to update other aspects of the file such as trigger events or selected test environments.
 
-### For Example...
+#### For Example...
 
-[PR 2](https://github.com/DARMA-tasking/test-ci-project/pull/2) from the DARMA-tasking/test-ci-project repository successfully implemented CI pipelines using the unified Docker containers.
+The [test-ci-project](https://github.com/DARMA-tasking/test-ci-project) repository successfully implemented CI pipelines using the common Docker containers.
