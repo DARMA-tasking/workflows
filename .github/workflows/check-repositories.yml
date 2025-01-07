@@ -1,6 +1,6 @@
 name: DARMA repositories check
 
-# Run on the first day of the month
+# Runs at 00:00 UTC on day 1 of every month
 on:
   schedule:
     - cron: '0 0 1 * *'
