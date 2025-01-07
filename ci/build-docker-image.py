@@ -10,7 +10,7 @@ class DockerBuilder:
     """Dockerfile generator class"""
 
     def build(self, args: list):
-        """Build an image using a given docker configuration fro the config file"""
+        """Build an image using a given docker configuration from the config file"""
 
         raw_config: dict = {}
         with open(os.path.dirname(__file__) + "/config.yaml", 'r', encoding="utf-8") as file:

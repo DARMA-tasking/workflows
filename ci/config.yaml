@@ -21,7 +21,7 @@
 
 # Dependencies:
 # The dependencies are command or scripts to run during a setup process
-# - dependencies scripts: located under the `deps` directory. Use script same (no prefix) as key
+# - dependencies scripts: located under the `deps` directory. Use script name (no prefix) as key
 # - simple commands: use `cmd` as key. It will be added as is in the setup script.
 
 # List of defaults and/or re-usable configuration nodes
