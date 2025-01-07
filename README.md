@@ -81,8 +81,10 @@ The following steps explain how to use the standardized Docker containers in the
 2. Update the definition of `CMD` in the "PR tests" step to reflect the correct build and test commands for the repository.
     - Search for "PR tests" in the workflow or pipeline file to find the `CMD` definition
 
-3. Optional: You may also want to update other aspects of the file such as trigger events or selected test environments.
+3. Update the rest of the workflow as needed. For example:
+    - Trigger Events
+    - Environment Variables
 
 #### For Example...
 
-The [test-ci-project](https://github.com/DARMA-tasking/test-ci-project) repository successfully implemented CI pipelines using the common Docker containers.
+The [test-ci-project](https://github.com/DARMA-tasking/test-ci-project) repository uses the common Docker containers in its CI pipelines.
