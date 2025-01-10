@@ -21,7 +21,7 @@
 
 # Dependencies:
 # The dependencies are command or scripts to run during a setup process
-# - dependencies scripts: located under the `deps` directory. Use script same (no prefix) as key
+# - dependencies scripts: located under the `deps` directory. Use script name (no prefix) as key
 # - simple commands: use `cmd` as key. It will be added as is in the setup script.
 
 # List of defaults and/or re-usable configuration nodes
@@ -66,6 +66,18 @@ setup:
       CXX: mpicxx++
     deps:
       packages: !extend [ *brew-packages, mpich ]
+
+  arm64-macos-14-clang-14-vtk-cpp:
+    label: macos-14-arm64, clang-14, mpich, vtk
+    env:
+      <<: *env
+      CC: mpicc
+      CXX: mpicxx++
+    deps:
+      packages: !extend [ *brew-packages, mpich]
+      cmake: ['3.23.4']
+      mesa: ~
+      vtk: '9.3.1'
 
   # alpine linux
   amd64-alpine-clang-13-cpp:
@@ -116,6 +128,7 @@ setup:
     <<: *develop-gcc
     label: gcc-12, ubuntu, mpich, vtk
     deps:
+      packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov, xvfb ]
       <<: *develop-gcc-deps
       mesa: ~
       vtk: '9.3.1'
@@ -211,6 +224,7 @@ setup:
     <<: *develop-clang
     label: clang-16, ubuntu, mpich, vtk
     deps:
+      packages: !extend [ *apt-packages, clang-16, llvm-16, xvfb ]
       <<: *develop-clang-deps
       mesa: ~
       vtk: '9.3.1'
@@ -442,6 +456,11 @@ runners:
     type: *runner-types
     runs-on: macos-14
     setup: arm64-macos-14-clang-14-cpp
+
+  -
+    type: *runner-types
+    runs-on: macos-14
+    setup: arm64-macos-14-clang-14-vtk-cpp
 
   # alpine linux
   -
