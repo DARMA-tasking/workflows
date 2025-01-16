@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #
-# clang-14, ubuntu, mpich - Installation
+# clang-8, ubuntu, mpich - Installation
 # Note: requires
 # - `git` and `wget` installed.
 # - run as root
@@ -94,7 +94,7 @@ fi
 
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "lcov" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-14" "llvm-14"
+./packages.sh "curl" "jq" "lcov" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-8"
 ./cmake.sh "3.23.4"
 ./libunwind.sh "1.6.2"
 ./mpich.sh "4.0.2" "-j4"

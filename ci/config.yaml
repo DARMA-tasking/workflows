@@ -99,13 +99,21 @@ setup:
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: [ '4.0.2', '-j4' ] }
 
+  amd64-ubuntu-20.04-gcc-10-cpp:
+    label: gcc-10, ubuntu, mpich
+    env: { <<: *env, CC: gcc-10, CXX: g++-10 }
+    deps:
+      packages: !extend [ *apt-packages, gcc-10, g++-10 ]
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-10, CXX: g++-10 }, args: [ '4.0.2', '-j4' ] }
+
   amd64-ubuntu-20.04-gcc-10-openmpi-cpp:
     label: gcc-10, ubuntu, openmpi
-    env: { <<: *env, CC: gcc-9, CXX: g++-9 }
+    env: { <<: *env, CC: gcc-10, CXX: g++-10 }
     deps:
-      packages: !extend [ *apt-packages, gcc-9, g++-9 ]
+      packages: !extend [ *apt-packages, gcc-10, g++-10 ]
       cmake: ['3.23.4']
-      openmpi: { env: { CC: gcc-9, CXX: g++-9 }, args: [ 'v4.0', '4.0.4', '-j4' ] }
+      openmpi: { env: { CC: gcc-10, CXX: g++-10 }, args: [ 'v4.0', '4.0.4', '-j4' ] }
 
   amd64-ubuntu-22.04-gcc-11-cpp:
     label: gcc-11, ubuntu, mpich
@@ -157,6 +165,15 @@ setup:
     label: nvidia cuda 11.2.2, gcc-9, ubuntu, mpich
 
   # ubuntu / clang
+  amd64-ubuntu-20.04-clang-8-cpp:
+    label: clang-8, ubuntu, mpich
+    env: { <<: *env, CC: clang-8, CXX: clang++-8 }
+    deps:
+      packages: !extend [ *apt-packages, clang-8 ]
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
   amd64-ubuntu-20.04-clang-9-cpp:
     label: clang-9, ubuntu, mpich
     env: { <<: *env, CC: clang-9, CXX: clang++-9 }
@@ -304,6 +321,14 @@ images:
 
   -
     repository: *docker-repository
+    tag: wf-amd64-ubuntu-20.04-gcc-10-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:20.04
+    setup: amd64-ubuntu-20.04-gcc-10-cpp
+
+  -
+    repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp
     dockerfile: base.dockerfile
     arch: linux/amd64
@@ -360,6 +385,14 @@ images:
     setup: amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp
 
   # ubuntu / clang
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-20.04-clang-8-cpp
+    dockerfile: base.dockerfile
+    arch: linux/amd64
+    base: ubuntu:20.04
+    setup: amd64-ubuntu-20.04-clang-8-cpp
+
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-clang-9-cpp
@@ -488,6 +521,11 @@ runners:
   -
     type: *runner-types
     runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-20.04-gcc-10-cpp }
+
+  -
+    type: *runner-types
+    runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp }
 
   -
@@ -522,6 +560,11 @@ runners:
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp }
 
   # ubuntu / clang
+  -
+    type: *runner-types
+    runs-on: ubuntu-20.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-20.04-clang-8-cpp }
+
   -
     type: *runner-types
     runs-on: ubuntu-20.04

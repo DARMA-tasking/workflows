@@ -95,7 +95,7 @@ fi
 
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-16" "llvm-16" "gfortran-13"
+./packages.sh "curl" "jq" "lcov" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "clang-16" "llvm-16" "gfortran-13"
 ./cmake.sh "3.23.4"
 ./libunwind.sh "1.6.2"
 ./mpich.sh "4.0.2" "-j4"
