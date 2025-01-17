@@ -86,12 +86,6 @@
       "name": "wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp"
     },
     {
-      "label": "clang-8, ubuntu, mpich",
-      "runs-on": "ubuntu-20.04",
-      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-clang-8-cpp",
-      "name": "wf-amd64-ubuntu-20.04-clang-8-cpp"
-    },
-    {
       "label": "clang-9, ubuntu, mpich",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-clang-9-cpp",

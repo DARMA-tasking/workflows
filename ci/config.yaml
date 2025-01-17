@@ -166,15 +166,6 @@ setup:
     label: nvidia cuda 11.2.2, gcc-9, ubuntu, mpich
 
   # ubuntu / clang
-  amd64-ubuntu-20.04-clang-8-cpp:
-    label: clang-8, ubuntu, mpich
-    env: { <<: *env, CC: clang-8, CXX: clang++-8 }
-    deps:
-      packages: !extend [ *apt-packages, clang-8 ]
-      cmake: ['3.23.4']
-      libunwind: '1.6.2'
-      mpich: ['4.0.2', '-j4']
-
   amd64-ubuntu-20.04-clang-9-cpp:
     label: clang-9, ubuntu, mpich
     env: { <<: *env, CC: clang-9, CXX: clang++-9 }
@@ -388,14 +379,6 @@ images:
   # ubuntu / clang
   -
     repository: *docker-repository
-    tag: wf-amd64-ubuntu-20.04-clang-8-cpp
-    dockerfile: base.dockerfile
-    arch: linux/amd64
-    base: ubuntu:20.04
-    setup: amd64-ubuntu-20.04-clang-8-cpp
-
-  -
-    repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-clang-9-cpp
     dockerfile: base.dockerfile
     arch: linux/amd64
@@ -561,11 +544,6 @@ runners:
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp }
 
   # ubuntu / clang
-  -
-    type: *runner-types
-    runs-on: ubuntu-20.04
-    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-20.04-clang-8-cpp }
-
   -
     type: *runner-types
     runs-on: ubuntu-20.04
