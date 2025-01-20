@@ -38,6 +38,12 @@
       "name": "wf-amd64-ubuntu-20.04-gcc-9-cpp"
     },
     {
+      "label": "gcc-10, ubuntu, mpich",
+      "runs-on": "ubuntu-20.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-cpp",
+      "name": "wf-amd64-ubuntu-20.04-gcc-10-cpp"
+    },
+    {
       "label": "gcc-10, ubuntu, openmpi",
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp",

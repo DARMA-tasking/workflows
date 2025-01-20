@@ -88,13 +88,15 @@ else
     cd $WF_TMP_DIR/deps
     wget $WF_DEPS_URL/packages.sh
     wget $WF_DEPS_URL/cmake.sh
+    wget $WF_DEPS_URL/doxygen.sh
     wget $WF_DEPS_URL/mpich.sh
 fi
 
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
+./packages.sh "curl" "jq" "lcov" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
 ./cmake.sh "3.23.4"
+./doxygen.sh "1.8.16"
 CC="gcc-9" CXX="g++-9" ./mpich.sh "4.0.2" "-j4"
 
 # Remove install scripts

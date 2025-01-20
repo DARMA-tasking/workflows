@@ -93,7 +93,7 @@ fi
 
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
+./packages.sh "curl" "jq" "lcov" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
 ./cmake.sh "3.23.4"
 CC="icc" CXX="icpc" ./mpich.sh "4.0.2" "-j4"
 

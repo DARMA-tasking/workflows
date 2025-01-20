@@ -93,9 +93,9 @@ fi
 
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
+./packages.sh "curl" "jq" "lcov" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-10" "g++-10"
 ./cmake.sh "3.23.4"
-CC="gcc-9" CXX="g++-9" ./openmpi.sh "v4.0" "4.0.4" "-j4"
+CC="gcc-10" CXX="g++-10" ./openmpi.sh "v4.0" "4.0.4" "-j4"
 
 # Remove install scripts
 rm -rf $WF_SCRIPTS_DIR
