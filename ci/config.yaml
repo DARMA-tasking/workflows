@@ -93,7 +93,16 @@ setup:
   # ubuntu / gcc
   amd64-ubuntu-20.04-gcc-9-cpp:
     label: gcc-9, ubuntu, mpich
-    env: { <<: *env, CC: gcc-9, CXX: g++-9 }
+    env:
+      <<: *env
+      CC: gcc-9
+      CXX: g++-9
+      PATH_PREFIX: "/usr/lib/ccache\
+        :/opt/cmake/bin\
+        :/opt/doxygen/bin
+        :/opt/nvcc_wrapper/build\
+        :/opt/vtk/bin\
+        :"
     deps:
       packages: !extend [ *apt-packages, gcc-9, g++-9 ]
       cmake: ['3.23.4']
