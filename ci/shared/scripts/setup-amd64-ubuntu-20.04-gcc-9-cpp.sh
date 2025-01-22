@@ -94,7 +94,7 @@ fi
 
 chmod u+x *.sh
 ls -l
-./packages.sh "curl" "jq" "lcov" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9"
+./packages.sh "curl" "jq" "lcov" "less" "libomp5" "libunwind-dev" "make-guile" "ninja-build" "valgrind" "zlib1g" "zlib1g-dev" "ccache" "python3" "gcc-9" "g++-9" "python3-jinja2" "python3-pygments"
 ./cmake.sh "3.23.4"
 ./doxygen.sh "1.8.16"
 CC="gcc-9" CXX="g++-9" ./mpich.sh "4.0.2" "-j4"
