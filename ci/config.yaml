@@ -99,7 +99,7 @@ setup:
       CXX: g++-9
       PATH_PREFIX: "/usr/lib/ccache\
         :/opt/cmake/bin\
-        :/opt/doxygen/bin
+        :/opt/doxygen/bin\
         :/opt/nvcc_wrapper/build\
         :/opt/vtk/bin\
         :"
