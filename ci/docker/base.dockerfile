@@ -1,5 +1,6 @@
 # Base dockerfile to build images used in Darma testing.
 
+ARG REPO=lifflander1/vt
 ARG ARCH=amd64
 ARG BASE=ubuntu:22.04
 
@@ -73,8 +74,17 @@ ENV CMPLR_ROOT=$CMPLR_ROOT \
     LIBRARY_PATH=$LIBRARY_PATH \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
-COPY ci/shared/scripts/setup-${SETUP_ID}.sh ${WF_TMP_DIR}/setup.sh
-RUN chmod +x ${WF_TMP_DIR}/setup.sh && . ${WF_TMP_DIR}/setup.sh
+
+COPY ci/setup-basic.sh ${WF_TMP_DIR}
+RUN chmod +x ${WF_TMP_DIR}/setup-basic.sh && . ${WF_TMP_DIR}/setup-basic.sh
+
+COPY ci/config.yaml ${WF_TMP_DIR}
+COPY ci/build-setup.py ${WF_TMP_DIR}
+COPY ci/util.py ${WF_TMP_DIR}
+COPY ci/setup-template.sh ${WF_TMP_DIR}
+RUN python3 ${WF_TMP_DIR}/build-setup.py ${REPO}:wf-${SETUP_ID}
+
+RUN chmod +x ${WF_TMP_DIR}/setup-${SETUP_ID}.sh && . ${WF_TMP_DIR}/setup-${SETUP_ID}.sh
 
 # Clean
 RUN rm -rf $WF_TMP_DIR

@@ -74,8 +74,7 @@ class SetupBuilder:
             setup_script = setup_script.replace("%DEPS_INSTALL%", '\n'.join(instructions))
 
             setup_filename = f"setup-{setup_id}.sh"
-            setup_filepath = os.path.join(os.path.dirname(__file__),
-                                          "shared", "scripts", setup_filename)
+            setup_filepath = os.path.join(os.path.dirname(__file__), setup_filename)
 
             with open(setup_filepath, "w+", encoding="utf-8") as f:
                 f.write(setup_script)
