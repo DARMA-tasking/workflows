@@ -3,14 +3,12 @@
 # Basic universal setup script
 
 WF_TMP_DIR=${WF_TMP_DIR:-"/opt/workflows"}
-WF_DEPS_URL=${WF_DEPS_URL:-"https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/master/ci/shared/scripts/deps"}
 
 echo "------------- Setup --------------"
 
 OS=
 OS_VERSION=
 UNAME=$(uname)
-WF_DOCKER=${WF_DOCKER:-"0"}
 if [ "$UNAME" = "Darwin" ]
 then
     OS_NAME=$(sw_vers -productName)
@@ -22,7 +20,6 @@ then
 fi
 
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
-echo "WF_DOCKER=$WF_DOCKER"
 echo "PATH=$PATH"
 echo "CPATH=$CPATH"
 echo "LIBRARY_PATH=$LIBRARY_PATH"
@@ -30,10 +27,9 @@ echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "----------------------------------"
 
 # Save setup environment to ~/.setuprc (used by packages.sh dep for example)
-echo "-- Set up variables (WF_SETUP_ID, WF_DOCKER, OS_NAME, OS_VERSION) > ~/.setuprc"
+echo "-- Set up variables (WF_SETUP_ID, OS_NAME, OS_VERSION) > ~/.setuprc"
 {
     echo "export WF_SETUP_ID=\"$WF_SETUP_ID\""
-    echo "export WF_DOCKER=\"$WF_DOCKER\""
     echo "export OS_NAME=\"$OS_NAME\""
     echo "export OS_VERSION=\"$OS_VERSION\""
 } >> ~/.setuprc

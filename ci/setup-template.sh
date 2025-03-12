@@ -18,7 +18,6 @@ echo "------------- Setup --------------"
 OS=
 OS_VERSION=
 UNAME=$(uname)
-WF_DOCKER=${WF_DOCKER:-"0"}
 if [ "$UNAME" = "Darwin" ]
 then
     OS_NAME=$(sw_vers -productName)
@@ -30,7 +29,6 @@ then
 fi
 
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
-echo "WF_DOCKER=$WF_DOCKER"
 echo "PATH=$PATH"
 echo "CPATH=$CPATH"
 echo "LIBRARY_PATH=$LIBRARY_PATH"
@@ -38,10 +36,9 @@ echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "----------------------------------"
 
 # Save setup environment to ~/.setuprc (used by packages.sh dep for example)
-echo "-- Set up variables (WF_SETUP_ID, WF_DOCKER, OS_NAME, OS_VERSION) > ~/.setuprc"
+echo "-- Set up variables (WF_SETUP_ID, OS_NAME, OS_VERSION) > ~/.setuprc"
 {
     echo "export WF_SETUP_ID=\"$WF_SETUP_ID\""
-    echo "export WF_DOCKER=\"$WF_DOCKER\""
     echo "export OS_NAME=\"$OS_NAME\""
     echo "export OS_VERSION=\"$OS_VERSION\""
 } >> ~/.setuprc
@@ -76,29 +73,13 @@ echo "--"
 echo "-- Installing dependencies..."
 echo "--"
 
-if [ "$WF_DOCKER" = "1" ]; then
-    # If a docker image is being built then deps are already available.
-    cd $WF_TMP_DIR/deps
-else
-    # if setup is ru directly (for example by a CI runner) then fetch dependencies
-    # trigger deps download from the workflows repo.
-    mkdir -p $WF_TMP_DIR
-    mkdir -p $WF_TMP_DIR/deps
-    # 1. Download dependency installation script
-    cd $WF_TMP_DIR/deps
-    %DEPS_DOWNLOAD%
-fi
-
+cd $WF_TMP_DIR/deps
 chmod u+x *.sh
 ls -l
 %DEPS_INSTALL%
 
 # Remove install scripts
 rm -rf $WF_SCRIPTS_DIR
-
-if [ "$WF_DOCKER" = "1" ]; then
-    rm -rf /var/lib/apt/lists/*
-fi
 
 echo "--"
 echo "-- Dependencies installed !"
@@ -123,7 +104,6 @@ echo "--"
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
 echo "--"
 echo "Setup id: $WF_SETUP_ID"
-echo "Docker: $WF_DOCKER"
 echo "--"
 echo "Environment:"
 echo "  CC=$CC"
