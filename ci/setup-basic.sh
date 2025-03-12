@@ -47,7 +47,7 @@ then
 elif [ "$OS_NAME" = "Alpine Linux" ]
 then
     apk update
-    apk add --no-cache wget git bash python3 python3-yaml
+    apk add --no-cache wget git bash python3 py3-yaml
 elif [ "$OS_NAME" = "macOS" ]
 then
     brew update
