@@ -38,8 +38,6 @@ ADD ci/shared/scripts/deps ${WF_TMP_DIR}/deps
 # Setup environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 
-ENV SCRIPTS_INSTALL_DIR=${SCRIPTS_INSTALL_DIR}
-
 ENV WF_DOCKER=1 \
     WF_SETUP_ID=${SETUP_ID}
 
