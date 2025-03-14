@@ -11,11 +11,9 @@
 #
 
 WF_TMP_DIR=${WF_TMP_DIR:-"/opt/workflows"}
-WF_DEPS_URL=${WF_DEPS_URL:-"https://raw.githubusercontent.com/DARMA-tasking/workflows/refs/heads/master/ci/shared/scripts/deps"}
 
 echo "------------- Setup --------------"
 
-OS=
 OS_VERSION=
 UNAME=$(uname)
 if [ "$UNAME" = "Darwin" ]
@@ -35,40 +33,9 @@ echo "LIBRARY_PATH=$LIBRARY_PATH"
 echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "----------------------------------"
 
-# Save setup environment to ~/.setuprc (used by packages.sh dep for example)
-echo "-- Set up variables (WF_SETUP_ID, OS_NAME, OS_VERSION) > ~/.setuprc"
-{
-    echo "export WF_SETUP_ID=\"$WF_SETUP_ID\""
-    echo "export OS_NAME=\"$OS_NAME\""
-    echo "export OS_VERSION=\"$OS_VERSION\""
-} >> ~/.setuprc
-
-### UPDATE PACKAGE LIST AND INSTALL START-UP PACKAGES: git, wget, bash.
-echo "-- Installing Core packages ($OS_NAME)..."
-if [ "$OS_NAME" = "Ubuntu" ]
-then
-    apt-get update -y -q
-    apt-get install -y -q --no-install-recommends ca-certificates wget git
-elif [ "$OS_NAME" = "Alpine Linux" ]
-then
-    apk update
-    apk add --no-cache wget git bash
-elif [ "$OS_NAME" = "macOS" ]
-then
-    brew update
-else
-    echo "Error. Please implement the pre-setup instructions for OS=$OS_NAME"
-    exit 1
-fi
-
-echo "--"
-echo "-- Core packages installed !"
-echo "--"
-
 set -e
 
-### SETUP DEPENDENCIES
-
+### INSTALL DEPENDENCIES
 echo "--"
 echo "-- Installing dependencies..."
 echo "--"
@@ -79,10 +46,10 @@ ls -l
 %DEPS_INSTALL%
 
 # Remove install scripts
-rm -rf $WF_SCRIPTS_DIR
+cd - && rm -rf $WF_TMP_DIR/deps
 
 echo "--"
-echo "-- Dependencies installed !"
+echo "-- Dependencies installed!"
 echo "--"
 
 ### CLEAN-UP
@@ -96,7 +63,7 @@ elif [ "$OS_NAME" = "macOS" ]
 then
    :
 else
-    echo "No cleanup instructions defined for OS=$OS."
+    echo "No cleanup instructions defined for OS=$OS_NAME."
 fi
 
 echo "---------- Setup OK ! ------------"

@@ -2,11 +2,8 @@
 
 # Basic universal setup script
 
-WF_TMP_DIR=${WF_TMP_DIR:-"/opt/workflows"}
-
 echo "------------- Setup --------------"
 
-OS=
 OS_VERSION=
 UNAME=$(uname)
 if [ "$UNAME" = "Darwin" ]
@@ -34,7 +31,7 @@ echo "-- Set up variables (WF_SETUP_ID, OS_NAME, OS_VERSION) > ~/.setuprc"
     echo "export OS_VERSION=\"$OS_VERSION\""
 } >> ~/.setuprc
 
-### UPDATE PACKAGE LIST AND INSTALL START-UP PACKAGES: git, wget, bash.
+### UPDATE PACKAGE LIST AND INSTALL CORE DEPENDENCIES
 echo "-- Installing Core packages ($OS_NAME)..."
 if [ "$OS_NAME" = "Ubuntu" ]
 then
@@ -51,3 +48,7 @@ else
     echo "Error. Please implement the pre-setup instructions for OS=$OS_NAME"
     exit 1
 fi
+
+echo "--"
+echo "-- Core packages installed!"
+echo "--"
