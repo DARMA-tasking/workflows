@@ -40,13 +40,10 @@ echo "--"
 echo "-- Installing dependencies..."
 echo "--"
 
-cd $WF_TMP_DIR/deps
+cd $WF_TMP_DIR/shared/scripts/deps
 chmod u+x *.sh
 ls -l
 %DEPS_INSTALL%
-
-# Remove install scripts
-cd - && rm -rf $WF_TMP_DIR/deps
 
 echo "--"
 echo "-- Dependencies installed!"

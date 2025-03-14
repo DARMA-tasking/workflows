@@ -31,10 +31,6 @@ ARG CMPLR_ROOT \
     LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""} \
     LIBRARY_PATH=${LIBRARY_PATH:-""}
 
-# Copy dependency scripts
-ENV WF_TMP_DIR=/opt/workflows
-ADD ci/shared/scripts/deps ${WF_TMP_DIR}/deps
-
 # Setup environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -71,17 +67,11 @@ ENV CMPLR_ROOT=$CMPLR_ROOT \
     LIBRARY_PATH=$LIBRARY_PATH \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
+# Prepare working directory
+ENV WF_TMP_DIR=/opt/workflows
 
-COPY ci/setup-basic.sh ${WF_TMP_DIR}
-RUN chmod +x ${WF_TMP_DIR}/setup-basic.sh && . ${WF_TMP_DIR}/setup-basic.sh
-
-COPY ci/config.yaml ${WF_TMP_DIR}
-COPY ci/build-setup.py ${WF_TMP_DIR}
-COPY ci/util.py ${WF_TMP_DIR}
-COPY ci/setup-template.sh ${WF_TMP_DIR}
-RUN python3 ${WF_TMP_DIR}/build-setup.py ${REPO}:wf-${SETUP_ID}
-
-RUN chmod +x ${WF_TMP_DIR}/setup-${SETUP_ID}.sh && . ${WF_TMP_DIR}/setup-${SETUP_ID}.sh
-
-# Clean
-RUN rm -rf $WF_TMP_DIR
+# Run the setup scripts
+RUN --mount=type=bind,rw,source=ci,target=${WF_TMP_DIR} \
+    sh ${WF_TMP_DIR}/setup-basic.sh && \
+    python3 ${WF_TMP_DIR}/build-setup.py ${REPO}:wf-${SETUP_ID} && \
+    sh ${WF_TMP_DIR}/setup-${SETUP_ID}.sh
