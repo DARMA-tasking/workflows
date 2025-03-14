@@ -54,7 +54,7 @@ class DockerBuilder:
         print("---------------------------")
 
         image_setup = setup.get(image.get("setup"))
-        dockerfile = image.get("dockerfile")
+        dockerfile = "base.dockerfile"
         env = image_setup.get("env")
 
         args = {

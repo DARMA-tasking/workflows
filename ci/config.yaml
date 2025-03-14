@@ -306,7 +306,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-alpine-clang-13-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: alpine:3.16
     setup: amd64-alpine-clang-13-cpp
@@ -315,7 +314,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-gcc-9-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:20.04
     setup: amd64-ubuntu-20.04-gcc-9-cpp
@@ -323,7 +321,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-gcc-10-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:20.04
     setup: amd64-ubuntu-20.04-gcc-10-cpp
@@ -331,7 +328,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:20.04
     setup: amd64-ubuntu-20.04-gcc-10-openmpi-cpp
@@ -339,7 +335,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-22.04-gcc-11-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-gcc-11-cpp
@@ -347,7 +342,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-22.04-gcc-12-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-gcc-12-cpp
@@ -355,7 +349,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-22.04-gcc-12-vtk-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-gcc-12-vtk-cpp
@@ -363,7 +356,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-22.04-gcc-12-zoltan-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-gcc-12-zoltan-cpp
@@ -372,7 +364,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-gcc-9-cuda-12.2.0-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: nvidia/cuda:12.2.0-devel-ubuntu20.04
     setup: amd64-ubuntu-20.04-gcc-9-cuda-12.2.0-cpp
@@ -380,7 +371,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: nvidia/cuda:11.2.2-devel-ubuntu20.04
     setup: amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp
@@ -389,7 +379,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-clang-9-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:20.04
     setup: amd64-ubuntu-20.04-clang-9-cpp
@@ -397,7 +386,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-clang-10-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:20.04
     setup: amd64-ubuntu-20.04-clang-10-cpp
@@ -405,7 +393,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-22.04-clang-11-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-clang-11-cpp
@@ -413,7 +400,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-22.04-clang-12-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-clang-12-cpp
@@ -421,7 +407,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-22.04-clang-13-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-clang-13-cpp
@@ -429,7 +414,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-22.04-clang-14-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-clang-14-cpp
@@ -437,7 +421,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-24.04-clang-16-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:24.04
     setup: amd64-ubuntu-24.04-clang-16-cpp
@@ -445,7 +428,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-24.04-clang-16-vtk-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:24.04
     setup: amd64-ubuntu-24.04-clang-16-vtk-cpp
@@ -453,7 +435,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-24.04-clang-16-zoltan-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: ubuntu:24.04
     setup: amd64-ubuntu-24.04-clang-16-zoltan-cpp
@@ -462,7 +443,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-icpc-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: intel/oneapi:os-tools-ubuntu20.04
     setup: amd64-ubuntu-20.04-icpc-cpp
@@ -470,7 +450,6 @@ images:
   -
     repository: *docker-repository
     tag: wf-amd64-ubuntu-20.04-icpx-cpp
-    dockerfile: base.dockerfile
     arch: linux/amd64
     base: intel/oneapi:os-tools-ubuntu20.04
     setup: amd64-ubuntu-20.04-icpx-cpp
