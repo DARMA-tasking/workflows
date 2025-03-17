@@ -56,10 +56,7 @@ class SetupBuilder:
         for (setup_id, setup_config) in setup.items():
             # generate install instructions and install dependencies commands
             instructions = []
-            downloads = []
             for (dep_id, args) in setup_config.get("deps").items():
-                if dep_id != "cmd":
-                    downloads.append(f"wget $WF_DEPS_URL/{dep_id}.sh")
                 instructions.extend(self.__instructions(dep_id, args))
 
             setup_script = ""
@@ -70,12 +67,10 @@ class SetupBuilder:
             ) as file:
                 setup_script = file.read()
             setup_script = setup_script.replace("%ENVIRONMENT_LABEL%", setup_config.get("label"))
-            setup_script = setup_script.replace("%DEPS_DOWNLOAD%", '\n    '.join(downloads))
             setup_script = setup_script.replace("%DEPS_INSTALL%", '\n'.join(instructions))
 
             setup_filename = f"setup-{setup_id}.sh"
-            setup_filepath = os.path.join(os.path.dirname(__file__),
-                                          "shared", "scripts", setup_filename)
+            setup_filepath = os.path.join(os.path.dirname(__file__), setup_filename)
 
             with open(setup_filepath, "w+", encoding="utf-8") as f:
                 f.write(setup_script)
