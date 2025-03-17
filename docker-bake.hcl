@@ -45,7 +45,7 @@ target "build" {
     DISTRO = "${DISTRO}"
     DISTRO_VERSION = "${DISTRO_VERSION}"
     COMPILER = "${COMPILER}"
-    SETUP_ID = "${ARCH}-${DISTRO}-${DISTRO_VERSION}-${COMPILER}-cpp"
+    REPO = "${REPO}"
   }
   target = "base"
   context = "."
@@ -60,10 +60,11 @@ target "build-all" {
   inherits = ["build"]
 
   args = {
-    ARCH = "${item.arch}"
-    DISTRO = "${item.distro}"
-    DISTRO_VERSION = "${item.distro_version}"
-    COMPILER = "${item.compiler}"
+    ARCH           = item.arch
+    DISTRO         = item.distro
+    DISTRO_VERSION = item.distro_version
+    COMPILER       = item.compiler
+    SETUP_ID = "${item.arch}-${item.distro}-${item.distro_version}-${item.compiler}-cpp"
   }
 
   matrix = {
