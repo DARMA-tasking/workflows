@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       targets: ${{ steps.list-targets.outputs.targets }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,6 +34,7 @@ jobs:
       fail-fast: false
       matrix:
         target: ${{ fromJson(needs.prepare.outputs.targets) }}
+
     steps:
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -48,3 +50,15 @@ jobs:
         with:
           targets: ${{ matrix.target }}
           push: false
+          load: true
+
+      - name: Test Docker image (vt build)
+        run: |
+          docker run \
+            --name test-container \
+            -e CI="1" \
+            lifflander1/vt:${{ matrix.target }} \
+            bash -c \
+              'mkdir -p "/opt/vt/build" ; \
+              git clone --depth=1 https://github.com/DARMA-tasking/vt /opt/vt ; \
+              bash /opt/vt/ci/build_cpp.sh /opt/vt /opt/vt/build'

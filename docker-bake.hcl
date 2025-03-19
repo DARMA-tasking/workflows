@@ -103,7 +103,7 @@ target "build" {
 }
 
 target "build-all" {
-  name = replace("build-${setup-id(item)}", ".", "-")
+  name = replace(setup-id(item), ".", "-")
   inherits = ["build"]
   tags = ["${REPO}:${setup-id(item)}"]
 
