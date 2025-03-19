@@ -13,6 +13,8 @@ ARG CC=${CC:-""}
 ARG CXX=${CXX:-""}
 ARG FC=${FC:-""}
 
+ARG PACKAGES=${PACKAGES:-""}
+
 # MPI
 ARG MPICH_CC=${MPICH_CC:-""}
 ARG MPICH_CXX=${MPICH_CXX:-""}
@@ -72,7 +74,8 @@ ENV WF_TMP_DIR=/opt/workflows
 
 # Run the setup scripts
 RUN --mount=type=bind,source=ci,target=${WF_TMP_DIR} \
-    sh ${WF_TMP_DIR}/setup-basic.sh
+    sh ${WF_TMP_DIR}/setup-basic.sh && \
+    bash ${WF_TMP_DIR}/shared/scripts/deps/packages.sh $PACKAGES
 
 RUN --mount=type=bind,rw,source=ci,target=${WF_TMP_DIR} \
     python3 ${WF_TMP_DIR}/build-setup.py ${REPO}:wf-${SETUP_ID} && \

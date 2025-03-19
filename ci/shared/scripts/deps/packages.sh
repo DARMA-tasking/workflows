@@ -13,9 +13,9 @@ echo "Install system packages..."
 if [ "$OS_NAME" == "Ubuntu" ]
 then
     apt-get install -y -q --no-install-recommends \
-            $PACKAGES && \
-            apt-get clean
-        exit 0
+        $PACKAGES && \
+    apt-get clean
+    exit 0
 elif [ "$OS_NAME" == "Alpine Linux" ]
 then
     apk add --no-cache \

@@ -39,7 +39,7 @@ function "arch" {
 
 function "base" {
   params = [item]
-  result = "${lookup(item, "distro", DISTRO)}:${lookup(item, "distro_version", DISTRO_VERSION)}"
+  result = "${distro(item)}:${distro_version(item)}"
 }
 
 function "distro" {
@@ -65,12 +65,15 @@ function "cc" {
 function "cxx" {
   params = [item]
   result = replace(
-    replace(
-      lookup(item, "compiler", COMPILER),
-      "gcc", "g++"
-    ),
+    replace(compiler(item), "gcc", "g++"),
     "clang", "clang++"
   )
+}
+
+# FIXME: check distro
+function "packages" {
+  params = [item]
+  result = "${cc(item)} ${cxx(item)} ccache curl jq lcov less libomp5 libunwind-dev make-guile ninja-build valgrind zlib1g zlib1g-dev"
 }
 
 function "setup-id" {
@@ -106,11 +109,12 @@ target "build-all" {
     FC              = ""
     MPICH_CC        = ""
     MPICH_CXX       = ""
-    PATH_PREFIX     = ""
     CPATH           = ""
     INFOPATH        = ""
     LIBRARY_PATH    = ""
     LD_LIBRARY_PATH = ""
+    PATH_PREFIX     = "/usr/lib/ccache:/opt/cmake/bin:"
+    PACKAGES        = packages(item)
   }
 
   matrix = {
