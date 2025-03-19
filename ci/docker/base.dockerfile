@@ -70,7 +70,7 @@ ENV CMPLR_ROOT=$CMPLR_ROOT \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
 # Prepare working directory
-ENV WF_TMP_DIR=/opt/workflows
+ARG WF_TMP_DIR=/opt/workflows
 
 # Run the setup scripts
 RUN --mount=type=bind,source=ci,target=${WF_TMP_DIR} \

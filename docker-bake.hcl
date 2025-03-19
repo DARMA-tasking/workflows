@@ -96,6 +96,7 @@ target "build" {
 target "build-all" {
   name = replace("build-${setup-id(item)}", ".", "-")
   inherits = ["build"]
+  tags = ["${REPO}:${setup-id(item)}"]
 
   args = {
     ARCH            = arch(item)
