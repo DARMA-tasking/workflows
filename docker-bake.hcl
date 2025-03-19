@@ -16,7 +16,7 @@ variable "REPO" {
 }
 
 variable "ARCH" {
-  default = "arm64"
+  default = "amd64"
 }
 
 variable "DISTRO" {
@@ -51,34 +51,30 @@ target "build" {
   context = "."
   dockerfile = "ci/docker/base.dockerfile"
   platforms = [
-    "linux/arm64"
+    "linux/amd64"
   ]
 }
 
 target "build-all" {
-  name = "build-${item.arch}-${item.distro}-${replace(item.distro_version, ".", "-")}-${item.compiler}-cpp"
+  name = "build-${lookup(item, "arch", ARCH)}-${lookup(item, "distro", DISTRO)}-${replace(lookup(item, "distro_version", DISTRO_VERSION), ".", "-")}-${lookup(item, "compiler", COMPILER)}-cpp"
   inherits = ["build"]
 
   args = {
-    ARCH           = item.arch
-    DISTRO         = item.distro
-    DISTRO_VERSION = item.distro_version
-    COMPILER       = item.compiler
-    SETUP_ID = "${item.arch}-${item.distro}-${item.distro_version}-${item.compiler}-cpp"
+    ARCH           = lookup(item, "arch", ARCH)
+    DISTRO         = lookup(item, "distro", DISTRO)
+    DISTRO_VERSION = lookup(item, "distro_version", DISTRO_VERSION)
+    COMPILER       = lookup(item, "compiler", COMPILER)
+    SETUP_ID = "${lookup(item, "arch", ARCH)}-${lookup(item, "distro", DISTRO)}-${lookup(item, "distro_version", DISTRO_VERSION)}-${lookup(item, "compiler", COMPILER)}-cpp"
   }
 
   matrix = {
     item = [
       {
-        arch = "amd64"
-        distro = "ubuntu"
         distro_version = "22.04"
         compiler = "clang-13"
         mpi = "mpich"
       },
       {
-        arch = "amd64"
-        distro = "ubuntu"
         distro_version = "22.04"
         compiler = "clang-14"
         mpi = "mpich"
