@@ -32,19 +32,48 @@ variable "DISTRO_VERSION" {
   default = "22.04"
 }
 
-function "build-setup-id" {
-  params = [arch, distro, distro_version, compiler, variant]
-  result = [
-    "${variant == "" ? "${arch}-${distro}-${distro_version}-${compiler}-cpp" : "${arch}-${distro}-${distro_version}-${compiler}-${variant}-cpp"}"
-  ]
+function "arch" {
+  params = [item]
+  result = lookup(item, "arch", ARCH)
+}
+
+function "base" {
+  params = [item]
+  result = "${lookup(item, "distro", DISTRO)}:${lookup(item, "distro_version", DISTRO_VERSION)}"
+}
+
+function "distro" {
+  params = [item]
+  result = lookup(item, "distro", DISTRO)
+}
+
+function "distro_version" {
+  params = [item]
+  result = lookup(item, "distro_version", DISTRO_VERSION)
+}
+
+function "compiler" {
+  params = [item]
+  result = lookup(item, "compiler", COMPILER)
+}
+
+function "cc" {
+  params = [item]
+  result = lookup(item, "compiler", COMPILER)
+}
+
+function "cxx" {
+  params = [item]
+  result = replace(lookup(item, "compiler", COMPILER), "clang-", "clang++-")
+}
+
+function "setup-id" {
+  params = [item]
+  result = "${arch(item)}-${distro(item)}-${distro_version(item)}-${compiler(item)}-cpp"
 }
 
 target "build" {
   args = {
-    ARCH = "${ARCH}"
-    DISTRO = "${DISTRO}"
-    DISTRO_VERSION = "${DISTRO_VERSION}"
-    COMPILER = "${COMPILER}"
     REPO = "${REPO}"
   }
   target = "base"
@@ -56,30 +85,58 @@ target "build" {
 }
 
 target "build-all" {
-  name = "build-${lookup(item, "arch", ARCH)}-${lookup(item, "distro", DISTRO)}-${replace(lookup(item, "distro_version", DISTRO_VERSION), ".", "-")}-${lookup(item, "compiler", COMPILER)}-cpp"
+  name = replace("build-${setup-id(item)}", ".", "-")
   inherits = ["build"]
 
   args = {
-    ARCH           = lookup(item, "arch", ARCH)
-    DISTRO         = lookup(item, "distro", DISTRO)
-    DISTRO_VERSION = lookup(item, "distro_version", DISTRO_VERSION)
-    COMPILER       = lookup(item, "compiler", COMPILER)
-    SETUP_ID = "${lookup(item, "arch", ARCH)}-${lookup(item, "distro", DISTRO)}-${lookup(item, "distro_version", DISTRO_VERSION)}-${lookup(item, "compiler", COMPILER)}-cpp"
+    ARCH            = arch(item)
+    BASE            = base(item)
+    DISTRO          = distro(item)
+    DISTRO_VERSION  = distro_version(item)
+    COMPILER        = compiler(item)
+    SETUP_ID        = setup-id(item)
+    CC              = cc(item)
+    CXX             = cxx(item)
+    FC              = ""
+    MPICH_CC        = ""
+    MPICH_CXX       = ""
+    PATH_PREFIX     = ""
+    CPATH           = ""
+    INFOPATH        = ""
+    LIBRARY_PATH    = ""
+    LD_LIBRARY_PATH = ""
   }
 
   matrix = {
     item = [
       {
+        distro_version = "20.04"
+        compiler = "clang-9"
+      },
+      {
+        distro_version = "20.04"
+        compiler = "clang-10"
+      },
+      {
+        distro_version = "22.04"
+        compiler = "clang-11"
+      },
+      {
+        distro_version = "22.04"
+        compiler = "clang-12"
+      },
+      {
         distro_version = "22.04"
         compiler = "clang-13"
-        mpi = "mpich"
       },
       {
         distro_version = "22.04"
         compiler = "clang-14"
-        mpi = "mpich"
+      },
+      {
+        distro_version = "24.04"
+        compiler = "clang-16"
       }
-
     ]
   }
 }

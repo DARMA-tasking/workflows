@@ -71,7 +71,9 @@ ENV CMPLR_ROOT=$CMPLR_ROOT \
 ENV WF_TMP_DIR=/opt/workflows
 
 # Run the setup scripts
+RUN --mount=type=bind,source=ci,target=${WF_TMP_DIR} \
+    sh ${WF_TMP_DIR}/setup-basic.sh
+
 RUN --mount=type=bind,rw,source=ci,target=${WF_TMP_DIR} \
-    sh ${WF_TMP_DIR}/setup-basic.sh && \
     python3 ${WF_TMP_DIR}/build-setup.py ${REPO}:wf-${SETUP_ID} && \
     sh ${WF_TMP_DIR}/setup-${SETUP_ID}.sh
