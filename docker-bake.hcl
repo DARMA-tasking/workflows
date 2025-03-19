@@ -37,6 +37,11 @@ function "arch" {
   result = lookup(item, "arch", ARCH)
 }
 
+function "base" {
+  params = [item]
+  result = "${lookup(item, "distro", DISTRO)}:${lookup(item, "distro_version", DISTRO_VERSION)}"
+}
+
 function "distro" {
   params = [item]
   result = lookup(item, "distro", DISTRO)
@@ -85,6 +90,7 @@ target "build-all" {
 
   args = {
     ARCH            = arch(item)
+    BASE            = base(item)
     DISTRO          = distro(item)
     DISTRO_VERSION  = distro_version(item)
     COMPILER        = compiler(item)
