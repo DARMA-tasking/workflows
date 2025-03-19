@@ -64,7 +64,13 @@ function "cc" {
 
 function "cxx" {
   params = [item]
-  result = replace(lookup(item, "compiler", COMPILER), "clang-", "clang++-")
+  result = replace(
+    replace(
+      lookup(item, "compiler", COMPILER),
+      "gcc", "g++"
+    ),
+    "clang", "clang++"
+  )
 }
 
 function "setup-id" {
@@ -110,32 +116,61 @@ target "build-all" {
   matrix = {
     item = [
       {
-        distro_version = "20.04"
         compiler = "clang-9"
-      },
-      {
         distro_version = "20.04"
-        compiler = "clang-10"
       },
       {
-        distro_version = "22.04"
+        compiler = "clang-10"
+        distro_version = "20.04"
+      },
+      {
         compiler = "clang-11"
       },
       {
-        distro_version = "22.04"
         compiler = "clang-12"
       },
       {
-        distro_version = "22.04"
         compiler = "clang-13"
       },
       {
-        distro_version = "22.04"
         compiler = "clang-14"
       },
       {
-        distro_version = "24.04"
+        compiler = "clang-15"
+      },
+      {
         compiler = "clang-16"
+        distro_version = "24.04"
+      },
+      {
+        compiler = "clang-17"
+        distro_version = "24.04"
+      },
+      {
+        compiler = "clang-18"
+        distro_version = "24.04"
+      },
+      {
+        compiler = "gcc-9"
+        distro_version = "20.04"
+      },
+      {
+        compiler = "gcc-10"
+        distro_version = "20.04"
+      },
+      {
+        compiler = "gcc-11"
+      },
+      {
+        compiler = "gcc-12"
+      },
+      {
+        compiler = "gcc-13"
+        distro_version = "24.04"
+      },
+      {
+        compiler = "gcc-14"
+        distro_version = "24.04"
       }
     ]
   }
