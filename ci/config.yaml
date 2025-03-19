@@ -104,7 +104,6 @@ setup:
         :/opt/vtk/bin\
         :"
     deps:
-      packages: !extend [ *apt-packages, gcc-9, g++-9, python3-jinja2, python3-pygments]
       cmake: ['3.23.4']
       doxygen: ['1.8.16']
       mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: [ '4.0.2', '-j4' ] }
@@ -113,7 +112,6 @@ setup:
     label: gcc-10, ubuntu, mpich
     env: { <<: *env, CC: gcc-10, CXX: g++-10 }
     deps:
-      packages: !extend [ *apt-packages, gcc-10, g++-10 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-10, CXX: g++-10 }, args: [ '4.0.2', '-j4' ] }
 
@@ -121,7 +119,6 @@ setup:
     label: gcc-10, ubuntu, openmpi
     env: { <<: *env, CC: gcc-10, CXX: g++-10 }
     deps:
-      packages: !extend [ *apt-packages, gcc-10, g++-10 ]
       cmake: ['3.23.4']
       openmpi: { env: { CC: gcc-10, CXX: g++-10 }, args: [ 'v4.0', '4.0.4', '-j4' ] }
 
@@ -129,7 +126,6 @@ setup:
     label: gcc-11, ubuntu, mpich
     env: { <<: *env, CC: gcc-11, CXX: g++-11 }
     deps:
-      packages: !extend [ *apt-packages, gcc-11, g++-11 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-11, CXX: g++-11 }, args: [ '4.0.2', '-j4' ] }
 
@@ -138,7 +134,6 @@ setup:
     label: gcc-12, ubuntu, mpich
     env: &develop-gcc-env { <<: *env, CC: gcc-12, CXX: g++-12 }
     deps: &develop-gcc-deps
-      packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2', '-j4' ] }
 
@@ -146,7 +141,7 @@ setup:
     <<: *develop-gcc
     label: gcc-12, ubuntu, mpich, vtk
     deps:
-      packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov, xvfb ]
+      #packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov, xvfb ]
       <<: *develop-gcc-deps
       mesa: ~
       vtk: '9.3.1'
@@ -156,7 +151,7 @@ setup:
     env: { <<: *develop-gcc-env, FC: gfortran-12 }
     deps:
       <<: *develop-gcc-deps
-      packages: !extend [ *apt-packages, gcc-12, g++-12, gfortran-12 ]
+      #packages: !extend [ *apt-packages, gcc-12, g++-12, gfortran-12 ]
       zoltan: [ -j4 ]
 
   # ubuntu / nvidia cuda
@@ -179,7 +174,6 @@ setup:
     label: clang-9, ubuntu, mpich
     env: { <<: *env, CC: clang-9, CXX: clang++-9 }
     deps:
-      packages: !extend [ *apt-packages, clang-9 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -188,7 +182,6 @@ setup:
     label: clang-10, ubuntu, mpich
     env: { <<: *env, CC: clang-10, CXX: clang++-10 }
     deps:
-      packages: !extend [ *apt-packages, clang-10 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -197,7 +190,6 @@ setup:
     label: clang-11, ubuntu, mpich
     env: { <<: *env, CC: clang-11, CXX: clang++-11 }
     deps:
-      packages: !extend [ *apt-packages, clang-11 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -206,7 +198,6 @@ setup:
     label: clang-12, ubuntu, mpich
     env: { <<: *env, CC: clang-12, CXX: clang++-12 }
     deps:
-      packages: !extend [ *apt-packages, clang-12 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -215,7 +206,6 @@ setup:
     label: clang-13, ubuntu, mpich
     env: { <<: *env, CC: clang-13, CXX: clang++-13 }
     deps:
-      packages: !extend [ *apt-packages, clang-13, llvm-13 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -224,7 +214,6 @@ setup:
     label: clang-14, ubuntu, mpich
     env: { <<: *env, CC: clang-14, CXX: clang++-14 }
     deps:
-      packages: !extend [ *apt-packages, clang-14, llvm-14 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -233,7 +222,6 @@ setup:
     label: clang-16, ubuntu, mpich
     env: &develop-clang-env { <<: *env, CC: clang-16, CXX: clang++-16 }
     deps: &develop-clang-deps
-      packages: !extend [ *apt-packages, clang-16, llvm-16 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']

@@ -32,6 +32,10 @@ variable "DISTRO_VERSION" {
   default = "22.04"
 }
 
+variable BASE_PACKAGES {
+  default = "ca-certificates wget git python3 python3-yaml ccache curl jq lcov less libomp5 libunwind-dev make-guile ninja-build valgrind zlib1g zlib1g-dev"
+}
+
 function "arch" {
   params = [item]
   result = lookup(item, "arch", ARCH)
@@ -39,7 +43,7 @@ function "arch" {
 
 function "base" {
   params = [item]
-  result = "${lookup(item, "distro", DISTRO)}:${lookup(item, "distro_version", DISTRO_VERSION)}"
+  result = "${distro(item)}:${distro_version(item)}"
 }
 
 function "distro" {
@@ -65,12 +69,20 @@ function "cc" {
 function "cxx" {
   params = [item]
   result = replace(
-    replace(
-      lookup(item, "compiler", COMPILER),
-      "gcc", "g++"
-    ),
+    replace(compiler(item), "gcc", "g++"),
     "clang", "clang++"
   )
+}
+
+# FIXME: check distro
+function "packages" {
+  params = [item]
+  result = "${cc(item)} ${cxx(item)} ${extra-packages(item)} ${BASE_PACKAGES}"
+}
+
+function "extra-packages" {
+  params = [item]
+  result = lookup(item, "extra_packages", "")
 }
 
 function "setup-id" {
@@ -106,11 +118,12 @@ target "build-all" {
     FC              = ""
     MPICH_CC        = ""
     MPICH_CXX       = ""
-    PATH_PREFIX     = ""
     CPATH           = ""
     INFOPATH        = ""
     LIBRARY_PATH    = ""
     LD_LIBRARY_PATH = ""
+    PATH_PREFIX     = "/usr/lib/ccache:/opt/cmake/bin:"
+    PACKAGES        = packages(item)
   }
 
   matrix = {
@@ -131,9 +144,11 @@ target "build-all" {
       },
       {
         compiler = "clang-13"
+        extra_packages = "llvm-13"
       },
       {
         compiler = "clang-14"
+        extra_packages = "llvm-14"
       },
       {
         compiler = "clang-15"
@@ -141,6 +156,7 @@ target "build-all" {
       {
         compiler = "clang-16"
         distro_version = "24.04"
+        extra_packages = "llvm-16"
       },
       {
         compiler = "clang-17"
@@ -153,6 +169,7 @@ target "build-all" {
       {
         compiler = "gcc-9"
         distro_version = "20.04"
+        extra_packages = "g++-9 python3-jinja2 python3-pygments"
       },
       {
         compiler = "gcc-10"
@@ -163,6 +180,7 @@ target "build-all" {
       },
       {
         compiler = "gcc-12"
+        extra_packages = "gcovr lcov"
       },
       {
         compiler = "gcc-13"

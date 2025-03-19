@@ -20,6 +20,8 @@ ARG MPICH_CXX=${MPICH_CXX:-""}
 # PATH
 ARG PATH_PREFIX=${PATH_PREFIX:-""}
 
+ARG PACKAGES=${PACKAGES:-""}
+
 # Specific (Intel One API)
 ARG CMPLR_ROOT \
     INTEL_LICENSE_FILE \
@@ -72,7 +74,7 @@ ENV WF_TMP_DIR=/opt/workflows
 
 # Run the setup scripts
 RUN --mount=type=bind,source=ci,target=${WF_TMP_DIR} \
-    sh ${WF_TMP_DIR}/setup-basic.sh
+    bash ${WF_TMP_DIR}/setup-basic.sh ${PACKAGES}
 
 RUN --mount=type=bind,rw,source=ci,target=${WF_TMP_DIR} \
     python3 ${WF_TMP_DIR}/build-setup.py ${REPO}:wf-${SETUP_ID} && \
