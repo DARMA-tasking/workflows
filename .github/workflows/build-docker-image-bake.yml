@@ -54,8 +54,9 @@ jobs:
 
       - name: Test Docker image (vt build)
         run: |
-          TARGET=${{ matrix.target }}
-          TAG=${TARGET/-0/.0}
+          TAG=${{ matrix.target }}
+          TAG=${TAG/-04/.04}
+          TAG=${TAG/3-16/3.16}
           docker run \
             --name test-container \
             -e CI="1" \

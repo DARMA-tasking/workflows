@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # Basic universal setup script
 
@@ -25,20 +25,20 @@ echo "----------------------------------"
 ### UPDATE PACKAGE LIST AND INSTALL CORE DEPENDENCIES
 echo "-- Installing base packages ($OS_NAME)..."
 
-set -euxo pipefail
+set -eux
 
-BASE_PACKAGES=("$@*")
+BASE_PACKAGES="$@"
 if [ "$OS_NAME" = "Ubuntu" ]
 then
     apt-get update -y -q
     apt-get install -y -q --no-install-recommends \
-        "${BASE_PACKAGES[@]}"
+        $BASE_PACKAGES
     apt-get clean -y -q
     rm -rf /var/lib/apt/lists/*
 elif [ "$OS_NAME" = "Alpine Linux" ]
 then
     apk update
-    apk add --no-cache "${BASE_PACKAGES[@]}"
+    apk add --no-cache $BASE_PACKAGES
 elif [ "$OS_NAME" = "macOS" ]
 then
     brew update
