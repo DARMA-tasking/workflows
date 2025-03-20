@@ -54,11 +54,12 @@ jobs:
 
       - name: Test Docker image (vt build)
         run: |
+          TARGET=${{ matrix.target }}
+          TAG=${TARGET/-0/.0}
           docker run \
             --name test-container \
             -e CI="1" \
-            lifflander1/vt:${{ matrix.target }} \
+            "lifflander1/vt:$TAG" \
             bash -c \
-              'mkdir -p "/opt/vt/build" ; \
-              git clone --depth=1 https://github.com/DARMA-tasking/vt /opt/vt ; \
+              'git clone --depth=1 https://github.com/DARMA-tasking/vt /opt/vt ; \
               bash /opt/vt/ci/build_cpp.sh /opt/vt /opt/vt/build'
