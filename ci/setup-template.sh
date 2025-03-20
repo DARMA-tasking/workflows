@@ -35,7 +35,6 @@ echo "--"
 
 cd $WF_TMP_DIR/shared/scripts/deps
 chmod u+x *.sh
-ls -l
 %DEPS_INSTALL%
 
 echo "--"

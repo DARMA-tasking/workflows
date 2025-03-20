@@ -80,14 +80,13 @@ setup:
       vtk: '9.3.1'
 
   # alpine linux
-  amd64-alpine-clang-13-cpp:
+  amd64-alpine-3.16-clang-cpp:
     label: alpine-3.16, clang-13, mpich
     env:
       <<: *env
       CC: mpicc
       CXX: mpicxx
     deps:
-      packages: !extend [ *apk-packages, clang, clang-dev ]
       mpich: { env: { CC: clang, CXX: clang++ }, args: ['3.3.2', '-j4'] }
 
   # ubuntu / gcc

@@ -32,8 +32,52 @@ variable "DISTRO_VERSION" {
   default = "22.04"
 }
 
-variable BASE_PACKAGES {
-  default = "ca-certificates wget git python3 python3-yaml ccache curl jq lcov less libomp5 libunwind-dev make-guile ninja-build valgrind zlib1g zlib1g-dev"
+function base-packages {
+  params = [item]
+  result = (
+    equal(distro(item), "ubuntu") ?
+      join(" ", [
+        "ca-certificates",
+        "ccache",
+        "curl",
+        "git",
+        "jq",
+        "lcov",
+        "less",
+        "libomp5",
+        "libunwind-dev",
+        "make-guile",
+        "ninja-build",
+        "python3-yaml",
+        "python3",
+        "valgrind",
+        "wget",
+        "zlib1g-dev",
+      ]) :
+      join(" ", [
+        "alpine-sdk",
+        "autoconf",
+        "automake",
+        "bash",
+        "binutils-dev",
+        "ccache",
+        "cmake",
+        "dpkg",
+        "gcovr",
+        "git",
+        "libdwarf-dev",
+        "libtool",
+        "libunwind-dev",
+        "linux-headers",
+        "m4",
+        "make",
+        "ninja",
+        "py3-yaml",
+        "python3",
+        "wget",
+        "zlib-dev",
+      ])
+  )
 }
 
 function "arch" {
@@ -43,7 +87,7 @@ function "arch" {
 
 function "base" {
   params = [item]
-  result = "${distro(item)}:${distro_version(item)}"
+  result = "${distro(item)}:${distro-version(item)}"
 }
 
 function "distro" {
@@ -51,7 +95,7 @@ function "distro" {
   result = lookup(item, "distro", DISTRO)
 }
 
-function "distro_version" {
+function "distro-version" {
   params = [item]
   result = lookup(item, "distro_version", DISTRO_VERSION)
 }
@@ -70,14 +114,13 @@ function "cxx" {
   params = [item]
   result = replace(
     replace(compiler(item), "gcc", "g++"),
-    "clang", "clang++"
+    "clang-", "clang++-"
   )
 }
 
-# FIXME: check distro
 function "packages" {
   params = [item]
-  result = "${cc(item)} ${cxx(item)} ${extra-packages(item)} ${BASE_PACKAGES}"
+  result = "${cc(item)} ${cxx(item)} ${extra-packages(item)} ${base-packages(item)}"
 }
 
 function "extra-packages" {
@@ -87,7 +130,7 @@ function "extra-packages" {
 
 function "setup-id" {
   params = [item]
-  result = "${arch(item)}-${distro(item)}-${distro_version(item)}-${compiler(item)}-cpp"
+  result = "${arch(item)}-${distro(item)}-${distro-version(item)}-${compiler(item)}-cpp"
 }
 
 target "build" {
@@ -111,7 +154,7 @@ target "build-all" {
     ARCH            = arch(item)
     BASE            = base(item)
     DISTRO          = distro(item)
-    DISTRO_VERSION  = distro_version(item)
+    DISTRO_VERSION  = distro-version(item)
     COMPILER        = compiler(item)
     SETUP_ID        = setup-id(item)
     CC              = cc(item)
@@ -129,6 +172,7 @@ target "build-all" {
 
   matrix = {
     item = [
+      # Ubuntu
       {
         compiler = "clang-9"
         distro_version = "20.04"
@@ -190,6 +234,13 @@ target "build-all" {
       {
         compiler = "gcc-14"
         distro_version = "24.04"
+      },
+      # Alpine
+      {
+        compiler = "clang"
+        distro = "alpine"
+        distro_version = "3.16"
+        extra_packages = "clang-dev"
       }
     ]
   }
