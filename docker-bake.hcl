@@ -1,13 +1,9 @@
 
-variable "COMPILER_TYPE" {
-  default = "clang"
-}
-
-variable "HOST_COMPILER" {
+variable "COMPILER" {
   default = "clang-14"
 }
 
-variable "COMPILER" {
+variable "HOST_COMPILER" {
   default = "clang-14"
 }
 
@@ -118,6 +114,11 @@ function "cxx" {
   )
 }
 
+function "variant" {
+  params = [item]
+  result = lookup(item, "variant", "")
+}
+
 function "packages" {
   params = [item]
   result = "${cc(item)} ${cxx(item)} ${extra-packages(item)} ${base-packages(item)}"
@@ -130,7 +131,13 @@ function "extra-packages" {
 
 function "setup-id" {
   params = [item]
-  result = "${arch(item)}-${distro(item)}-${distro-version(item)}-${compiler(item)}-cpp"
+  result = join("-", [
+    arch(item),
+    distro(item),
+    distro-version(item),
+    compiler(item),
+    equal(variant(item), "") ? "cpp" : "${variant(item)}-cpp"
+  ])
 }
 
 target "build" {
@@ -226,6 +233,16 @@ target "build-all" {
       {
         compiler = "gcc-12"
         extra_packages = "gcovr lcov"
+      },
+      {
+        compiler = "gcc-12"
+        extra_packages = "gcovr lcov xvfb"
+        variant = "vtk"
+      },
+      {
+        compiler = "gcc-12"
+        extra_packages = "gcovr lcov gfortran-12"
+        variant = "zoltan"
       },
       {
         compiler = "gcc-13"
