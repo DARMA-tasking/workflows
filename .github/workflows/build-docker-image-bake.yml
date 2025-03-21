@@ -57,6 +57,8 @@ jobs:
           TAG=${{ matrix.target }}
           TAG=${TAG/-04/.04}
           TAG=${TAG/3-16/3.16}
+          TAG=${TAG/11-2-2/11.2.2}
+          TAG=${TAG/12-2-0/12.2.0}
           docker run \
             --name test-container \
             -e CI="1" \
