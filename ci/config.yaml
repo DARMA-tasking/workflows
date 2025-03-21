@@ -140,7 +140,6 @@ setup:
     <<: *develop-gcc
     label: gcc-12, ubuntu, mpich, vtk
     deps:
-      #packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov, xvfb ]
       <<: *develop-gcc-deps
       mesa: ~
       vtk: '9.3.1'
@@ -150,7 +149,6 @@ setup:
     env: { <<: *develop-gcc-env, FC: gfortran-12 }
     deps:
       <<: *develop-gcc-deps
-      #packages: !extend [ *apt-packages, gcc-12, g++-12, gfortran-12 ]
       zoltan: [ -j4 ]
 
   # ubuntu / nvidia cuda
