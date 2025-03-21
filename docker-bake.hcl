@@ -31,7 +31,7 @@ variable "DISTRO_VERSION" {
 function base-packages {
   params = [item]
   result = (
-    equal(distro(item), "ubuntu") ?
+    equal(distro(item), "ubuntu") || equal(distro(item), "nvidia/cuda") ?
       join(" ", [
         "ca-certificates",
         "ccache",
@@ -129,12 +129,18 @@ function "extra-packages" {
   result = lookup(item, "extra_packages", "")
 }
 
+function "path-prefix" {
+  params = [item]
+  result = "${lookup(item, "path_prefix", "")}/usr/lib/ccache:/opt/cmake/bin:"
+}
+
 function "setup-id" {
   params = [item]
   result = join("-", [
     arch(item),
-    distro(item),
-    distro-version(item),
+    equal(distro(item), "nvidia/cuda") ?
+      "ubuntu-20.04" :
+      "${distro(item)}-${distro-version(item)}",
     compiler(item),
     equal(variant(item), "") ? "cpp" : "${variant(item)}-cpp"
   ])
@@ -165,7 +171,7 @@ target "build-all" {
     COMPILER        = compiler(item)
     SETUP_ID        = setup-id(item)
     CC              = cc(item)
-    CXX             = cxx(item)
+    CXX             = equal(distro(item), "nvidia/cuda") ? "nvcc_wrapper" : cxx(item)
     FC              = ""
     MPICH_CC        = ""
     MPICH_CXX       = ""
@@ -173,7 +179,7 @@ target "build-all" {
     INFOPATH        = ""
     LIBRARY_PATH    = ""
     LD_LIBRARY_PATH = ""
-    PATH_PREFIX     = "/usr/lib/ccache:/opt/cmake/bin:"
+    PATH_PREFIX     = path-prefix(item)
     PACKAGES        = packages(item)
   }
 
@@ -221,7 +227,7 @@ target "build-all" {
       {
         compiler = "gcc-9"
         distro_version = "20.04"
-        extra_packages = "g++-9 python3-jinja2 python3-pygments"
+        extra_packages = "python3-jinja2 python3-pygments"
       },
       {
         compiler = "gcc-10"
@@ -258,7 +264,22 @@ target "build-all" {
         distro = "alpine"
         distro_version = "3.16"
         extra_packages = "clang-dev"
-      }
+      },
+      # CUDA
+      {
+        compiler = "gcc-9"
+        distro = "nvidia/cuda"
+        distro_version = "12.2.0-devel-ubuntu20.04"
+        path_prefix = "/opt/nvcc_wrapper/build:"
+        variant = "cuda-12.2.0"
+      },
+      {
+        compiler = "gcc-9"
+        distro = "nvidia/cuda"
+        distro_version = "11.2.2-devel-ubuntu20.04"
+        path_prefix = "/opt/nvcc_wrapper/build:"
+        variant = "cuda-11.2.2"
+      },
     ]
   }
 }
