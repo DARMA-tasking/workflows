@@ -114,6 +114,11 @@ function "cxx" {
   )
 }
 
+function "fc" {
+  params = [item]
+  result = lookup(item, "fc", "")
+}
+
 function "variant" {
   params = [item]
   result = lookup(item, "variant", "")
@@ -172,7 +177,7 @@ target "build-all" {
     SETUP_ID        = setup-id(item)
     CC              = cc(item)
     CXX             = equal(distro(item), "nvidia/cuda") ? "nvcc_wrapper" : cxx(item)
-    FC              = ""
+    FC              = fc(item)
     MPICH_CC        = ""
     MPICH_CXX       = ""
     CPATH           = ""
@@ -248,6 +253,7 @@ target "build-all" {
       {
         compiler = "gcc-12"
         extra_packages = "gcovr lcov gfortran-12"
+        fc="gfortran-12"
         variant = "zoltan"
       },
       {
