@@ -226,7 +226,6 @@ setup:
     <<: *develop-clang
     label: clang-16, ubuntu, mpich, vtk
     deps:
-      packages: !extend [ *apt-packages, clang-16, llvm-16, xvfb ]
       <<: *develop-clang-deps
       mesa: ~
       vtk: '9.3.1'
@@ -236,7 +235,6 @@ setup:
     env: { <<: *develop-clang-env, FC: gfortran-13 }
     label: clang-16, ubuntu, mpich, zoltan
     deps:
-      packages: !extend [ *apt-packages, clang-16, llvm-16, gfortran-13 ]
       <<: *develop-clang-deps
       zoltan: [ -j4 ]
 
@@ -249,14 +247,8 @@ setup:
       CXX: mpicxx
       MPICH_CC: icc
       MPICH_CXX: icpc
-      PATH_PREFIX: "/usr/lib/ccache\
-        :/opt/cmake/bin\
-        :/opt/nvcc_wrapper/build\
-        :/opt/vtk/bin\
-        :/opt/intel/oneapi/dev-utilities/latest/bin\
+      PATH_PREFIX: "/opt/intel/oneapi/dev-utilities/latest/bin\
         :/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/bin\
-        :/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/llvm/aocl-bin\
-        :/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/bin\
         :/opt/intel/oneapi/compiler/latest/linux/bin/intel64\
         :/opt/intel/oneapi/compiler/latest/linux/bin\
         :"
@@ -269,7 +261,6 @@ setup:
       LD_LIBRARY_PATH: /opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/debugger/10.1.1/dep/lib:/opt/intel/oneapi/debugger/10.1.1/libipt/intel64/lib:/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/lib:/opt/intel/oneapi/compiler/latest/linux/lib:/opt/intel/oneapi/compiler/latest/linux/lib/x64:/opt/intel/oneapi/compiler/latest/linux/lib/emu:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/host/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/compiler/lib
       INTEL_LICENSE_FILE: /opt/intel/licenses:/root/intel/licenses:/opt/intel/licenses:/root/intel/licenses:/Users/Shared/Library/Application Support/Intel/Licenses'
     deps: &intel-icpc-deps
-      packages: !extend [ *apt-packages, intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: icc, CXX: icpc }, args: ['4.0.2', '-j4'] }
 

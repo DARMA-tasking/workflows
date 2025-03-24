@@ -31,7 +31,7 @@ variable "DISTRO_VERSION" {
 function base-packages {
   params = [item]
   result = (
-    equal(distro(item), "ubuntu") || equal(distro(item), "nvidia/cuda") ?
+    equal(distro(item), "ubuntu") || equal(distro(item), "nvidia/cuda") || equal(distro(item), "intel/oneapi") ?
       join(" ", [
         "ca-certificates",
         "ccache",
@@ -103,7 +103,7 @@ function "compiler" {
 
 function "cc" {
   params = [item]
-  result = lookup(item, "compiler", COMPILER)
+  result = replace(lookup(item, "compiler", COMPILER), "icp", "ic")
 }
 
 function "cxx" {
@@ -126,7 +126,12 @@ function "variant" {
 
 function "packages" {
   params = [item]
-  result = "${cc(item)} ${cxx(item)} ${extra-packages(item)} ${base-packages(item)}"
+  result = join(" ", [
+    equal(distro(item), "intel/oneapi") ? "" : cc(item),
+    equal(distro(item), "intel/oneapi") ? "" : cxx(item),
+    base-packages(item),
+    extra-packages(item),
+  ])
 }
 
 function "extra-packages" {
@@ -143,7 +148,7 @@ function "setup-id" {
   params = [item]
   result = join("-", [
     arch(item),
-    equal(distro(item), "nvidia/cuda") ?
+    equal(distro(item), "nvidia/cuda") || equal(distro(item), "intel/oneapi") ?
       "ubuntu-20.04" :
       "${distro(item)}-${distro-version(item)}",
     compiler(item),
@@ -222,6 +227,19 @@ target "build-all" {
         extra_packages = "llvm-16"
       },
       {
+        compiler = "clang-16"
+        distro_version = "24.04"
+        extra_packages = "llvm-16 xvfb"
+        variant = "vtk"
+      },
+      {
+        compiler = "clang-16"
+        distro_version = "24.04"
+        extra_packages = "llvm-16 gfortran-13"
+        fc="gfortran-13"
+        variant = "zoltan"
+      },
+      {
         compiler = "clang-17"
         distro_version = "24.04"
       },
@@ -237,6 +255,12 @@ target "build-all" {
       {
         compiler = "gcc-10"
         distro_version = "20.04"
+      },
+      {
+        # FIXME
+        compiler = "gcc-10"
+        distro_version = "20.04"
+        variant = "openmpi"
       },
       {
         compiler = "gcc-11"
@@ -285,6 +309,21 @@ target "build-all" {
         distro_version = "11.2.2-devel-ubuntu20.04"
         path_prefix = "/opt/nvcc_wrapper/build:"
         variant = "cuda-11.2.2"
+      },
+      # Intel
+      {
+        compiler = "icpc"
+        distro = "intel/oneapi"
+        distro_version = "os-tools-ubuntu20.04"
+        extra_packages = "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
+        path_prefix = "/opt/intel/oneapi/dev-utilities/latest/bin:/opt/intel/oneapi/compiler/latest/linux/bin/intel64:/opt/intel/oneapi/compiler/latest/linux/bin:"
+      },
+      {
+        compiler = "icpx"
+        distro = "intel/oneapi"
+        distro_version = "os-tools-ubuntu20.04"
+        extra_packages = "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
+        path_prefix = "/opt/intel/oneapi/dev-utilities/latest/bin:/opt/intel/oneapi/compiler/latest/linux/bin/intel64:/opt/intel/oneapi/compiler/latest/linux/bin:"
       },
     ]
   }
