@@ -151,6 +151,20 @@ setup:
       <<: *develop-gcc-deps
       zoltan: [ -j4 ]
 
+  amd64-ubuntu-24.04-gcc-13-cpp:
+    label: gcc-13, ubuntu, mpich
+    env: { <<: *env, CC: gcc-13, CXX: g++-13 }
+    deps:
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-13, CXX: g++-13 }, args: [ '4.0.2', '-j4' ] }
+
+  amd64-ubuntu-24.04-gcc-14-cpp:
+    label: gcc-14, ubuntu, mpich
+    env: { <<: *env, CC: gcc-14, CXX: g++-14 }
+    deps:
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-14, CXX: g++-14 }, args: [ '4.0.2', '-j4' ] }
+
   # ubuntu / nvidia cuda
   amd64-ubuntu-20.04-gcc-9-cuda-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-cuda-12_2_0-cpp
     label: nvidia cuda 12.2.0, gcc-9, ubuntu, mpich
@@ -214,6 +228,14 @@ setup:
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
+  amd64-ubuntu-22.04-clang-15-cpp:
+    label: clang-15, ubuntu, mpich
+    env: { <<: *env, CC: clang-15, CXX: clang++-15 }
+    deps:
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
   amd64-ubuntu-24.04-clang-16-cpp: &develop-clang
     label: clang-16, ubuntu, mpich
     env: &develop-clang-env { <<: *env, CC: clang-16, CXX: clang++-16 }
@@ -237,6 +259,22 @@ setup:
     deps:
       <<: *develop-clang-deps
       zoltan: [ -j4 ]
+
+  amd64-ubuntu-24.04-clang-17-cpp:
+    label: clang-17, ubuntu, mpich
+    env: { <<: *env, CC: clang-17, CXX: clang++-17 }
+    deps:
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-24.04-clang-18-cpp:
+    label: clang-18, ubuntu, mpich
+    env: { <<: *env, CC: clang-18, CXX: clang++-18 }
+    deps:
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
 
   # intel
   amd64-ubuntu-20.04-icpc-cpp: &amd64-ubuntu-20_04-icpc-icpc-cpp
@@ -335,6 +373,20 @@ images:
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-gcc-12-zoltan-cpp
 
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-24.04-gcc-13-cpp
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-gcc-13-cpp
+
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-24.04-gcc-14-cpp
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-gcc-14-cpp
+
   # ubuntu / nvidia cuda
   -
     repository: *docker-repository
@@ -395,6 +447,13 @@ images:
 
   -
     repository: *docker-repository
+    tag: wf-amd64-ubuntu-22.04-clang-15-cpp
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-clang-15-cpp
+
+  -
+    repository: *docker-repository
     tag: wf-amd64-ubuntu-24.04-clang-16-cpp
     arch: linux/amd64
     base: ubuntu:24.04
@@ -413,6 +472,20 @@ images:
     arch: linux/amd64
     base: ubuntu:24.04
     setup: amd64-ubuntu-24.04-clang-16-zoltan-cpp
+
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-24.04-clang-17-cpp
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-clang-17-cpp
+
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-24.04-clang-18-cpp
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-clang-18-cpp
 
   # intel
   -
@@ -495,6 +568,16 @@ runners:
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-22.04-gcc-12-zoltan-cpp }
 
+  -
+    type: *runner-types
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-gcc-13-cpp }
+
+  -
+    type: *runner-types
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-gcc-14-cpp }
+
   # ubuntu / nvidia cuda
   -
     type: *runner-types
@@ -539,6 +622,11 @@ runners:
 
   -
     type: *runner-types
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-22.04-clang-15-cpp }
+
+  -
+    type: *runner-types
     runs-on: ubuntu-24.04
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-clang-16-cpp }
 
@@ -551,3 +639,13 @@ runners:
     type: *runner-types
     runs-on: ubuntu-24.04
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-clang-16-zoltan-cpp }
+
+  -
+    type: *runner-types
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-clang-17-cpp }
+
+  -
+    type: *runner-types
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-clang-18-cpp }
