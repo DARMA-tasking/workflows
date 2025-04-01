@@ -280,10 +280,10 @@ images:
   # alpine Linux
   -
     repository: *docker-repository
-    tag: wf-amd64-alpine-clang-13-cpp
+    tag: wf-amd64-alpine-3.16-clang-cpp
     arch: linux/amd64
     base: alpine:3.16
-    setup: amd64-alpine-clang-13-cpp
+    setup: amd64-alpine-3.16-clang-cpp
 
   # ubuntu / gcc
   -
@@ -446,7 +446,7 @@ runners:
   -
     type: *runner-types
     runs-on: ubuntu-latest
-    image: { repository: *docker-repository, tag: wf-amd64-alpine-clang-13-cpp }
+    image: { repository: *docker-repository, tag: wf-amd64-alpine-3.16-clang-cpp }
 
   # intel
   -

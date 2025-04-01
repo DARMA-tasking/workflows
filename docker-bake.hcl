@@ -110,7 +110,7 @@ function "cxx" {
   params = [item]
   result = replace(
     replace(compiler(item), "gcc", "g++"),
-    "clang-", "clang++-"
+    "clang", "clang++"
   )
 }
 
@@ -128,7 +128,8 @@ function "packages" {
   params = [item]
   result = join(" ", [
     equal(distro(item), "intel/oneapi") ? "" : cc(item),
-    equal(distro(item), "intel/oneapi") ? "" : cxx(item),
+    equal(distro(item), "intel/oneapi") || equal(distro(item), "alpine") ?
+      "" : cxx(item),
     base-packages(item),
     extra-packages(item),
   ])

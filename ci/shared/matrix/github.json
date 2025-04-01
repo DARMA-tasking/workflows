@@ -16,8 +16,8 @@
     {
       "label": "alpine-3.16, clang-13, mpich",
       "runs-on": "ubuntu-latest",
-      "image": "lifflander1/vt:wf-amd64-alpine-clang-13-cpp",
-      "name": "wf-amd64-alpine-clang-13-cpp"
+      "image": "lifflander1/vt:wf-amd64-alpine-3.16-clang-cpp",
+      "name": "wf-amd64-alpine-3.16-clang-cpp"
     },
     {
       "label": "intel icpc, ubuntu, mpich",
