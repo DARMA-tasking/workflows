@@ -145,6 +145,11 @@ function "path-prefix" {
   result = "${lookup(item, "path_prefix", "")}/usr/lib/ccache:/opt/cmake/bin:"
 }
 
+function "mpi-extra-flags" {
+  params = [item]
+  result = lookup(item, "mpi_extra_flags", "")
+}
+
 function "setup-id" {
   params = [item]
   result = join("-", [
@@ -184,6 +189,7 @@ target "build-all" {
     CC              = cc(item)
     CXX             = equal(distro(item), "nvidia/cuda") ? "nvcc_wrapper" : cxx(item)
     FC              = fc(item)
+    MPI_EXTRA_FLAGS = mpi-extra-flags(item)
     PATH_PREFIX     = path-prefix(item)
     PACKAGES        = packages(item)
   }
@@ -252,9 +258,9 @@ target "build-all" {
         distro_version = "20.04"
       },
       {
-        # FIXME
         compiler = "gcc-10"
         distro_version = "20.04"
+        mpi_extra_flags = "--allow-run-as-root --oversubscribe"
         variant = "openmpi"
       },
       {
