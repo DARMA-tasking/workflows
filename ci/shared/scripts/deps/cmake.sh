@@ -32,7 +32,7 @@ echo "${cmake_version}"
 echo "${cmake_tar_name}"
 
 pushd /opt
-wget http://github.com/Kitware/CMake/releases/download/v${cmake_version}/${cmake_tar_name}
+wget --no-verbose http://github.com/Kitware/CMake/releases/download/v${cmake_version}/${cmake_tar_name}
 tar xzf ${cmake_tar_name} --one-top-level=cmake --strip-components 1
 rm ${cmake_tar_name}
 popd
