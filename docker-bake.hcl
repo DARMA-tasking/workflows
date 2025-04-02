@@ -184,12 +184,6 @@ target "build-all" {
     CC              = cc(item)
     CXX             = equal(distro(item), "nvidia/cuda") ? "nvcc_wrapper" : cxx(item)
     FC              = fc(item)
-    MPICH_CC        = ""
-    MPICH_CXX       = ""
-    CPATH           = ""
-    INFOPATH        = ""
-    LIBRARY_PATH    = ""
-    LD_LIBRARY_PATH = ""
     PATH_PREFIX     = path-prefix(item)
     PACKAGES        = packages(item)
   }
