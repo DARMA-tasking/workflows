@@ -172,7 +172,7 @@ target "build" {
 target "build-all" {
   name = replace(setup-id(item), ".", "-")
   inherits = ["build"]
-  tags = ["${REPO}:${setup-id(item)}"]
+  tags = ["${REPO}:wf-${setup-id(item)}"]
 
   args = {
     ARCH            = arch(item)
