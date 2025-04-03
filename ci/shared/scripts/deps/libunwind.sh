@@ -14,7 +14,7 @@ libunwind_tar_name=${libunwind_name}.tar.gz
 
 echo "Downloading ${libunwind_tar_name}"
 
-wget https://github.com/libunwind/libunwind/releases/download/v${libunwind_version}/${libunwind_tar_name}
+wget --no-verbose https://github.com/libunwind/libunwind/releases/download/v${libunwind_version}/${libunwind_tar_name}
 
 tar xzf ${libunwind_tar_name}
 rm ${libunwind_tar_name}

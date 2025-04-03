@@ -80,14 +80,13 @@ setup:
       vtk: '9.3.1'
 
   # alpine linux
-  amd64-alpine-clang-13-cpp:
+  amd64-alpine-3.16-clang-cpp:
     label: alpine-3.16, clang-13, mpich
     env:
       <<: *env
       CC: mpicc
       CXX: mpicxx
     deps:
-      packages: !extend [ *apk-packages, clang, clang-dev ]
       mpich: { env: { CC: clang, CXX: clang++ }, args: ['3.3.2', '-j4'] }
 
   # ubuntu / gcc
@@ -104,7 +103,6 @@ setup:
         :/opt/vtk/bin\
         :"
     deps:
-      packages: !extend [ *apt-packages, gcc-9, g++-9, python3-jinja2, python3-pygments]
       cmake: ['3.23.4']
       doxygen: ['1.8.16']
       mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: [ '4.0.2', '-j4' ] }
@@ -113,7 +111,6 @@ setup:
     label: gcc-10, ubuntu, mpich
     env: { <<: *env, CC: gcc-10, CXX: g++-10 }
     deps:
-      packages: !extend [ *apt-packages, gcc-10, g++-10 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-10, CXX: g++-10 }, args: [ '4.0.2', '-j4' ] }
 
@@ -121,7 +118,6 @@ setup:
     label: gcc-10, ubuntu, openmpi
     env: { <<: *env, CC: gcc-10, CXX: g++-10 }
     deps:
-      packages: !extend [ *apt-packages, gcc-10, g++-10 ]
       cmake: ['3.23.4']
       openmpi: { env: { CC: gcc-10, CXX: g++-10 }, args: [ 'v4.0', '4.0.4', '-j4' ] }
 
@@ -129,7 +125,6 @@ setup:
     label: gcc-11, ubuntu, mpich
     env: { <<: *env, CC: gcc-11, CXX: g++-11 }
     deps:
-      packages: !extend [ *apt-packages, gcc-11, g++-11 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-11, CXX: g++-11 }, args: [ '4.0.2', '-j4' ] }
 
@@ -138,7 +133,6 @@ setup:
     label: gcc-12, ubuntu, mpich
     env: &develop-gcc-env { <<: *env, CC: gcc-12, CXX: g++-12 }
     deps: &develop-gcc-deps
-      packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2', '-j4' ] }
 
@@ -146,7 +140,6 @@ setup:
     <<: *develop-gcc
     label: gcc-12, ubuntu, mpich, vtk
     deps:
-      packages: !extend [ *apt-packages, gcc-12, g++-12, gcovr, lcov, xvfb ]
       <<: *develop-gcc-deps
       mesa: ~
       vtk: '9.3.1'
@@ -156,15 +149,27 @@ setup:
     env: { <<: *develop-gcc-env, FC: gfortran-12 }
     deps:
       <<: *develop-gcc-deps
-      packages: !extend [ *apt-packages, gcc-12, g++-12, gfortran-12 ]
       zoltan: [ -j4 ]
+
+  amd64-ubuntu-24.04-gcc-13-cpp:
+    label: gcc-13, ubuntu, mpich
+    env: { <<: *env, CC: gcc-13, CXX: g++-13 }
+    deps:
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-13, CXX: g++-13 }, args: [ '4.0.2', '-j4' ] }
+
+  amd64-ubuntu-24.04-gcc-14-cpp:
+    label: gcc-14, ubuntu, mpich
+    env: { <<: *env, CC: gcc-14, CXX: g++-14 }
+    deps:
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-14, CXX: g++-14 }, args: [ '4.0.2', '-j4' ] }
 
   # ubuntu / nvidia cuda
   amd64-ubuntu-20.04-gcc-9-cuda-12.2.0-cpp: &amd64-ubuntu-20_04-gcc-9-cuda-12_2_0-cpp
     label: nvidia cuda 12.2.0, gcc-9, ubuntu, mpich
     env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
     deps:
-      packages: !extend [ *apt-packages, gcc-9, g++-9 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: ['4.0.2', '-j4'] }
       nvcc_wrapper: ~
@@ -179,7 +184,6 @@ setup:
     label: clang-9, ubuntu, mpich
     env: { <<: *env, CC: clang-9, CXX: clang++-9 }
     deps:
-      packages: !extend [ *apt-packages, clang-9 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -188,7 +192,6 @@ setup:
     label: clang-10, ubuntu, mpich
     env: { <<: *env, CC: clang-10, CXX: clang++-10 }
     deps:
-      packages: !extend [ *apt-packages, clang-10 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -197,7 +200,6 @@ setup:
     label: clang-11, ubuntu, mpich
     env: { <<: *env, CC: clang-11, CXX: clang++-11 }
     deps:
-      packages: !extend [ *apt-packages, clang-11 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -206,7 +208,6 @@ setup:
     label: clang-12, ubuntu, mpich
     env: { <<: *env, CC: clang-12, CXX: clang++-12 }
     deps:
-      packages: !extend [ *apt-packages, clang-12 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -215,7 +216,6 @@ setup:
     label: clang-13, ubuntu, mpich
     env: { <<: *env, CC: clang-13, CXX: clang++-13 }
     deps:
-      packages: !extend [ *apt-packages, clang-13, llvm-13 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -224,7 +224,14 @@ setup:
     label: clang-14, ubuntu, mpich
     env: { <<: *env, CC: clang-14, CXX: clang++-14 }
     deps:
-      packages: !extend [ *apt-packages, clang-14, llvm-14 ]
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-22.04-clang-15-cpp:
+    label: clang-15, ubuntu, mpich
+    env: { <<: *env, CC: clang-15, CXX: clang++-15 }
+    deps:
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -233,7 +240,6 @@ setup:
     label: clang-16, ubuntu, mpich
     env: &develop-clang-env { <<: *env, CC: clang-16, CXX: clang++-16 }
     deps: &develop-clang-deps
-      packages: !extend [ *apt-packages, clang-16, llvm-16 ]
       cmake: ['3.23.4']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
@@ -242,7 +248,6 @@ setup:
     <<: *develop-clang
     label: clang-16, ubuntu, mpich, vtk
     deps:
-      packages: !extend [ *apt-packages, clang-16, llvm-16, xvfb ]
       <<: *develop-clang-deps
       mesa: ~
       vtk: '9.3.1'
@@ -252,9 +257,24 @@ setup:
     env: { <<: *develop-clang-env, FC: gfortran-13 }
     label: clang-16, ubuntu, mpich, zoltan
     deps:
-      packages: !extend [ *apt-packages, clang-16, llvm-16, gfortran-13 ]
       <<: *develop-clang-deps
       zoltan: [ -j4 ]
+
+  amd64-ubuntu-24.04-clang-17-cpp:
+    label: clang-17, ubuntu, mpich
+    env: { <<: *env, CC: clang-17, CXX: clang++-17 }
+    deps:
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
+
+  amd64-ubuntu-24.04-clang-18-cpp:
+    label: clang-18, ubuntu, mpich
+    env: { <<: *env, CC: clang-18, CXX: clang++-18 }
+    deps:
+      cmake: ['3.23.4']
+      libunwind: '1.6.2'
+      mpich: ['4.0.2', '-j4']
 
   # intel
   amd64-ubuntu-20.04-icpc-cpp: &amd64-ubuntu-20_04-icpc-icpc-cpp
@@ -265,14 +285,8 @@ setup:
       CXX: mpicxx
       MPICH_CC: icc
       MPICH_CXX: icpc
-      PATH_PREFIX: "/usr/lib/ccache\
-        :/opt/cmake/bin\
-        :/opt/nvcc_wrapper/build\
-        :/opt/vtk/bin\
-        :/opt/intel/oneapi/dev-utilities/latest/bin\
+      PATH_PREFIX: "/opt/intel/oneapi/dev-utilities/latest/bin\
         :/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/bin\
-        :/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/llvm/aocl-bin\
-        :/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/bin\
         :/opt/intel/oneapi/compiler/latest/linux/bin/intel64\
         :/opt/intel/oneapi/compiler/latest/linux/bin\
         :"
@@ -285,7 +299,6 @@ setup:
       LD_LIBRARY_PATH: /opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/debugger/10.1.1/dep/lib:/opt/intel/oneapi/debugger/10.1.1/libipt/intel64/lib:/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/lib:/opt/intel/oneapi/compiler/latest/linux/lib:/opt/intel/oneapi/compiler/latest/linux/lib/x64:/opt/intel/oneapi/compiler/latest/linux/lib/emu:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/host/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/compiler/lib
       INTEL_LICENSE_FILE: /opt/intel/licenses:/root/intel/licenses:/opt/intel/licenses:/root/intel/licenses:/Users/Shared/Library/Application Support/Intel/Licenses'
     deps: &intel-icpc-deps
-      packages: !extend [ *apt-packages, intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1 ]
       cmake: ['3.23.4']
       mpich: { env: { CC: icc, CXX: icpc }, args: ['4.0.2', '-j4'] }
 
@@ -305,10 +318,10 @@ images:
   # alpine Linux
   -
     repository: *docker-repository
-    tag: wf-amd64-alpine-clang-13-cpp
+    tag: wf-amd64-alpine-3.16-clang-cpp
     arch: linux/amd64
     base: alpine:3.16
-    setup: amd64-alpine-clang-13-cpp
+    setup: amd64-alpine-3.16-clang-cpp
 
   # ubuntu / gcc
   -
@@ -359,6 +372,20 @@ images:
     arch: linux/amd64
     base: ubuntu:22.04
     setup: amd64-ubuntu-22.04-gcc-12-zoltan-cpp
+
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-24.04-gcc-13-cpp
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-gcc-13-cpp
+
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-24.04-gcc-14-cpp
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-gcc-14-cpp
 
   # ubuntu / nvidia cuda
   -
@@ -420,6 +447,13 @@ images:
 
   -
     repository: *docker-repository
+    tag: wf-amd64-ubuntu-22.04-clang-15-cpp
+    arch: linux/amd64
+    base: ubuntu:22.04
+    setup: amd64-ubuntu-22.04-clang-15-cpp
+
+  -
+    repository: *docker-repository
     tag: wf-amd64-ubuntu-24.04-clang-16-cpp
     arch: linux/amd64
     base: ubuntu:24.04
@@ -438,6 +472,20 @@ images:
     arch: linux/amd64
     base: ubuntu:24.04
     setup: amd64-ubuntu-24.04-clang-16-zoltan-cpp
+
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-24.04-clang-17-cpp
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-clang-17-cpp
+
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-24.04-clang-18-cpp
+    arch: linux/amd64
+    base: ubuntu:24.04
+    setup: amd64-ubuntu-24.04-clang-18-cpp
 
   # intel
   -
@@ -471,7 +519,7 @@ runners:
   -
     type: *runner-types
     runs-on: ubuntu-latest
-    image: { repository: *docker-repository, tag: wf-amd64-alpine-clang-13-cpp }
+    image: { repository: *docker-repository, tag: wf-amd64-alpine-3.16-clang-cpp }
 
   # intel
   -
@@ -520,6 +568,16 @@ runners:
     runs-on: ubuntu-22.04
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-22.04-gcc-12-zoltan-cpp }
 
+  -
+    type: *runner-types
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-gcc-13-cpp }
+
+  -
+    type: *runner-types
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-gcc-14-cpp }
+
   # ubuntu / nvidia cuda
   -
     type: *runner-types
@@ -564,6 +622,11 @@ runners:
 
   -
     type: *runner-types
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-22.04-clang-15-cpp }
+
+  -
+    type: *runner-types
     runs-on: ubuntu-24.04
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-clang-16-cpp }
 
@@ -576,3 +639,13 @@ runners:
     type: *runner-types
     runs-on: ubuntu-24.04
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-clang-16-zoltan-cpp }
+
+  -
+    type: *runner-types
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-clang-17-cpp }
+
+  -
+    type: *runner-types
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-clang-18-cpp }

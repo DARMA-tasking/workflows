@@ -20,7 +20,7 @@ echo "${openmpi_name}"
 echo "${openmpi_tar_name}"
 echo "${make_flags}"
 
-wget https://download.open-mpi.org/release/open-mpi/${openmpi_dir}/${openmpi_tar_name}
+wget --no-verbose https://download.open-mpi.org/release/open-mpi/${openmpi_dir}/${openmpi_tar_name}
 tar xzf ${openmpi_tar_name}
 rm ${openmpi_tar_name}
 cd ${openmpi_name}
