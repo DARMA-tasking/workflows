@@ -266,6 +266,7 @@ target "build-all" {
       {
         compiler = "gcc-10"
         distro_version = "20.04"
+        extra_packages = "ssh"
         mpi_extra_flags = "--allow-run-as-root --oversubscribe"
         variant = "openmpi"
       },
