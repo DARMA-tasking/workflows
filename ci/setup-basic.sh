@@ -17,8 +17,6 @@ fi
 
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
 echo "PATH=$PATH"
-echo "CPATH=$CPATH"
-echo "LIBRARY_PATH=$LIBRARY_PATH"
 echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "----------------------------------"
 
