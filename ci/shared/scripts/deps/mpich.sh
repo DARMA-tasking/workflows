@@ -19,7 +19,7 @@ echo "${mpich_name}"
 echo "${mpich_tar_name}"
 echo "${make_flags}"
 
-wget --no-check-certificate http://www.mpich.org/static/downloads/${mpich_version}/${mpich_tar_name}
+wget --no-verbose --no-check-certificate http://www.mpich.org/static/downloads/${mpich_version}/${mpich_tar_name}
 tar xzf ${mpich_tar_name}
 rm ${mpich_tar_name}
 cd ${mpich_name}

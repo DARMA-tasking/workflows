@@ -14,7 +14,7 @@ doxygen_tar_name=doxygen-"${doxygen_version}".linux.bin.tar.gz
 echo "${doxygen_tar_name}"
 
 pushd /opt
-wget https://sourceforge.net/projects/doxygen/files/rel-"${doxygen_version}"/"${doxygen_tar_name}"
+wget --no-verbose https://sourceforge.net/projects/doxygen/files/rel-"${doxygen_version}"/"${doxygen_tar_name}"
 tar xzf "${doxygen_tar_name}" --one-top-level=doxygen --strip-components=1
 rm "${doxygen_tar_name}"
 popd

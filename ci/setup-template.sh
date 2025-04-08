@@ -26,13 +26,6 @@ then
     OS_VERSION=$(cat /etc/os-release | grep -E "^VERSION_ID=*" | cut -d = -f 2 | tr -d '"')
 fi
 
-echo "Operating system: $OS_NAME / Version: $OS_VERSION"
-echo "PATH=$PATH"
-echo "CPATH=$CPATH"
-echo "LIBRARY_PATH=$LIBRARY_PATH"
-echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-echo "----------------------------------"
-
 set -e
 
 ### INSTALL DEPENDENCIES
@@ -42,26 +35,11 @@ echo "--"
 
 cd $WF_TMP_DIR/shared/scripts/deps
 chmod u+x *.sh
-ls -l
 %DEPS_INSTALL%
 
 echo "--"
 echo "-- Dependencies installed!"
 echo "--"
-
-### CLEAN-UP
-if [ "$OS_NAME" = "Ubuntu" ]
-then
-    rm -rf /var/lib/apt/lists/*
-elif [ "$OS_NAME" = "Alpine Linux" ]
-then
-    :
-elif [ "$OS_NAME" = "macOS" ]
-then
-   :
-else
-    echo "No cleanup instructions defined for OS=$OS_NAME."
-fi
 
 echo "---------- Setup OK ! ------------"
 echo "--"

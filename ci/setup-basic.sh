@@ -4,7 +4,6 @@
 
 echo "------------- Setup --------------"
 
-OS_VERSION=
 UNAME=$(uname)
 if [ "$UNAME" = "Darwin" ]
 then
@@ -18,37 +17,34 @@ fi
 
 echo "Operating system: $OS_NAME / Version: $OS_VERSION"
 echo "PATH=$PATH"
-echo "CPATH=$CPATH"
-echo "LIBRARY_PATH=$LIBRARY_PATH"
 echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "----------------------------------"
 
-# Save setup environment to ~/.setuprc (used by packages.sh dep for example)
-echo "-- Set up variables (WF_SETUP_ID, OS_NAME, OS_VERSION) > ~/.setuprc"
-{
-    echo "export WF_SETUP_ID=\"$WF_SETUP_ID\""
-    echo "export OS_NAME=\"$OS_NAME\""
-    echo "export OS_VERSION=\"$OS_VERSION\""
-} >> ~/.setuprc
-
 ### UPDATE PACKAGE LIST AND INSTALL CORE DEPENDENCIES
-echo "-- Installing Core packages ($OS_NAME)..."
+echo "-- Installing base packages ($OS_NAME)..."
+
+set -eux
+
+BASE_PACKAGES="$@"
 if [ "$OS_NAME" = "Ubuntu" ]
 then
     apt-get update -y -q
-    apt-get install -y -q --no-install-recommends ca-certificates wget git python3 python3-yaml
+    apt-get install -y -q --no-install-recommends \
+        $BASE_PACKAGES
+    apt-get clean -y -q
+    rm -rf /var/lib/apt/lists/*
 elif [ "$OS_NAME" = "Alpine Linux" ]
 then
     apk update
-    apk add --no-cache wget git bash python3 py3-yaml
+    apk add --no-cache $BASE_PACKAGES
 elif [ "$OS_NAME" = "macOS" ]
 then
     brew update
 else
-    echo "Error. Please implement the pre-setup instructions for OS=$OS_NAME"
+    echo "Error. Please implement installation instructions for OS=$OS_NAME"
     exit 1
 fi
 
 echo "--"
-echo "-- Core packages installed!"
+echo "-- Base packages installed!"
 echo "--"
