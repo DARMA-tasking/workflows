@@ -8,6 +8,9 @@ FROM --platform=${ARCH} ${BASE} AS base
 
 ARG SETUP_ID=${SETUP_ID:-"amd64-ubuntu-22.04-gcc-12-cpp"}
 
+# YAML configuration string with dependencies to install
+ARG DEPS=""
+
 # Compiler
 ARG CC=${CC:-""}
 ARG CXX=${CXX:-""}
@@ -60,5 +63,5 @@ RUN --mount=type=bind,source=ci,target=${WF_TMP_DIR} \
     sh ${WF_TMP_DIR}/setup-basic.sh ${PACKAGES}
 
 RUN --mount=type=bind,rw,source=ci,target=${WF_TMP_DIR} \
-    python3 ${WF_TMP_DIR}/build-setup.py ${REPO}:wf-${SETUP_ID} && \
+    BUILD_DEPS=${DEPS} python3 ${WF_TMP_DIR}/build-setup.py ${SETUP_ID} && \
     sh ${WF_TMP_DIR}/setup-${SETUP_ID}.sh

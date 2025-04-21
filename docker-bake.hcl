@@ -155,6 +155,11 @@ function "ld-library-path" {
   result = lookup(item, "ld_library_path", "")
 }
 
+function "deps" {
+  params = [item]
+  result = lookup(item, "deps", "")
+}
+
 function "setup-id" {
   params = [item]
   result = join("-", [
@@ -198,6 +203,7 @@ target "build-all" {
     MPI_EXTRA_FLAGS = mpi-extra-flags(item)
     PATH_PREFIX     = path-prefix(item)
     PACKAGES        = packages(item)
+    DEPS            = deps(item)
   }
 
   matrix = {
@@ -206,38 +212,85 @@ target "build-all" {
       {
         compiler = "clang-9"
         distro_version = "20.04"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "clang-10"
         distro_version = "20.04"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "clang-11"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "clang-12"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "clang-13"
         extra_packages = "llvm-13"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "clang-14"
         extra_packages = "llvm-14"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "clang-15"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "clang-16"
         distro_version = "24.04"
         extra_packages = "llvm-16"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "clang-16"
         distro_version = "24.04"
         extra_packages = "llvm-16 xvfb"
         variant = "vtk"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+          mesa: ~
+          vtk: '9.3.1'
+        EOF
       },
       {
         compiler = "clang-16"
@@ -245,23 +298,48 @@ target "build-all" {
         extra_packages = "llvm-16 gfortran-13"
         fc="gfortran-13"
         variant = "zoltan"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+          zoltan: [ -j4 ]
+        EOF
       },
       {
         compiler = "clang-17"
         distro_version = "24.04"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "clang-18"
         distro_version = "24.04"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          libunwind: '1.6.2'
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "gcc-9"
         distro_version = "20.04"
         extra_packages = "python3-jinja2 python3-pygments"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          doxygen: ['1.8.16']
+          mpich: [ '4.0.2', '-j4' ]
+        EOF
       },
       {
         compiler = "gcc-10"
         distro_version = "20.04"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: ['4.0.2', '-j4']
+        EOF
       },
       {
         compiler = "gcc-10"
@@ -269,32 +347,63 @@ target "build-all" {
         extra_packages = "ssh"
         mpi_extra_flags = "--allow-run-as-root --oversubscribe"
         variant = "openmpi"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          openmpi: ['v4.0', '4.0.4', '-j4']
+        EOF
       },
       {
         compiler = "gcc-11"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: { args: [ '4.0.2', '-j4' ] }
+        EOF
       },
       {
         compiler = "gcc-12"
         extra_packages = "gcovr lcov"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: { args: [ '4.0.2', '-j4' ] }
+        EOF
       },
       {
         compiler = "gcc-12"
         extra_packages = "gcovr lcov xvfb"
         variant = "vtk"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: ['4.0.2', '-j4']
+          mesa: ~
+          vtk: '9.3.1'
+        EOF
       },
       {
         compiler = "gcc-12"
         extra_packages = "gcovr lcov gfortran-12"
         fc="gfortran-12"
         variant = "zoltan"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: ['4.0.2', '-j4']
+          zoltan: [ -j4 ]
+        EOF
       },
       {
         compiler = "gcc-13"
         distro_version = "24.04"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: { args: [ '4.0.2', '-j4' ] }
+        EOF
       },
       {
         compiler = "gcc-14"
         distro_version = "24.04"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: { args: [ '4.0.2', '-j4' ] }
+        EOF
       },
       # Alpine
       {
@@ -302,6 +411,10 @@ target "build-all" {
         distro = "alpine"
         distro_version = "3.16"
         extra_packages = "clang-dev"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: { args: [ '4.0.2', '-j4' ] }
+        EOF
       },
       # CUDA
       {
@@ -310,6 +423,11 @@ target "build-all" {
         distro_version = "12.2.0-devel-ubuntu20.04"
         path_prefix = "/opt/nvcc_wrapper/build:"
         variant = "cuda-12.2.0"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: ['4.0.2', '-j4'] }
+          nvcc_wrapper: ~
+        EOF
       },
       {
         compiler = "gcc-9"
@@ -317,6 +435,11 @@ target "build-all" {
         distro_version = "11.2.2-devel-ubuntu20.04"
         path_prefix = "/opt/nvcc_wrapper/build:"
         variant = "cuda-11.2.2"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: ['4.0.2', '-j4'] }
+          nvcc_wrapper: ~
+        EOF
       },
       # Intel
       {
@@ -326,6 +449,10 @@ target "build-all" {
         extra_packages = "intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1"
         ld_library_path = "/opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/debugger/10.1.1/dep/lib:/opt/intel/oneapi/debugger/10.1.1/libipt/intel64/lib:/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/lib:/opt/intel/oneapi/compiler/latest/linux/lib:/opt/intel/oneapi/compiler/latest/linux/lib/x64:/opt/intel/oneapi/compiler/latest/linux/lib/emu:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/compiler/lib"
         path_prefix = "/opt/intel/oneapi/dev-utilities/latest/bin:/opt/intel/oneapi/compiler/latest/linux/bin/intel64:/opt/intel/oneapi/compiler/latest/linux/bin:"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: { args: [ '4.0.2', '-j4' ] }
+        EOF
       },
     ]
   }
