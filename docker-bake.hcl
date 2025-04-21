@@ -412,8 +412,7 @@ target "build-all" {
         distro_version = "3.16"
         extra_packages = "clang-dev"
         deps = <<EOF
-          cmake: ['3.23.4']
-          mpich: { args: [ '4.0.2', '-j4' ] }
+          mpich: { args: [ '3.3.2', '-j4' ] }
         EOF
       },
       # CUDA
@@ -432,9 +431,9 @@ target "build-all" {
       {
         compiler = "gcc-9"
         distro = "nvidia/cuda"
-        distro_version = "11.2.2-devel-ubuntu20.04"
+        distro_version = "11.4.3-devel-ubuntu20.04"
         path_prefix = "/opt/nvcc_wrapper/build:"
-        variant = "cuda-11.2.2"
+        variant = "cuda-11.4.3"
         deps = <<EOF
           cmake: ['3.23.4']
           mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: ['4.0.2', '-j4'] }
