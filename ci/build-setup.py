@@ -1,9 +1,10 @@
 """This script generates setup scripts"""
 import copy
 import os
+import sys
 from typing import List, Union
 
-from util import resolve_conf
+from util import resolve_conf_deps
 import yaml
 
 class SetupBuilder:
@@ -44,35 +45,33 @@ class SetupBuilder:
 
         return [ cmd ]
 
-    def build(self):
-        """Build setup scripts for each setup configuration defined in config"""
+    def build_specific_configuration(self):
+        """Build setup script based on specitic setup configuration passed"""
+        build_deps_yaml = os.environ.get("BUILD_DEPS")
+        raw_config = yaml.safe_load(build_deps_yaml)
 
-        raw_config: dict = {}
-        with open(os.path.dirname(__file__) + "/config.yaml", 'r', encoding="utf-8") as file:
-            raw_config = yaml.safe_load(file)
-        config = resolve_conf(copy.deepcopy(raw_config))
+        config = resolve_conf_deps(copy.deepcopy(raw_config))
 
-        setup = config.get("setup")
-        for (setup_id, setup_config) in setup.items():
-            # generate install instructions and install dependencies commands
-            instructions = []
-            for (dep_id, args) in setup_config.get("deps").items():
-                instructions.extend(self.__instructions(dep_id, args))
+        setup_id = sys.argv[1]
+        instructions = []
 
-            setup_script = ""
-            with open(
+        for (dep_id, args) in config.items():
+            instructions.extend(self.__instructions(dep_id, args))
+
+        setup_script = ""
+        with open(
                 os.path.dirname(__file__) + "/setup-template.sh",
                 'r',
                 encoding="utf-8"
-            ) as file:
-                setup_script = file.read()
-            setup_script = setup_script.replace("%ENVIRONMENT_LABEL%", setup_config.get("label"))
+        ) as file:
+            setup_script = file.read()
+            setup_script = setup_script.replace("%ENVIRONMENT_LABEL%", setup_id)
             setup_script = setup_script.replace("%DEPS_INSTALL%", '\n'.join(instructions))
 
-            setup_filename = f"setup-{setup_id}.sh"
-            setup_filepath = os.path.join(os.path.dirname(__file__), setup_filename)
+        setup_filename = f"setup-{setup_id}.sh"
+        setup_filepath = os.path.join(os.path.dirname(__file__), setup_filename)
 
-            with open(setup_filepath, "w+", encoding="utf-8") as f:
-                f.write(setup_script)
+        with open(setup_filepath, "w+", encoding="utf-8") as f:
+            f.write(setup_script)
 
-SetupBuilder().build()
+SetupBuilder().build_specific_configuration()
