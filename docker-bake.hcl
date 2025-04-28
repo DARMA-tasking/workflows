@@ -356,7 +356,7 @@ target "build-all" {
         compiler = "gcc-11"
         deps = <<EOF
           cmake: ['3.23.4']
-          mpich: { args: [ '4.0.2', '-j4' ] }
+          mpich: ['4.0.2', '-j4']
         EOF
       },
       {
@@ -364,7 +364,7 @@ target "build-all" {
         extra_packages = "gcovr lcov"
         deps = <<EOF
           cmake: ['3.23.4']
-          mpich: { args: [ '4.0.2', '-j4' ] }
+          mpich: ['4.0.2', '-j4']
         EOF
       },
       {
@@ -394,7 +394,7 @@ target "build-all" {
         distro_version = "24.04"
         deps = <<EOF
           cmake: ['3.23.4']
-          mpich: { args: [ '4.0.2', '-j4' ] }
+          mpich: ['4.0.2', '-j4']
         EOF
       },
       {
@@ -402,7 +402,7 @@ target "build-all" {
         distro_version = "24.04"
         deps = <<EOF
           cmake: ['3.23.4']
-          mpich: { args: [ '4.0.2', '-j4' ] }
+          mpich: ['4.0.2', '-j4']
         EOF
       },
       # Alpine
@@ -412,7 +412,7 @@ target "build-all" {
         distro_version = "3.16"
         extra_packages = "clang-dev"
         deps = <<EOF
-          mpich: { args: [ '3.3.2', '-j4' ] }
+          mpich: [ '3.3.2', '-j4' ]
         EOF
       },
       # CUDA
@@ -450,7 +450,7 @@ target "build-all" {
         path_prefix = "/opt/intel/oneapi/dev-utilities/latest/bin:/opt/intel/oneapi/compiler/latest/linux/bin/intel64:/opt/intel/oneapi/compiler/latest/linux/bin:"
         deps = <<EOF
           cmake: ['3.23.4']
-          mpich: { args: [ '4.0.2', '-j4' ] }
+          mpich: ['4.0.2', '-j4']
         EOF
       },
     ]
