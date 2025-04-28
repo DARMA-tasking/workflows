@@ -62,10 +62,6 @@ def resolve_conf(config: Union[dict,list]) -> dict:
     return config
 
 def resolve_conf_deps(config: Union[dict,list]) -> dict:
-    """Update configuration to ease its processing:
-    - Turn images list into a dict (images indexed by `repo:tag`)
-    - Add some required missing keys with default values
-    """
     for dep_id, args in config.items():
         # no args
         if args is None:
