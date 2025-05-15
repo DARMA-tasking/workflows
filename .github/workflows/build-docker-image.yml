@@ -70,7 +70,7 @@ jobs:
               bash /opt/vt/ci/build_vt_sample.sh /opt/vt /opt/vt/build'
 
       - name: Push
-        if: ${{ success() && github.ref == 'refs/heads/master' }}
+        if: ${{ success() }}
         uses: docker/bake-action@v6
         with:
           targets: ${{ matrix.target }}
