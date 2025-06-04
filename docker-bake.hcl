@@ -329,6 +329,7 @@ target "build-all" {
       {
         compiler = "gcc-9"
         distro_version = "20.04"
+        path_prefix = "/opt/doxygen/bin:"
         extra_packages = "python3-jinja2 python3-pygments"
         deps = <<EOF
           cmake: ['3.23.4']
