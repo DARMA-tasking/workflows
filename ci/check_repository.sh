@@ -1,0 +1,101 @@
+#!/bin/bash
+
+# Check that a repository is compliant:
+# - all expected workflows are present
+
+CURRENT_DIR="$(dirname -- "$(realpath -- "$0")")" # Current directory
+PARENT_DIR="$(dirname "$CURRENT_DIR")"
+WORKING_DIR="$PARENT_DIR/output"
+ORG=DARMA-tasking
+REPOSITORY=$1
+EXPECTED_WORKFLOWS=( \
+find-unsigned-commits \
+check-commit-format \
+find-trailing-whitespace \
+check-pr-fixes-issue \
+action-git-diff-check \
+)
+
+# Clean
+rm -rf $WORKING_DIR
+mkdir -p $WORKING_DIR
+
+# Initialize
+N_ERRORS=0
+TSSTART=$(date +%s)
+echo "$ORG/$REPOSITORY > Cloning repository...";
+git clone https://github.com/$ORG/$REPOSITORY $WORKING_DIR/$REPOSITORY >/dev/null 2>&1
+
+# Directory containing workflow files
+WORKFLOWS_DIR="$WORKING_DIR/$REPOSITORY/.github/workflows"
+FOUND_WORKFLOWS=()
+
+# Check workflows
+if [ ! -d "$WORKFLOWS_DIR" ]; then
+    echo "[error] Workflow directory '$WORKFLOWS_DIR' does not exist."
+    exit 1
+fi
+
+for file in "$WORKFLOWS_DIR"/*.yml; do
+    if [ ! -f "$file" ]; then
+        continue
+    fi
+
+    # Check each file for the current workflow
+    for w in "${EXPECTED_WORKFLOWS[@]}"; do
+        if grep -qE "uses: .*/$w" "$file"; then
+            if [[ ! " ${FOUND_WORKFLOWS[@]} " =~ " $w " ]]; then
+                FOUND_WORKFLOWS+=("$w")
+                echo "[ok] Found workflow '$w' in file '${file#$WORKING_DIR/}'"
+            fi
+        fi
+    done
+
+    # Exit if all workflows are found
+    if [ ${#FOUND_WORKFLOWS[@]} -eq ${#EXPECTED_WORKFLOWS[@]} ]; then
+        break
+    fi
+done
+
+# Find any missing workflows
+MISSING_WORKFLOWS=()
+if [ ${#FOUND_WORKFLOWS[@]} -ne ${#EXPECTED_WORKFLOWS[@]} ]; then
+    echo "[error] Missing workflows:"
+    for w in "${EXPECTED_WORKFLOWS[@]}"; do
+        if [[ ! " ${FOUND_WORKFLOWS[@]} " =~ " $w " ]]; then
+            echo "  - $w"
+            MISSING_WORKFLOWS+=("$w")
+            ((N_ERRORS++))
+        fi
+    done
+else
+    echo "[ok] All expected workflows are present."
+fi
+
+# Finalize
+TSEND=$(date +%s)
+TSDURATION=$(( $TSEND - $TSSTART ))
+if [[ $N_ERRORS -gt 0 ]]; then
+    echo "Creating an issue in $REPOSITORY to add missing workflows..."
+
+    if [ ${#MISSING_WORKFLOWS[@]} -gt 0 ]; then
+        ISSUE_TITLE="[workflows] Missing Actions"
+        ISSUE_BODY="The following actions are missing from the repository:"
+        for w in "${MISSING_WORKFLOWS[@]}"; do
+            ISSUE_BODY+=$'\n- '"$w"
+        done
+
+        gh issue create \
+            --repo "$ORG/$REPOSITORY" \
+            --title "$ISSUE_TITLE" \
+            --body "$ISSUE_BODY"
+    fi
+else
+    echo "[success] repository checks OK."
+fi
+echo "$WORKING_DIR/$REPOSITORY has been processed in $TSDURATION seconds."
+echo "--------------------------------------------------";
+
+if [[ $N_ERRORS -gt 0 ]]; then
+    exit 1
+fi
