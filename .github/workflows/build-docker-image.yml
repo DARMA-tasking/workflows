@@ -64,7 +64,7 @@ jobs:
             --name test-container \
             "lifflander1/vt:wf-$TAG" \
             bash -c \
-              'git clone --depth=1 https://github.com/DARMA-tasking/vt /opt/vt && \
+              'git clone -b 2450-sync-ci-configs --depth=1 https://github.com/DARMA-tasking/vt /opt/vt && \
               bash /opt/vt/ci/build_cpp.sh /opt/vt /opt/vt/build && \
               bash /opt/vt/ci/test_cpp.sh /opt/vt /opt/vt/build && \
               bash /opt/vt/ci/build_vt_sample.sh /opt/vt /opt/vt/build'
