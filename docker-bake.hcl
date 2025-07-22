@@ -163,6 +163,11 @@ function "deps" {
   result = lookup(item, "deps", "")
 }
 
+function "vt_ldms" {
+  params = [item]
+  result = lookup(item, "vt_ldms", "")
+}
+
 function "setup-id" {
   params = [item]
   result = join("-", [
@@ -458,6 +463,17 @@ target "build-all" {
           mpich: ['4.0.2', '-j4']
         EOF
       },
+      #LDMS
+      {
+        compiler = "gcc-13"
+        distro_version = "24.04"
+        variant = "ldms"
+        deps = <<EOF
+          cmake: ['3.28.3']
+          mpich: ['4.0.2', '-j4']
+          ldms: ['4.3.5'] #latest: 5.1.2
+        EOF
+      }
     ]
   }
 }
