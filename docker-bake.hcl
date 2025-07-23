@@ -481,7 +481,7 @@ target "build-all" {
         variant = "ldms"
         deps = <<EOF
           cmake: ['3.28.3']
-          mpich: ['4.0.2', '-j20']
+          mpich: ['4.0.2', '-j4']
           ldms: ['4.3.5'] #latest: 5.1.2
         EOF
       }
