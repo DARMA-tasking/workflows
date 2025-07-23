@@ -33,6 +33,14 @@ function base-packages {
   result = (
     equal(distro(item), "ubuntu") || equal(distro(item), "nvidia/cuda") || equal(distro(item), "intel/oneapi") ?
       join(" ", [
+        "autoconf",
+        "automake",
+        "libtool",
+        "m4",
+        "pkg-config",
+        "bison",
+        "flex",
+        "libssl-dev",
         "ca-certificates",
         "ccache",
         "curl",
@@ -45,6 +53,8 @@ function base-packages {
         "make-guile",
         "ninja-build",
         "python3",
+        "python3-dev",
+        "python3-distutils",
         "python3-brotli",
         "python3-deepdiff",
         "python3-schema",
@@ -59,6 +69,7 @@ function base-packages {
         "automake",
         "bash",
         "binutils-dev",
+        "bison",
         "ccache",
         "cmake",
         "dpkg",
@@ -465,12 +476,12 @@ target "build-all" {
       },
       #LDMS
       {
-        compiler = "gcc-13"
-        distro_version = "24.04"
+        compiler = "gcc-9"
+        distro_version = "20.04"
         variant = "ldms"
         deps = <<EOF
           cmake: ['3.28.3']
-          mpich: ['4.0.2', '-j4']
+          mpich: ['4.0.2', '-j20']
           ldms: ['4.3.5'] #latest: 5.1.2
         EOF
       }
