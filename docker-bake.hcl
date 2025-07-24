@@ -164,11 +164,6 @@ function "deps" {
   result = lookup(item, "deps", "")
 }
 
-function "vt_ldms" {
-  params = [item]
-  result = lookup(item, "vt_ldms", "")
-}
-
 function "setup-id" {
   params = [item]
   result = join("-", [
