@@ -59,7 +59,6 @@ function base-packages {
         "automake",
         "bash",
         "binutils-dev",
-        "bison",
         "ccache",
         "cmake",
         "dpkg",
