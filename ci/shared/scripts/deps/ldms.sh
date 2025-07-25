@@ -17,6 +17,7 @@ cd ovis
 git checkout OVIS-${version}
 
 ./autogen.sh
+sed -i '19s|^prefix=.*|prefix=/opt/ldms|' ./packaging/make-all-top.sh
 ./packaging/make-all-top.sh
 
 cd -
