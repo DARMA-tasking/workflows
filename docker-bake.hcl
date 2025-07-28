@@ -458,6 +458,18 @@ target "build-all" {
           mpich: ['4.0.2', '-j4']
         EOF
       },
+      #LDMS
+      {
+        compiler = "gcc-9"
+        distro_version = "20.04"
+        variant = "ldms"
+        extra_packages = "autoconf automake libtool m4 pkg-config bison flex libssl-dev python3-dev python3-distutils"
+        deps = <<EOF
+          cmake: ['3.28.3']
+          mpich: ['4.0.2', '-j4']
+          ldms: ['4.3.5'] #latest: 5.1.2
+        EOF
+      }
     ]
   }
 }
