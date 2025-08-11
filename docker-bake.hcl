@@ -464,6 +464,7 @@ target "build-all" {
         distro_version = "20.04"
         variant = "ldms"
         extra_packages = "autoconf automake libtool m4 pkg-config bison flex libssl-dev python3-dev python3-distutils"
+        ld_library_path = "/opt/ldms/lib"
         deps = <<EOF
           cmake: ['3.28.3']
           mpich: ['4.0.2', '-j4']
