@@ -75,7 +75,7 @@ setup:
       CXX: mpicxx++
     deps:
       packages: !extend [ *brew-packages, mpich]
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       mesa: ~
       vtk: '9.3.1'
 
@@ -103,7 +103,7 @@ setup:
         :/opt/vtk/bin\
         :"
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       doxygen: ['1.8.16']
       mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: [ '4.0.2', '-j4' ] }
 
@@ -111,21 +111,21 @@ setup:
     label: gcc-10, ubuntu, mpich
     env: { <<: *env, CC: gcc-10, CXX: g++-10 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       mpich: { env: { CC: gcc-10, CXX: g++-10 }, args: [ '4.0.2', '-j4' ] }
 
   amd64-ubuntu-20.04-gcc-10-openmpi-cpp:
     label: gcc-10, ubuntu, openmpi
     env: { <<: *env, CC: gcc-10, CXX: g++-10 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       openmpi: { env: { CC: gcc-10, CXX: g++-10 }, args: [ 'v4.0', '4.0.4', '-j4' ] }
 
   amd64-ubuntu-22.04-gcc-11-cpp:
     label: gcc-11, ubuntu, mpich
     env: { <<: *env, CC: gcc-11, CXX: g++-11 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       mpich: { env: { CC: gcc-11, CXX: g++-11 }, args: [ '4.0.2', '-j4' ] }
 
   # The `develop` configuration. Includes also gcovr and lcov report generators.
@@ -133,7 +133,7 @@ setup:
     label: gcc-12, ubuntu, mpich
     env: &develop-gcc-env { <<: *env, CC: gcc-12, CXX: g++-12 }
     deps: &develop-gcc-deps
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       mpich: { env: { CC: gcc-12, CXX: g++-12 }, args: [ '4.0.2', '-j4' ] }
 
   amd64-ubuntu-22.04-gcc-12-vtk-cpp:
@@ -155,14 +155,14 @@ setup:
     label: gcc-13, ubuntu, mpich
     env: { <<: *env, CC: gcc-13, CXX: g++-13 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       mpich: { env: { CC: gcc-13, CXX: g++-13 }, args: [ '4.0.2', '-j4' ] }
 
   amd64-ubuntu-24.04-gcc-14-cpp:
     label: gcc-14, ubuntu, mpich
     env: { <<: *env, CC: gcc-14, CXX: g++-14 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       mpich: { env: { CC: gcc-14, CXX: g++-14 }, args: [ '4.0.2', '-j4' ] }
 
   # ubuntu / nvidia cuda
@@ -170,7 +170,7 @@ setup:
     label: nvidia cuda 12.2.0, gcc-9, ubuntu, mpich
     env: { <<: *env, CC: gcc-9, CXX: nvcc_wrapper }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: ['4.0.2', '-j4'] }
       nvcc_wrapper: ~
       # fmt: ['7.1.3', '-j4'] external fmt
@@ -184,7 +184,7 @@ setup:
     label: clang-9, ubuntu, mpich
     env: { <<: *env, CC: clang-9, CXX: clang++-9 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -192,7 +192,7 @@ setup:
     label: clang-10, ubuntu, mpich
     env: { <<: *env, CC: clang-10, CXX: clang++-10 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -200,7 +200,7 @@ setup:
     label: clang-11, ubuntu, mpich
     env: { <<: *env, CC: clang-11, CXX: clang++-11 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -208,7 +208,7 @@ setup:
     label: clang-12, ubuntu, mpich
     env: { <<: *env, CC: clang-12, CXX: clang++-12 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -216,7 +216,7 @@ setup:
     label: clang-13, ubuntu, mpich
     env: { <<: *env, CC: clang-13, CXX: clang++-13 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -224,7 +224,7 @@ setup:
     label: clang-14, ubuntu, mpich
     env: { <<: *env, CC: clang-14, CXX: clang++-14 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -232,7 +232,7 @@ setup:
     label: clang-15, ubuntu, mpich
     env: { <<: *env, CC: clang-15, CXX: clang++-15 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -240,7 +240,7 @@ setup:
     label: clang-16, ubuntu, mpich
     env: &develop-clang-env { <<: *env, CC: clang-16, CXX: clang++-16 }
     deps: &develop-clang-deps
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -264,7 +264,7 @@ setup:
     label: clang-17, ubuntu, mpich
     env: { <<: *env, CC: clang-17, CXX: clang++-17 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -272,7 +272,7 @@ setup:
     label: clang-18, ubuntu, mpich
     env: { <<: *env, CC: clang-18, CXX: clang++-18 }
     deps:
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       libunwind: '1.6.2'
       mpich: ['4.0.2', '-j4']
 
@@ -299,7 +299,7 @@ setup:
       LD_LIBRARY_PATH: /opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/debugger/10.1.1/dep/lib:/opt/intel/oneapi/debugger/10.1.1/libipt/intel64/lib:/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/lib:/opt/intel/oneapi/compiler/latest/linux/lib:/opt/intel/oneapi/compiler/latest/linux/lib/x64:/opt/intel/oneapi/compiler/latest/linux/lib/emu:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/host/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/linux64/lib:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/compiler/lib
       INTEL_LICENSE_FILE: /opt/intel/licenses:/root/intel/licenses:/opt/intel/licenses:/root/intel/licenses:/Users/Shared/Library/Application Support/Intel/Licenses'
     deps: &intel-icpc-deps
-      cmake: ['3.23.4']
+      cmake: ['3.31.9']
       mpich: { env: { CC: icc, CXX: icpc }, args: ['4.0.2', '-j4'] }
 
   amd64-ubuntu-20.04-icpx-cpp:
