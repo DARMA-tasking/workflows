@@ -216,7 +216,7 @@ target "build-all" {
         compiler = "clang-9"
         distro_version = "20.04"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -225,7 +225,7 @@ target "build-all" {
         compiler = "clang-10"
         distro_version = "20.04"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -233,7 +233,7 @@ target "build-all" {
       {
         compiler = "clang-11"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -241,7 +241,7 @@ target "build-all" {
       {
         compiler = "clang-12"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -250,7 +250,7 @@ target "build-all" {
         compiler = "clang-13"
         extra_packages = "llvm-13"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -259,7 +259,7 @@ target "build-all" {
         compiler = "clang-14"
         extra_packages = "llvm-14"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -267,7 +267,7 @@ target "build-all" {
       {
         compiler = "clang-15"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -277,7 +277,7 @@ target "build-all" {
         distro_version = "24.04"
         extra_packages = "llvm-16"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -288,7 +288,7 @@ target "build-all" {
         extra_packages = "llvm-16 xvfb"
         variant = "vtk"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
           mesa: ~
@@ -302,7 +302,7 @@ target "build-all" {
         fc="gfortran-13"
         variant = "zoltan"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
           zoltan: [ -j4 ]
@@ -312,7 +312,7 @@ target "build-all" {
         compiler = "clang-17"
         distro_version = "24.04"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -321,7 +321,7 @@ target "build-all" {
         compiler = "clang-18"
         distro_version = "24.04"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
         EOF
@@ -332,7 +332,7 @@ target "build-all" {
         path_prefix = "/opt/doxygen/bin:"
         extra_packages = "python3-jinja2 python3-pygments texlive-font-utils"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           doxygen: ['1.8.16']
           mpich: [ '4.0.2', '-j4' ]
         EOF
@@ -341,7 +341,7 @@ target "build-all" {
         compiler = "gcc-10"
         distro_version = "20.04"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           mpich: ['4.0.2', '-j4']
         EOF
       },
@@ -352,14 +352,14 @@ target "build-all" {
         mpi_extra_flags = "--allow-run-as-root --oversubscribe"
         variant = "openmpi"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           openmpi: ['v4.0', '4.0.4', '-j4']
         EOF
       },
       {
         compiler = "gcc-11"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           mpich: ['4.0.2', '-j4']
         EOF
       },
@@ -367,7 +367,7 @@ target "build-all" {
         compiler = "gcc-12"
         extra_packages = "gcovr lcov"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           mpich: ['4.0.2', '-j4']
         EOF
       },
@@ -376,7 +376,7 @@ target "build-all" {
         extra_packages = "gcovr lcov xvfb"
         variant = "vtk"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           mpich: ['4.0.2', '-j4']
           mesa: ~
           vtk: '9.3.1'
@@ -388,7 +388,7 @@ target "build-all" {
         fc="gfortran-12"
         variant = "zoltan"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           mpich: ['4.0.2', '-j4']
           zoltan: [ -j4 ]
         EOF
@@ -397,7 +397,7 @@ target "build-all" {
         compiler = "gcc-13"
         distro_version = "24.04"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           mpich: ['4.0.2', '-j4']
         EOF
       },
@@ -405,7 +405,7 @@ target "build-all" {
         compiler = "gcc-14"
         distro_version = "24.04"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           mpich: ['4.0.2', '-j4']
         EOF
       },
@@ -416,6 +416,7 @@ target "build-all" {
         distro_version = "3.16"
         extra_packages = "clang-dev"
         deps = <<EOF
+          cmake: ['3.31.9']
           mpich: [ '3.3.2', '-j4' ]
         EOF
       },
@@ -427,7 +428,7 @@ target "build-all" {
         path_prefix = "/opt/nvcc_wrapper/build:"
         variant = "cuda-12.2.0"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: ['4.0.2', '-j4'] }
           nvcc_wrapper: ~
         EOF
@@ -451,7 +452,7 @@ target "build-all" {
         path_prefix = "/opt/nvcc_wrapper/build:"
         variant = "cuda-11.4.3"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           fmt: { env: { CC: gcc-9, CXX: g++-9 }, args: ['11.1.3', '-j4'] }
           mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: ['4.0.2', '-j4'] }
           nvcc_wrapper: ~
@@ -466,7 +467,7 @@ target "build-all" {
         ld_library_path = "/opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/debugger/10.1.1/dep/lib:/opt/intel/oneapi/debugger/10.1.1/libipt/intel64/lib:/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/lib:/opt/intel/oneapi/compiler/latest/linux/lib:/opt/intel/oneapi/compiler/latest/linux/lib/x64:/opt/intel/oneapi/compiler/latest/linux/lib/emu:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/compiler/lib"
         path_prefix = "/opt/intel/oneapi/dev-utilities/latest/bin:/opt/intel/oneapi/compiler/latest/linux/bin/intel64:/opt/intel/oneapi/compiler/latest/linux/bin:"
         deps = <<EOF
-          cmake: ['3.23.4']
+          cmake: ['3.31.9']
           mpich: ['4.0.2', '-j4']
         EOF
       },
