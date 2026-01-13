@@ -433,6 +433,18 @@ target "build-all" {
         EOF
       },
       {
+        compiler = "gcc-13"
+        distro = "nvidia/cuda"
+        distro_version = "12.9.0-devel-ubuntu24.04"
+        path_prefix = "/opt/nvcc_wrapper/build:"
+        variant = "cuda-12.9.0"
+        deps = <<EOF
+          cmake: ['3.23.4']
+          mpich: { env: { CC: gcc-13, CXX: g++-13 }, args: ['4.0.2', '-j4'] }
+          nvcc_wrapper: ~
+        EOF
+      },
+      {
         compiler = "gcc-9"
         distro = "nvidia/cuda"
         distro_version = "11.4.3-devel-ubuntu20.04"
