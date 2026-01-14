@@ -311,6 +311,7 @@ target "build-all" {
       {
         compiler = "clang-17"
         distro_version = "24.04"
+        extra_packages = "clang-tools-17"
         deps = <<EOF
           cmake: ['3.31.9']
           libunwind: '1.6.2'
@@ -320,6 +321,7 @@ target "build-all" {
       {
         compiler = "clang-18"
         distro_version = "24.04"
+        extra_packages = "clang-tools-18"
         deps = <<EOF
           cmake: ['3.31.9']
           libunwind: '1.6.2'
