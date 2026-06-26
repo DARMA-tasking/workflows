@@ -463,8 +463,8 @@ target "build-all" {
       # Intel
       {
         compiler = "icpx"
-        distro = "intel-oneapi-hpckit"
-        distro_version = "2024-2-ubuntu22-04"
+        distro = "intel/oneapi"
+        distro_version = "2026.0.0-devel-ubuntu24.04"
         extra_packages = "intel-oneapi-compiler-dpcpp-cpp-2023.2.0"
         ld_library_path = "/opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/debugger/10.1.1/dep/lib:/opt/intel/oneapi/debugger/10.1.1/libipt/intel64/lib:/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/lib:/opt/intel/oneapi/compiler/latest/linux/lib:/opt/intel/oneapi/compiler/latest/linux/lib/x64:/opt/intel/oneapi/compiler/latest/linux/lib/emu:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/compiler/lib"
         path_prefix = "/opt/intel/oneapi/dev-utilities/latest/bin:/opt/intel/oneapi/compiler/latest/linux/bin/intel64:/opt/intel/oneapi/compiler/latest/linux/bin:"
