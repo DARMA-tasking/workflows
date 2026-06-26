@@ -302,8 +302,8 @@ setup:
       cmake: ['3.23.4']
       mpich: { env: { CC: icc, CXX: icpc }, args: ['4.0.2', '-j4'] }
 
-  amd64-ubuntu-20.04-icpx-cpp:
-    <<: *amd64-ubuntu-20_04-icpc-icpc-cpp
+  amd64-ubuntu-22.04-icpx-cpp:
+    <<: *amd64-ubuntu-22_04-icpc-icpc-cpp
     label: intel icpx, ubuntu, mpich
     env:
       <<: *intel-icpc-env
@@ -497,10 +497,10 @@ images:
 
   -
     repository: *docker-repository
-    tag: wf-amd64-ubuntu-20.04-icpx-cpp
+    tag: wf-amd64-ubuntu-22.04-icpx-cpp
     arch: linux/amd64
-    base: intel/oneapi:os-tools-ubuntu20.04
-    setup: amd64-ubuntu-20.04-icpx-cpp
+    base: intel/oneapi:os-tools-ubuntu22.04
+    setup: amd64-ubuntu-22.04-icpx-cpp
 
 # List of test configurations available to the CI runners/agents
 runners:
@@ -529,8 +529,8 @@ runners:
 
   -
     type: *runner-types
-    runs-on: ubuntu-20.04
-    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-20.04-icpx-cpp }
+    runs-on: ubuntu-22.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-22.04-icpx-cpp }
 
   # ubuntu / gcc
   -
