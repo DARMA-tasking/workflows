@@ -25,11 +25,11 @@
       "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-icpc-cpp",
       "name": "wf-amd64-ubuntu-20.04-icpc-cpp"
     },
-    "wf-amd64-ubuntu-20-04-icpx-cpp": {
+    "wf-amd64-ubuntu-24-04-icpx-cpp": {
       "label": "intel icpx, ubuntu, mpich",
-      "vmImage": "ubuntu-20.04",
-      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-icpx-cpp",
-      "name": "wf-amd64-ubuntu-20.04-icpx-cpp"
+      "vmImage": "ubuntu-24.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-24.04-icpx-cpp",
+      "name": "wf-amd64-ubuntu-24.04-icpx-cpp"
     },
     "wf-amd64-ubuntu-20-04-gcc-9-cpp": {
       "label": "gcc-9, ubuntu, mpich",

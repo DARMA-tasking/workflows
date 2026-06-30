@@ -60,6 +60,7 @@ jobs:
           TAG=${TAG/11-2-2/11.2.2}
           TAG=${TAG/11-4-3/11.4.3}
           TAG=${TAG/12-2-0/12.2.0}
+          TAG=${TAG/12-9-0/12.9.0}
           docker run \
             --name test-container \
             "lifflander1/vt:wf-$TAG" \
