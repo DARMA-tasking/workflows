@@ -97,6 +97,12 @@
       "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp",
       "name": "wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp"
     },
+    "wf-amd64-ubuntu-24-04-gcc-13-cuda-12-9-0-cpp": {
+      "label": "nvidia cuda 12.9.0, gcc-13, ubuntu, mpich",
+      "vmImage": "ubuntu-24.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-24.04-gcc-13-cuda-12.9.0-cpp",
+      "name": "wf-amd64-ubuntu-24.04-gcc-13-cuda-12.9.0-cpp"
+    },
     "wf-amd64-ubuntu-20-04-clang-9-cpp": {
       "label": "clang-9, ubuntu, mpich",
       "vmImage": "ubuntu-20.04",

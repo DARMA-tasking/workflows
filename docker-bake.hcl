@@ -99,6 +99,17 @@ function "distro-version" {
   result = lookup(item, "distro_version", DISTRO_VERSION)
 }
 
+function "setup-distro-version" {
+  params = [item]
+  result = lookup(
+    item,
+    "setup_distro_version",
+    equal(distro(item), "nvidia/cuda") || equal(distro(item), "intel/oneapi") ?
+      "ubuntu-20.04" :
+      "${distro(item)}-${distro-version(item)}"
+  )
+}
+
 function "compiler" {
   params = [item]
   result = lookup(item, "compiler", COMPILER)
@@ -167,9 +178,7 @@ function "setup-id" {
   params = [item]
   result = join("-", [
     arch(item),
-    equal(distro(item), "nvidia/cuda") || equal(distro(item), "intel/oneapi") ?
-      "ubuntu-20.04" :
-      "${distro(item)}-${distro-version(item)}",
+    setup-distro-version(item),
     compiler(item),
     equal(variant(item), "") ? "cpp" : "${variant(item)}-cpp"
   ])
@@ -439,6 +448,7 @@ target "build-all" {
         compiler = "gcc-13"
         distro = "nvidia/cuda"
         distro_version = "12.9.0-devel-ubuntu24.04"
+        setup_distro_version = "ubuntu-24.04"
         path_prefix = "/opt/nvcc_wrapper/build:"
         variant = "cuda-12.9.0"
         deps = <<EOF
@@ -465,6 +475,7 @@ target "build-all" {
         compiler = "icpx"
         distro = "intel/oneapi"
         distro_version = "2026.0.0-devel-ubuntu24.04"
+        setup_distro_version = "ubuntu-24.04"
         extra_packages = "intel-oneapi-compiler-dpcpp-cpp-2023.2.0"
         ld_library_path = "/opt/intel/oneapi/tbb/latest/env/../lib/intel64/gcc4.8:/opt/intel/oneapi/debugger/10.1.1/dep/lib:/opt/intel/oneapi/debugger/10.1.1/libipt/intel64/lib:/opt/intel/oneapi/debugger/10.1.1/gdb/intel64/lib:/opt/intel/oneapi/compiler/latest/linux/lib:/opt/intel/oneapi/compiler/latest/linux/lib/x64:/opt/intel/oneapi/compiler/latest/linux/lib/emu:/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/opt/intel/oneapi/compiler/latest/linux/compiler/lib"
         path_prefix = "/opt/intel/oneapi/dev-utilities/latest/bin:/opt/intel/oneapi/compiler/latest/linux/bin/intel64:/opt/intel/oneapi/compiler/latest/linux/bin:"
