@@ -27,9 +27,9 @@
     },
     {
       "label": "intel icpx, ubuntu, mpich",
-      "runs-on": "ubuntu-20.04",
-      "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-icpx-cpp",
-      "name": "wf-amd64-ubuntu-20.04-icpx-cpp"
+      "runs-on": "ubuntu-24.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-24.04-icpx-cpp",
+      "name": "wf-amd64-ubuntu-24.04-icpx-cpp"
     },
     {
       "label": "gcc-9, ubuntu, mpich",
@@ -96,6 +96,12 @@
       "runs-on": "ubuntu-20.04",
       "image": "lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp",
       "name": "wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp"
+    },
+    {
+      "label": "nvidia cuda 12.9.0, gcc-13, ubuntu, mpich",
+      "runs-on": "ubuntu-24.04",
+      "image": "lifflander1/vt:wf-amd64-ubuntu-24.04-gcc-13-cuda-12.9.0-cpp",
+      "name": "wf-amd64-ubuntu-24.04-gcc-13-cuda-12.9.0-cpp"
     },
     {
       "label": "clang-9, ubuntu, mpich",

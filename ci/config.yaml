@@ -179,6 +179,14 @@ setup:
     <<: *amd64-ubuntu-20_04-gcc-9-cuda-12_2_0-cpp
     label: nvidia cuda 11.2.2, gcc-9, ubuntu, mpich
 
+  amd64-ubuntu-24.04-gcc-13-cuda-12.9.0-cpp:
+    label: nvidia cuda 12.9.0, gcc-13, ubuntu, mpich
+    env: { <<: *env, CC: gcc-13, CXX: nvcc_wrapper }
+    deps:
+      cmake: ['3.23.4']
+      mpich: { env: { CC: gcc-13, CXX: g++-13 }, args: ['4.0.2', '-j4'] }
+      nvcc_wrapper: ~
+
   # ubuntu / clang
   amd64-ubuntu-20.04-clang-9-cpp:
     label: clang-9, ubuntu, mpich
@@ -302,7 +310,7 @@ setup:
       cmake: ['3.23.4']
       mpich: { env: { CC: icc, CXX: icpc }, args: ['4.0.2', '-j4'] }
 
-  amd64-ubuntu-20.04-icpx-cpp:
+  amd64-ubuntu-24.04-icpx-cpp:
     <<: *amd64-ubuntu-20_04-icpc-icpc-cpp
     label: intel icpx, ubuntu, mpich
     env:
@@ -402,6 +410,13 @@ images:
     base: nvidia/cuda:11.2.2-devel-ubuntu20.04
     setup: amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp
 
+  -
+    repository: *docker-repository
+    tag: wf-amd64-ubuntu-24.04-gcc-13-cuda-12.9.0-cpp
+    arch: linux/amd64
+    base: nvidia/cuda:12.9.0-devel-ubuntu24.04
+    setup: amd64-ubuntu-24.04-gcc-13-cuda-12.9.0-cpp
+
   # ubuntu / clang
   -
     repository: *docker-repository
@@ -497,10 +512,10 @@ images:
 
   -
     repository: *docker-repository
-    tag: wf-amd64-ubuntu-20.04-icpx-cpp
+    tag: wf-amd64-ubuntu-24.04-icpx-cpp
     arch: linux/amd64
-    base: intel/oneapi:os-tools-ubuntu20.04
-    setup: amd64-ubuntu-20.04-icpx-cpp
+    base: intel/oneapi:2026.0.0-devel-ubuntu24.04
+    setup: amd64-ubuntu-24.04-icpx-cpp
 
 # List of test configurations available to the CI runners/agents
 runners:
@@ -529,8 +544,8 @@ runners:
 
   -
     type: *runner-types
-    runs-on: ubuntu-20.04
-    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-20.04-icpx-cpp }
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-icpx-cpp }
 
   # ubuntu / gcc
   -
@@ -588,6 +603,11 @@ runners:
     type: *runner-types
     runs-on: ubuntu-20.04
     image: { repository: *docker-repository, tag: wf-amd64-ubuntu-20.04-gcc-9-cuda-11.2.2-cpp }
+
+  -
+    type: *runner-types
+    runs-on: ubuntu-24.04
+    image: { repository: *docker-repository, tag: wf-amd64-ubuntu-24.04-gcc-13-cuda-12.9.0-cpp }
 
   # ubuntu / clang
   -
