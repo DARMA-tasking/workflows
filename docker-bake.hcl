@@ -340,11 +340,8 @@ target "build-all" {
       {
         compiler = "gcc-9"
         distro_version = "20.04"
-        path_prefix = "/opt/doxygen/bin:"
-        extra_packages = "python3-jinja2 python3-pygments texlive-font-utils"
         deps = <<EOF
           cmake: ['3.31.9']
-          doxygen: ['1.8.16']
           mpich: [ '4.0.2', '-j4' ]
         EOF
       },
@@ -415,8 +412,11 @@ target "build-all" {
       {
         compiler = "gcc-14"
         distro_version = "24.04"
+        path_prefix = "/opt/doxygen/bin:"
+        extra_packages = "python3-jinja2 python3-pygments texlive-font-utils"
         deps = <<EOF
           cmake: ['3.31.9']
+          doxygen: ['1.8.16']
           mpich: ['4.0.2', '-j4']
         EOF
       },
