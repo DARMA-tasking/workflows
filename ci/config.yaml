@@ -162,7 +162,7 @@ setup:
         :"
     deps:
       cmake: ['3.23.4']
-      doxygen: ['1.8.16']
+      doxygen: ['1.17.0']
       mpich: { env: { CC: gcc-14, CXX: g++-14 }, args: [ '4.0.2', '-j4' ] }
 
   # ubuntu / nvidia cuda

@@ -416,7 +416,7 @@ target "build-all" {
         extra_packages = "python3-jinja2 python3-pygments texlive-font-utils"
         deps = <<EOF
           cmake: ['3.31.9']
-          doxygen: ['1.8.16']
+          doxygen: ['1.17.0']
           mpich: ['4.0.2', '-j4']
         EOF
       },
