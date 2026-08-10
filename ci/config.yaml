@@ -92,19 +92,9 @@ setup:
   # ubuntu / gcc
   amd64-ubuntu-20.04-gcc-9-cpp:
     label: gcc-9, ubuntu, mpich
-    env:
-      <<: *env
-      CC: gcc-9
-      CXX: g++-9
-      PATH_PREFIX: "/usr/lib/ccache\
-        :/opt/cmake/bin\
-        :/opt/doxygen/bin\
-        :/opt/nvcc_wrapper/build\
-        :/opt/vtk/bin\
-        :"
+    env: { <<: *env, CC: gcc-9, CXX: g++-9 }
     deps:
       cmake: ['3.23.4']
-      doxygen: ['1.8.16']
       mpich: { env: { CC: gcc-9, CXX: g++-9 }, args: [ '4.0.2', '-j4' ] }
 
   amd64-ubuntu-20.04-gcc-10-cpp:
@@ -160,9 +150,19 @@ setup:
 
   amd64-ubuntu-24.04-gcc-14-cpp:
     label: gcc-14, ubuntu, mpich
-    env: { <<: *env, CC: gcc-14, CXX: g++-14 }
+    env:
+      <<: *env
+      CC: gcc-14
+      CXX: g++-14
+      PATH_PREFIX: "/usr/lib/ccache\
+        :/opt/cmake/bin\
+        :/opt/doxygen/bin\
+        :/opt/nvcc_wrapper/build\
+        :/opt/vtk/bin\
+        :"
     deps:
       cmake: ['3.23.4']
+      doxygen: ['1.17.0']
       mpich: { env: { CC: gcc-14, CXX: g++-14 }, args: [ '4.0.2', '-j4' ] }
 
   # ubuntu / nvidia cuda
