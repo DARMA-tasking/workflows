@@ -1,0 +1,46 @@
+name: DARMA repositories check
+
+# Runs at 00:00 UTC on day 1 of every month
+on:
+  # schedule:
+  #   - cron: '0 0 1 * *'
+  push:
+    branches:
+      - 1-validate-required-workflows-usage-across-repositories
+
+concurrency:
+  group: ${{ github.event.repository.name }}-${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: True
+
+jobs:
+  list_repositories:
+    name: List repositories
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: List repositories
+        id: list-repositories
+        run: |
+          REPOSITORIES=$(bash ci/list_repositories.sh)
+          echo "repositories=$(echo $REPOSITORIES)" >> $GITHUB_OUTPUT
+    outputs:
+      repositories: ${{ steps.list-repositories.outputs.repositories }}
+
+  check_repository:
+    name: Check repository (${{ matrix.repository.name }})
+    runs-on: ubuntu-latest
+    needs: list_repositories
+    env:
+      GH_TOKEN: ${{ secrets.ISSUE_CREATION_1}}
+    strategy:
+      fail-fast: false
+      matrix:
+        repository: ${{ fromJson(needs.list_repositories.outputs.repositories ) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check repositories
+        run: |
+          bash ./ci/check_repository.sh ${{ matrix.repository.name }}
