@@ -486,7 +486,7 @@ target "build-all" {
       },
       #LDMS
       {
-        compiler = "gcc-9"
+        compiler = "gcc-10"
         distro_version = "20.04"
         variant = "ldms"
         extra_packages = "autoconf automake libtool m4 pkg-config bison flex libssl-dev python3-dev python3-distutils"
