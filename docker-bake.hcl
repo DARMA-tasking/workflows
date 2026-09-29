@@ -453,6 +453,7 @@ target "build-all" {
         variant = "cuda-12.9.0"
         deps = <<EOF
           cmake: ['3.23.4']
+          fmt: { env: { CC: gcc-13, CXX: g++-13 }, args: ['12.2.0', '-j4'] }
           mpich: { env: { CC: gcc-13, CXX: g++-13 }, args: ['4.0.2', '-j4'] }
           nvcc_wrapper: ~
         EOF
