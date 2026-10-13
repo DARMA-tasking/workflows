@@ -1,17 +1,17 @@
 {
   "_comment": "This file has been generated. Please do not edit",
   "matrix": {
-    "arm64-macos-14-clang-14-cpp": {
-      "label": "macos-14-arm64, clang-14, mpich",
-      "vmImage": "macos-14",
-      "setup": "arm64-macos-14-clang-14-cpp",
-      "name": "arm64-macos-14-clang-14-cpp"
+    "arm64-macos-15-clang-14-cpp": {
+      "label": "macos-15-arm64, clang-14, mpich",
+      "vmImage": "macos-15",
+      "setup": "arm64-macos-15-clang-14-cpp",
+      "name": "arm64-macos-15-clang-14-cpp"
     },
-    "arm64-macos-14-clang-14-vtk-cpp": {
-      "label": "macos-14-arm64, clang-14, mpich, vtk",
-      "vmImage": "macos-14",
-      "setup": "arm64-macos-14-clang-14-vtk-cpp",
-      "name": "arm64-macos-14-clang-14-vtk-cpp"
+    "arm64-macos-15-clang-14-vtk-cpp": {
+      "label": "macos-15-arm64, clang-14, mpich, vtk",
+      "vmImage": "macos-15",
+      "setup": "arm64-macos-15-clang-14-vtk-cpp",
+      "name": "arm64-macos-15-clang-14-vtk-cpp"
     },
     "wf-amd64-alpine-3-16-clang-cpp": {
       "label": "alpine-3.16, clang-13, mpich",
