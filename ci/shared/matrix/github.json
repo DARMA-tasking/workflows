@@ -2,16 +2,16 @@
   "_comment": "This file has been generated. Please do not edit",
   "matrix": [
     {
-      "label": "macos-14-arm64, clang-14, mpich",
-      "runs-on": "macos-14",
-      "setup": "arm64-macos-14-clang-14-cpp",
-      "name": "arm64-macos-14-clang-14-cpp"
+      "label": "macos-15-arm64, clang-14, mpich",
+      "runs-on": "macos-15",
+      "setup": "arm64-macos-15-clang-14-cpp",
+      "name": "arm64-macos-15-clang-14-cpp"
     },
     {
-      "label": "macos-14-arm64, clang-14, mpich, vtk",
-      "runs-on": "macos-14",
-      "setup": "arm64-macos-14-clang-14-vtk-cpp",
-      "name": "arm64-macos-14-clang-14-vtk-cpp"
+      "label": "macos-15-arm64, clang-14, mpich, vtk",
+      "runs-on": "macos-15",
+      "setup": "arm64-macos-15-clang-14-vtk-cpp",
+      "name": "arm64-macos-15-clang-14-vtk-cpp"
     },
     {
       "label": "alpine-3.16, clang-13, mpich",

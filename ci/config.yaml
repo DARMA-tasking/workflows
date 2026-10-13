@@ -58,8 +58,8 @@ defaults:
 # List of all available test configurations
 setup:
   # macos
-  arm64-macos-14-clang-14-cpp:
-    label: macos-14-arm64, clang-14, mpich
+  arm64-macos-15-clang-14-cpp:
+    label: macos-15-arm64, clang-14, mpich
     env:
       <<: *env
       CC: mpicc
@@ -67,8 +67,8 @@ setup:
     deps:
       packages: !extend [ *brew-packages, mpich ]
 
-  arm64-macos-14-clang-14-vtk-cpp:
-    label: macos-14-arm64, clang-14, mpich, vtk
+  arm64-macos-15-clang-14-vtk-cpp:
+    label: macos-15-arm64, clang-14, mpich, vtk
     env:
       <<: *env
       CC: mpicc
@@ -523,13 +523,13 @@ runners:
   # no docker image
   -
     type: *runner-types
-    runs-on: macos-14
-    setup: arm64-macos-14-clang-14-cpp
+    runs-on: macos-15
+    setup: arm64-macos-15-clang-14-cpp
 
   -
     type: *runner-types
-    runs-on: macos-14
-    setup: arm64-macos-14-clang-14-vtk-cpp
+    runs-on: macos-15
+    setup: arm64-macos-15-clang-14-vtk-cpp
 
   # alpine linux
   -
