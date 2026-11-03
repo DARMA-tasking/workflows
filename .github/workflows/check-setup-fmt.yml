@@ -1,0 +1,49 @@
+name: Check setup_fmt.cmake
+
+on:
+  workflow_call:
+    inputs:
+      file:
+        description: Path to setup_fmt.cmake relative to the calling repository
+        required: false
+        default: cmake/setup_fmt.cmake
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Compare setup_fmt.cmake with golden copy
+    runs-on: ubuntu-latest
+    steps:
+      # In a reusable workflow, checkout defaults to the calling repository
+      # and the revision that triggered its workflow (including PR changes).
+      - name: Checkout calling repository
+        uses: actions/checkout@v4
+        with:
+          path: caller
+          persist-credentials: false
+
+      # Always fetch the authoritative copy, independently of the caller's
+      # branch or fork. A failed checkout must fail the check as well.
+      - name: Fetch GOLD_setup_fmt.cmake
+        uses: actions/checkout@v4
+        with:
+          repository: DARMA-tasking/workflows
+          ref: master
+          path: setup-fmt-golden
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /cmake/GOLD_setup_fmt.cmake
+            /ci/check-setup-fmt.sh
+
+      - name: Compare files
+        shell: bash
+        env:
+          SETUP_FMT_PATH: ${{ inputs.file }}
+        run: |
+          bash setup-fmt-golden/ci/check-setup-fmt.sh \
+            setup-fmt-golden/cmake/GOLD_setup_fmt.cmake \
+            "caller/$SETUP_FMT_PATH"
