@@ -301,7 +301,7 @@ target "build-all" {
           libunwind: '1.6.2'
           mpich: ['4.0.2', '-j4']
           mesa: ~
-          vtk: '9.3.1'
+          vtk: '9.5.0'
         EOF
       },
       {
@@ -387,7 +387,7 @@ target "build-all" {
           cmake: ['3.31.9']
           mpich: ['4.0.2', '-j4']
           mesa: ~
-          vtk: '9.3.1'
+          vtk: '9.5.0'
         EOF
       },
       {
