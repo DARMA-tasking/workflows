@@ -77,7 +77,7 @@ setup:
       packages: !extend [ *brew-packages, mpich]
       cmake: ['3.23.4']
       mesa: ~
-      vtk: '9.3.1'
+      vtk: '9.5.0'
 
   # alpine linux
   amd64-alpine-3.16-clang-cpp:
@@ -132,7 +132,7 @@ setup:
     deps:
       <<: *develop-gcc-deps
       mesa: ~
-      vtk: '9.3.1'
+      vtk: '9.5.0'
 
   amd64-ubuntu-22.04-gcc-12-zoltan-cpp:
     label: gcc-12, ubuntu, mpich, zoltan
@@ -259,7 +259,7 @@ setup:
     deps:
       <<: *develop-clang-deps
       mesa: ~
-      vtk: '9.3.1'
+      vtk: '9.5.0'
 
   amd64-ubuntu-24.04-clang-16-zoltan-cpp:
     <<: *develop-clang
